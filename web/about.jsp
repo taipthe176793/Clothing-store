@@ -13,28 +13,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--===============================================================================================-->
-        <link rel="icon" type="image/png" href="images/icons/favicon.png" />
+        <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/icons/favicon.png" />
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/iconic/css/material-design-iconic-font.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/linearicons-v1.0.0/icon-font.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/css-hamburgers/hamburgers.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animsition/css/animsition.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/select2/select2.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="css/util.css">
-        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <!--===============================================================================================-->
     </head>
 
@@ -76,7 +76,7 @@
 
                         <!-- Logo desktop -->
                         <a href="#" class="logo">
-                            <img src="images/icons/logo-01.png" alt="IMG-LOGO">
+                            <img src="${pageContext.request.contextPath}/images/icons/logo-01.png" alt="IMG-LOGO">
                         </a>
 
                         <!-- Menu desktop -->
@@ -135,7 +135,7 @@
             <div class="wrap-header-mobile">
                 <!-- Logo moblie -->
                 <div class="logo-mobile">
-                    <a href="index.jsp"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
+                    <a href="index.jsp"><img src="${pageContext.request.contextPath}/images/icons/logo-01.png" alt="IMG-LOGO"></a>
                 </div>
 
                 <!-- Icon header -->
@@ -231,7 +231,7 @@
             <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
                 <div class="container-search-header">
                     <button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-                        <img src="images/icons/icon-close2.png" alt="CLOSE">
+                        <img src="${pageContext.request.contextPath}/images/icons/icon-close2.png" alt="CLOSE">
                     </button>
 
                     <form class="wrap-search-header flex-w p-l-15">
@@ -263,7 +263,7 @@
                     <ul class="header-cart-wrapitem w-full">
                         <li class="header-cart-item flex-w flex-t m-b-12">
                             <div class="header-cart-item-img">
-                                <img src="images/item-cart-01.jpg" alt="IMG">
+                                <img src="${pageContext.request.contextPath}/images/item-cart-01.jpg" alt="IMG">
                             </div>
 
                             <div class="header-cart-item-txt p-t-8">
@@ -279,7 +279,7 @@
 
                         <li class="header-cart-item flex-w flex-t m-b-12">
                             <div class="header-cart-item-img">
-                                <img src="images/item-cart-02.jpg" alt="IMG">
+                                <img src="${pageContext.request.contextPath}/images/item-cart-02.jpg" alt="IMG">
                             </div>
 
                             <div class="header-cart-item-txt p-t-8">
@@ -295,7 +295,7 @@
 
                         <li class="header-cart-item flex-w flex-t m-b-12">
                             <div class="header-cart-item-img">
-                                <img src="images/item-cart-03.jpg" alt="IMG">
+                                <img src="${pageContext.request.contextPath}/images/item-cart-03.jpg" alt="IMG">
                             </div>
 
                             <div class="header-cart-item-txt p-t-8">
@@ -331,7 +331,7 @@
 
 
         <!-- Title page -->
-        <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/bg-01.jpg');">
+        <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('${pageContext.request.contextPath}/images/bg-01.jpg');">
             <h2 class="ltext-105 cl0 txt-center">
                 About
             </h2>
@@ -370,7 +370,7 @@
                     <div class="col-11 col-md-5 col-lg-4 m-lr-auto">
                         <div class="how-bor1 ">
                             <div class="hov-img0">
-                                <img src="images/about-01.jpg" alt="IMG">
+                                <img src="${pageContext.request.contextPath}/images/about-01.jpg" alt="IMG">
                             </div>
                         </div>
                     </div>
@@ -405,7 +405,7 @@
                     <div class="order-md-1 col-11 col-md-5 col-lg-4 m-lr-auto p-b-30">
                         <div class="how-bor2">
                             <div class="hov-img0">
-                                <img src="images/about-02.jpg" alt="IMG">
+                                <img src="${pageContext.request.contextPath}/images/about-02.jpg" alt="IMG">
                             </div>
                         </div>
                     </div>
@@ -530,23 +530,23 @@
                 <div class="p-t-40">
                     <div class="flex-c-m flex-w p-b-18">
                         <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-01.png" alt="ICON-PAY">
+                            <img src="${pageContext.request.contextPath}/images/icons/icon-pay-01.png" alt="ICON-PAY">
                         </a>
 
                         <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-02.png" alt="ICON-PAY">
+                            <img src="${pageContext.request.contextPath}/images/icons/icon-pay-02.png" alt="ICON-PAY">
                         </a>
 
                         <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-03.png" alt="ICON-PAY">
+                            <img src="${pageContext.request.contextPath}/images/icons/icon-pay-03.png" alt="ICON-PAY">
                         </a>
 
                         <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-04.png" alt="ICON-PAY">
+                            <img src="${pageContext.request.contextPath}/images/icons/icon-pay-04.png" alt="ICON-PAY">
                         </a>
 
                         <a href="#" class="m-all-1">
-                            <img src="images/icons/icon-pay-05.png" alt="ICON-PAY">
+                            <img src="${pageContext.request.contextPath}/images/icons/icon-pay-05.png" alt="ICON-PAY">
                         </a>
                     </div>
 
@@ -572,14 +572,14 @@
         </div>
 
         <!--===============================================================================================-->
-        <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
         <!--===============================================================================================-->
-        <script src="vendor/animsition/js/animsition.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
         <!--===============================================================================================-->
-        <script src="vendor/bootstrap/js/popper.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
         <!--===============================================================================================-->
-        <script src="vendor/select2/select2.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
         <script>
                             $(".js-select2").each(function () {
                                 $(this).select2({
@@ -589,9 +589,9 @@
                             })
         </script>
         <!--===============================================================================================-->
-        <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
         <!--===============================================================================================-->
-        <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
         <script>
                             $('.js-pscroll').each(function () {
                                 $(this).css('position', 'relative');
@@ -608,7 +608,7 @@
                             });
         </script>
         <!--===============================================================================================-->
-        <script src="js/main.js"></script>
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
 
     </body>
 </html>
