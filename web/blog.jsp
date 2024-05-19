@@ -83,9 +83,9 @@
                         <div class="menu-desktop">
                             <ul class="main-menu">
                                 <li>
-                                    <a href="index.jsp">Home</a>
+                                    <a href="home.jsp">Home</a>
                                     <ul class="sub-menu">
-                                        <li><a href="index.jsp">Homepage 1</a></li>
+                                        <li><a href="home.jsp">Homepage 1</a></li>
                                         <li><a href="home-02.jsp">Homepage 2</a></li>
                                         <li><a href="home-03.jsp">Homepage 3</a></li>
                                     </ul>
@@ -135,7 +135,7 @@
             <div class="wrap-header-mobile">
                 <!-- Logo moblie -->
                 <div class="logo-mobile">
-                    <a href="index.jsp"><img src="${pageContext.request.contextPath}/images/icons/logo-01.png" alt="IMG-LOGO"></a>
+                    <a href="home.jsp"><img src="${pageContext.request.contextPath}/images/icons/logo-01.png" alt="IMG-LOGO"></a>
                 </div>
 
                 <!-- Icon header -->
@@ -194,9 +194,9 @@
 
                 <ul class="main-menu-m">
                     <li>
-                        <a href="index.jsp">Home</a>
+                        <a href="home.jsp">Home</a>
                         <ul class="sub-menu-m">
-                            <li><a href="index.jsp">Homepage 1</a></li>
+                            <li><a href="home.jsp">Homepage 1</a></li>
                             <li><a href="home-02.jsp">Homepage 2</a></li>
                             <li><a href="home-03.jsp">Homepage 3</a></li>
                         </ul>
