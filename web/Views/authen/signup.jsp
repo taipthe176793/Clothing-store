@@ -23,7 +23,7 @@
                 <form action="auth?action=signup" method="post">
                     <h3>Sign Up</h3>
                     <div class="form-wrapper">
-                        <input type="text" placeholder="Full Name" class="form-control">
+                        <input name="fullname" type="text" placeholder="Full Name"  class="form-control">
                     </div>
                     <div class="form-wrapper">
                         <input name="user" type="text" placeholder="Username" class="form-control">
@@ -44,6 +44,8 @@
                         <input name="confirm-pass" type="password" placeholder="Confirm Password" class="form-control">
                         <i class="zmdi zmdi-lock"></i>
                     </div>
+                    ${error}
+                    ${Success}
                     <button onclick="this.closest('form').submit()">Register
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
@@ -53,14 +55,14 @@
 
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
+                        window.dataLayer = window.dataLayer || [];
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
+                        function gtag() {
+                            dataLayer.push(arguments);
+                        }
+                        gtag('js', new Date());
 
-            gtag('config', 'UA-23581568-13');
+                        gtag('config', 'UA-23581568-13');
         </script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"88761a3dfc270ebd","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}'
         crossorigin="anonymous"></script>

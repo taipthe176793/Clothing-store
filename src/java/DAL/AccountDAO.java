@@ -4,12 +4,116 @@
  */
 package DAL;
 
+import Models.Account;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  *
  * @author admin
  */
-public class AccountDAO extends DBContext{
-    
-    
-    
+public class AccountDAO extends DBContext {
+
+    public boolean checkEmailExist(String email)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM account WHERE [email] = ? AND account.role_id = 3";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+                    return true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+           
+        }
+        return false;
+    }
+
+    public boolean checkUsernameExist(String user)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM account WHERE [username] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, user);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+                    return true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            
+        }
+        return false;
+    }
+
+    public void addAccount(Account acc) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "INSERT INTO [dbo].[account]\n"
+                        + "([username] , [password], [role_id], [email], [fullname], [phone])\n"
+                        + "VALUES( ?, ?, ?, ?, ?, ?)";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, acc.getUsername());
+                stm.setString(2, acc.getPassword());
+                stm.setInt(3, acc.getRoleId());
+                stm.setString(4, acc.getEmail());
+                stm.setString(5, acc.getFullname());
+                stm.setString(6,acc.getPhone());
+                
+                stm.executeUpdate();
+            }
+        }  finally {
+            if (stm != null) {
+                stm.close();
+            }
+            
+        }
+
+    }
+
 }

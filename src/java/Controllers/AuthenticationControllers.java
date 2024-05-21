@@ -4,12 +4,17 @@
  */
 package Controllers;
 
+import DAL.AccountDAO;
+import Models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -83,7 +88,20 @@ public class AuthenticationControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = (request.getParameter("action") != null ? request.getParameter("action") : "");
+        switch (action) {
+            case "signup":
+                boolean success = signUp(request,response);
+                if (!success) {
+                    request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("Success", "Sign Up Successfully!");
+                    request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
+                }
+                break;
+            default:
+                throw new AssertionError();
+        }
     }
 
     /**
@@ -95,5 +113,48 @@ public class AuthenticationControllers extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean signUp(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            AccountDAO Adao = new AccountDAO();
+            String fullname = request.getParameter("fullname");
+            String username = request.getParameter("user");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String password = request.getParameter("pass");
+            String confirmpass = request.getParameter("confirm-pass");
+            if(!password.equals(confirmpass)){
+                request.setAttribute("error", "Password must match ConfirmPassword!");
+                return false;
+            }
+            if(Adao.checkEmailExist(email)){
+                request.setAttribute("error", "Email is already used for another account!");
+                return false;
+            }
+            if (Adao.checkUsernameExist(username)) {
+                request.setAttribute("error", "Username is already existed");
+                return false;
+            }
+            Account acc = new Account(username,password,3,email,fullname,phone);
+            Adao.addAccount(acc);
+              return true;
+
+           
+        } catch (SQLException  | ClassNotFoundException ex) {
+            request.setAttribute("error", ex.getMessage());
+        }
+           return false;
+    }
+    
+    public static void main(String[] args) {
+        try {
+            AccountDAO Adao = new AccountDAO();
+            System.out.println(Adao.checkUsernameExist("ngacq10"));
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }
