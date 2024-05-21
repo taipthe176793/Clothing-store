@@ -4,10 +4,95 @@
  */
 package Models;
 
+import java.util.Date;
+
 /**
  *
  * @author admin
  */
 public class Coupon {
+    private int couponId;
+    private int code;
+    private String description;
+    private int discount;
+    private Date expiresAt;
+    private Date startAt;
+    private int quantity;
+
+    public Coupon() {
+    }
+
+    public Coupon(int couponId, int code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
+        this.couponId = couponId;
+        this.code = code;
+        this.description = description;
+        this.discount = discount;
+        this.expiresAt = expiresAt;
+        this.startAt = startAt;
+        this.quantity = quantity;
+    }
+
+    public int getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(int couponId) {
+        this.couponId = couponId;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public Date getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Date expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public Date getStartAt() {
+        return startAt;
+    }
+
+    public void setStartAt(Date startAt) {
+        this.startAt = startAt;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Coupon{" + "couponId=" + couponId + ", code=" + code + ", description=" + description + ", discount=" + discount + ", expiresAt=" + expiresAt + ", startAt=" + startAt + ", quantity=" + quantity + '}';
+    }
+    
+    
     
 }
