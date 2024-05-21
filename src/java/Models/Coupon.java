@@ -22,6 +22,16 @@ public class Coupon {
     public Coupon() {
     }
 
+    public Coupon(int code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
+        this.code = code;
+        this.description = description;
+        this.discount = discount;
+        this.expiresAt = expiresAt;
+        this.startAt = startAt;
+        this.quantity = quantity;
+    }
+    
+    
     public Coupon(int couponId, int code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
         this.couponId = couponId;
         this.code = code;

@@ -21,6 +21,14 @@ public class Feedback {
     public Feedback() {
     }
 
+    public Feedback(int customerId, int productId, String comment, double rating, Timestamp createdAt) {
+        this.customerId = customerId;
+        this.productId = productId;
+        this.comment = comment;
+        this.rating = rating;
+        this.createdAt = createdAt;
+    }
+    
     public Feedback(int feedbackId, int customerId, int productId, String comment, double rating, Timestamp createdAt) {
         this.feedbackId = feedbackId;
         this.customerId = customerId;
