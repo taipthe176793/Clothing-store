@@ -9,6 +9,7 @@ package Models;
  * @author admin
  */
 public class Product {
+
     private int productId;
     private String name;
     private String description;
@@ -17,16 +18,25 @@ public class Product {
     private String img2;
     private String img3;
     private int categoryId;
-    private String color;
-    private String size;
-    private int quantity;
     private boolean isDelete;
     private double rating;
 
     public Product() {
     }
 
-    public Product(int productId, String name, String description, int price, String img1, String img2, String img3, int categoryId, String color, String size, int quantity, boolean isDelete, double rating) {
+    public Product(String name, String description, int price, String img1, String img2, String img3, int categoryId, boolean isDelete, double rating) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.img1 = img1;
+        this.img2 = img2;
+        this.img3 = img3;
+        this.categoryId = categoryId;
+        this.isDelete = isDelete;
+        this.rating = rating;
+    }
+
+    public Product(int productId, String name, String description, int price, String img1, String img2, String img3, int categoryId, boolean isDelete, double rating) {
         this.productId = productId;
         this.name = name;
         this.description = description;
@@ -35,24 +45,6 @@ public class Product {
         this.img2 = img2;
         this.img3 = img3;
         this.categoryId = categoryId;
-        this.color = color;
-        this.size = size;
-        this.quantity = quantity;
-        this.isDelete = isDelete;
-        this.rating = rating;
-    }
-
-    public Product(String name, String description, int price, String img1, String img2, String img3, int categoryId, String color, String size, int quantity, boolean isDelete, double rating) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.img1 = img1;
-        this.img2 = img2;
-        this.img3 = img3;
-        this.categoryId = categoryId;
-        this.color = color;
-        this.size = size;
-        this.quantity = quantity;
         this.isDelete = isDelete;
         this.rating = rating;
     }
@@ -121,30 +113,6 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public boolean isIsDelete() {
         return isDelete;
     }
@@ -163,8 +131,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", price=" + price + ", img1=" + img1 + ", img2=" + img2 + ", img3=" + img3 + ", categoryId=" + categoryId + ", color=" + color + ", size=" + size + ", quantity=" + quantity + ", isDelete=" + isDelete + ", rating=" + rating + '}';
+        return "Product{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", price=" + price + ", img1=" + img1 + ", img2=" + img2 + ", img3=" + img3 + ", categoryId=" + categoryId + ", isDelete=" + isDelete + ", rating=" + rating + '}';
     }
-    
-    
+
 }

@@ -11,16 +11,16 @@ package Models;
 public class CartDetails {
     private int cartDetailId;
     private int cartId;
-    private int productId;
+    private int productVariantId;
     private int quantity;
 
     public CartDetails() {
     }
 
-    public CartDetails(int cartDetailId, int cartId, int productId, int quantity) {
+    public CartDetails(int cartDetailId, int cartId, int productVariantId, int quantity) {
         this.cartDetailId = cartDetailId;
         this.cartId = cartId;
-        this.productId = productId;
+        this.productVariantId = productVariantId;
         this.quantity = quantity;
     }
 
@@ -40,12 +40,12 @@ public class CartDetails {
         this.cartId = cartId;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getProductVariantId() {
+        return productVariantId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProductVariantId(int productVariantId) {
+        this.productVariantId = productVariantId;
     }
 
     public int getQuantity() {
@@ -58,7 +58,7 @@ public class CartDetails {
 
     @Override
     public String toString() {
-        return "CartDetails{" + "cartDetailId=" + cartDetailId + ", cartId=" + cartId + ", productId=" + productId + ", quantity=" + quantity + '}';
+        return "CartDetails{" + "cartDetailId=" + cartDetailId + ", cartId=" + cartId + ", productVariantId=" + productVariantId + ", quantity=" + quantity + '}';
     }
 
     
