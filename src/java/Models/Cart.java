@@ -4,17 +4,29 @@
  */
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author admin
  */
 public class Cart {
+
     private int cartId;
     private int customerId;
 
+    public List<CartDetails> getCartDetailsList() {
+        return cartDetailsList;
+    }
+
+    public void setCartDetailsList(List<CartDetails> cartDetailsList) {
+        this.cartDetailsList = cartDetailsList;
+    }
+    private List<CartDetails> cartDetailsList = new ArrayList<>();
+
     public Cart() {
     }
-    
 
     public Cart(int cartId, int customerId) {
         this.cartId = cartId;
@@ -41,6 +53,5 @@ public class Cart {
     public String toString() {
         return "Cart{" + "cartId=" + cartId + ", customerId=" + customerId + '}';
     }
-    
-    
+
 }

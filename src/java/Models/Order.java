@@ -5,6 +5,8 @@
 package Models;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,6 +21,7 @@ public class Order {
     private Timestamp createdAt;
     private String status;
     private String trackingCode;
+    List<OrderDetails> listOrderDetails = new ArrayList<>();
 
     public Order() {
     }
@@ -94,6 +97,14 @@ public class Order {
 
     public String getStatus() {
         return status;
+    }
+
+    public List<OrderDetails> getListOrderDetails() {
+        return listOrderDetails;
+    }
+
+    public void setListOrderDetails(List<OrderDetails> listOrderDetails) {
+        this.listOrderDetails = listOrderDetails;
     }
 
     public void setStatus(String status) {
