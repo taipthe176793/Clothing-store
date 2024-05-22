@@ -145,11 +145,11 @@ public class AccountDAO extends DBContext {
                 }
             }
         } finally {
-            if (stm != null) {
-                stm.close();
-            }
             if (rs != null) {
                 rs.close();
+            }
+            if (stm != null) {
+                stm.close();
             }
         }
         return null;
@@ -185,11 +185,11 @@ public class AccountDAO extends DBContext {
                 }
             }
         } finally {
-            if (stm != null) {
-                stm.close();
-            }
             if (rs != null) {
                 rs.close();
+            }
+            if (stm != null) {
+                stm.close();
             }
         }
         return null;
