@@ -61,21 +61,23 @@ public class AuthenticationControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String action = (request.getParameter("action") != null ? request.getParameter("action") : "");
-
+        
         switch (action) {
             case "login":
                 request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                 break;
-
             case "signup":
                 request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
+                break;
+            case "logout":
+                
                 break;
             default:
                 throw new AssertionError();
         }
-
+        
     }
 
     /**
@@ -103,7 +105,7 @@ public class AuthenticationControllers extends HttpServlet {
             case "login":
                 Account account = login(request, response);
                 if (account == null) {
-                    request.setAttribute("error","Username or password is wrong.");
+                    request.setAttribute("error", "Username or password is wrong.");
                     request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                 } else {
                     HttpSession session = request.getSession();
@@ -114,7 +116,7 @@ public class AuthenticationControllers extends HttpServlet {
             default:
                 throw new AssertionError();
         }
-
+        
     }
 
     /**
@@ -151,15 +153,13 @@ public class AuthenticationControllers extends HttpServlet {
             Account acc = new Account(username, password, 3, email, fullname, phone);
             Adao.addAccount(acc);
             return true;
-
+            
         } catch (SQLException | ClassNotFoundException ex) {
             request.setAttribute("error", ex.getMessage());
         }
         return false;
     }
-
     
-
     private Account login(HttpServletRequest request, HttpServletResponse response) {
         try {
             String userInput = request.getParameter("user");
@@ -167,7 +167,7 @@ public class AuthenticationControllers extends HttpServlet {
             Account account = null;
             AccountDAO Adao = new AccountDAO();
             if (userInput.contains("@")) {
-
+                
                 account = Adao.loginByEmail(userInput, password);
                 
             } else {
@@ -175,8 +175,8 @@ public class AuthenticationControllers extends HttpServlet {
             }
             return account;
         } catch (SQLException ex) {
-            request.setAttribute("error", ex.getMessage());     
-        } 
+            request.setAttribute("error", ex.getMessage());            
+        }        
         return null;
-    } 
+    }    
 }

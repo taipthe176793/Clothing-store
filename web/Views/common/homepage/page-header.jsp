@@ -24,17 +24,20 @@
                         Help & FAQs
                     </a>
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        My Account
-                    </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        EN
-                    </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        USD
-                    </a>
+                    <c:if test="${sessionScope.account eq null}">
+                        <a href="auth?action=login" class="flex-c-m trans-04 p-lr-25">
+                            Login
+                        </a>
+                    </c:if>
+                    
+                    <c:if test="${sessionScope.account ne null}">
+                        <a href="#" class="flex-c-m trans-04 p-lr-25">
+                            My Profile
+                        </a>
+                        <a href="auth?action=logout" class="flex-c-m trans-04 p-lr-25">
+                            Logout
+                        </a>
+                    </c:if>
                 </div>
             </div>
         </div>

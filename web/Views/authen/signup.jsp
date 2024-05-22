@@ -46,9 +46,10 @@
                     </div>
                     ${error}
                     ${Success}
-                    <button type="submit">Register
+                    <button type="submit" style="margin-bottom: 10px;">Register
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
+                    <div style="text-align: center;">Or you can sign in <a href="auth?action=login">Here</a></div>
                 </form>
             </div>
         </div>
