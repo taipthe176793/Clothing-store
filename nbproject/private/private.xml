@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/GIT/Clothing-store/src/java/Models/Account.java</file>
+            <file>file:/D:/GIT/Clothing-store/src/java/Controllers/AuthenticationControllers.java</file>
+            <file>file:/D:/GIT/Clothing-store/src/java/DAL/AccountDAO.java</file>
+            <file>file:/D:/GIT/Clothing-store/src/java/DAL/DBContext.java</file>
+            <file>file:/D:/GIT/Clothing-store/src/java/Controllers/AboutServlet.java</file>
+            <file>file:/D:/GIT/Clothing-store/web/Views/authen/login.jsp</file>
+        </group>
     </open-files>
 </project-private>

@@ -158,14 +158,7 @@ public class AuthenticationControllers extends HttpServlet {
         return false;
     }
 
-    public static void main(String[] args) {
-        try {
-            AccountDAO Adao = new AccountDAO();
-            System.out.println(Adao.loginByEmail("taipt21","taipt0820"));
-        } catch (SQLException ex) {
-            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-    }
+    
 
     private Account login(HttpServletRequest request, HttpServletResponse response) {
         try {
