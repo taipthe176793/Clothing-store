@@ -4,6 +4,9 @@
  */
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author admin
@@ -20,6 +23,15 @@ public class Product {
     private int categoryId;
     private boolean isDelete;
     private double rating;
+    private List<ProductVariant> variantList = new ArrayList<>();
+
+    public List<ProductVariant> getVariantList() {
+        return variantList;
+    }
+
+    public void setVariantList(List<ProductVariant> variantList) {
+        this.variantList = variantList;
+    }
 
     public Product() {
     }
