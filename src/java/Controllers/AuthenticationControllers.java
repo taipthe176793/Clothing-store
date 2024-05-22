@@ -149,7 +149,7 @@ public class AuthenticationControllers extends HttpServlet {
     public static void main(String[] args) {
         try {
             AccountDAO Adao = new AccountDAO();
-            System.out.println(Adao.checkUsernameExist("ngacq10"));
+            System.out.println(Adao.checkUsernameExist("ngacq11"));
         } catch (SQLException ex) {
             Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
