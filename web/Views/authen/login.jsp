@@ -11,28 +11,44 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/authentication.css">
+        <style>
+            body {
+                font-family: 'Play', sans-serif;
+            }
+            h3 {
+                font-weight: 700;
+            }
+            .form-control {
+                font-weight: 400;
+            }
+            .form-wrapper i {
+                font-weight: 500;
+            }
+        </style>
     </head>
     <body>
-        <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/bg-registration-form-1.jpg');">
+        <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/bg-registration-form.jpg');">
             <div class="inner">
                 <div class="image-holder">
-                    <img src="${pageContext.request.contextPath}/images/registration-form-1.jpg" alt>
+                    <img src="${pageContext.request.contextPath}/images/registration-form.jpg" alt>
                 </div>
                 <form action="auth?action=login" method="post">
                     <h3>Login</h3>
                     <div class="form-wrapper">
-                        <input name="user" type="text" placeholder="Username or Email" class="form-control">
+                        <input name="user" type="text" placeholder="Username or Email" class="form-control" required>
                         <i class="zmdi zmdi-account"></i>
                     </div>
                     <div class="form-wrapper">
-                        <input name="pass" type="password" placeholder="Password" class="form-control">
+                        <input name="pass" type="password" placeholder="Password" class="form-control" required>
                         <i class="zmdi zmdi-lock"></i>
                     </div>
                     <div>Forget password? <a href="auth?action=resetPass">Reset</a></div>
                     <div style="color: red; margin-top: 10px;">${error}</div>
-                    <button onclick="this.closest('form').submit()">Login
+                    <button type="submit">Login
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
                     <!-- or login by google -->
