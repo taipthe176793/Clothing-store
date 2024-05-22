@@ -30,7 +30,7 @@
                         <input name="pass" type="password" placeholder="Password" class="form-control">
                         <i class="zmdi zmdi-lock"></i>
                     </div>
-                    <div>Forget password? <a href="auth?action=resetPass">Reset</a></div>
+                    <div>Forget password? <a href="auth?action=resetPass">Reset</a></div>${error}
                     <button onclick="this.closest('form').submit()">Login
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>

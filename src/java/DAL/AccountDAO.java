@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 /**
  *
  * @author admin
@@ -46,7 +45,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-           
+
         }
         return false;
     }
@@ -80,7 +79,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
         return false;
     }
@@ -103,17 +102,96 @@ public class AccountDAO extends DBContext {
                 stm.setInt(3, acc.getRoleId());
                 stm.setString(4, acc.getEmail());
                 stm.setString(5, acc.getFullname());
-                stm.setString(6,acc.getPhone());
-                
+                stm.setString(6, acc.getPhone());
+
                 stm.executeUpdate();
             }
-        }  finally {
+        } finally {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
 
     }
 
+    public Account loginByEmail(String userInput, String password) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM account WHERE [email] = ? AND [password] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userInput);
+                stm.setString(2, password);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setEmail(rs.getString("email"));
+                    account.setFullname(rs.getString("fullname"));
+                    account.setPhone(rs.getString("phone"));
+                    account.setAddress(rs.getString("address"));
+                    return account;
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+        }
+        return null;
+    }
+
+    public Account loginByUsername(String userInput, String password) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM account WHERE [username] = ? AND [password] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userInput);
+                stm.setString(2, password);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setEmail(rs.getString("email"));
+                    account.setFullname(rs.getString("fullname"));
+                    account.setPhone(rs.getString("phone"));
+                    account.setAddress(rs.getString("address"));
+                    return account;
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+        }
+        return null;
+    }
 }
