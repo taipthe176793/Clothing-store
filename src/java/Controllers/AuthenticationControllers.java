@@ -72,7 +72,9 @@ public class AuthenticationControllers extends HttpServlet {
                 request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
                 break;
             case "logout":
-                
+                HttpSession session = request.getSession();
+                session.removeAttribute("account");
+                response.sendRedirect("home");
                 break;
             default:
                 throw new AssertionError();
