@@ -53,7 +53,7 @@ public class ProductControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("/Views/admin/products-table.jsp").forward(request, response);
     } 
 
     /** 

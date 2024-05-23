@@ -78,230 +78,109 @@
                           height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <div class="wrapper">
-            <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
 
-                <div class="sidebar-wrapper">
-                    <div class="logo">
-                        <a href="#" class="simple-text">
-                            Creative Tim
-                        </a>
-                    </div>
-                    <ul class="nav">
-                        <li>
-                            <a class="nav-link" href="dashboard.html">
-                                <i class="nc-icon nc-chart-pie-35"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="./user.html">
-                                <i class="nc-icon nc-circle-09"></i>
-                                <p>User Profile</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="./table.html">
-                                <i class="nc-icon nc-notes"></i>
-                                <p>Table List</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="./typography.html">
-                                <i class="nc-icon nc-paper-2"></i>
-                                <p>Typography</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="./icons.html">
-                                <i class="nc-icon nc-atom"></i>
-                                <p>Icons</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="./maps.html">
-                                <i class="nc-icon nc-pin-3"></i>
-                                <p>Maps</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="./notifications.html">
-                                <i class="nc-icon nc-bell-55"></i>
-                                <p>Notifications</p>
-                            </a>
-                        </li>
-                        <li class="nav-item active active-pro">
-                            <a class="nav-link active" href="upgrade.html">
-                                <i class="nc-icon nc-alien-33"></i>
-                                <p>Upgrade to PRO</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="main-panel">
+            <jsp:include page="../common/admin/side-bar.jsp"></jsp:include>
 
-                <nav class="navbar navbar-expand-lg " color-on-scroll="500">
-                    <div class=" container-fluid  ">
-                        <a class="navbar-brand" href="#pablo"> User </a>
-                        <button href class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-bar burger-lines"></span>
-                            <span class="navbar-toggler-bar burger-lines"></span>
-                            <span class="navbar-toggler-bar burger-lines"></span>
-                        </button>
-                        <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                            <ul class="nav navbar-nav mr-auto">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="dropdown">
-                                        <i class="nc-icon nc-palette"></i>
-                                        <span class="d-lg-none">Dashboard</span>
-                                    </a>
-                                </li>
-                                <li class="dropdown nav-item">
-                                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                        <i class="nc-icon nc-planet"></i>
-                                        <span class="notification">5</span>
-                                        <span class="d-lg-none">Notification</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Notification 1</a>
-                                        <a class="dropdown-item" href="#">Notification 2</a>
-                                        <a class="dropdown-item" href="#">Notification 3</a>
-                                        <a class="dropdown-item" href="#">Notification 4</a>
-                                        <a class="dropdown-item" href="#">Another notification</a>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nc-icon nc-zoom-split"></i>
-                                        <span class="d-lg-block">&nbsp;Search</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="navbar-nav ml-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#pablo">
-                                        <span class="no-icon">Account</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="https://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="no-icon">Dropdown</span>
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                        <div class="divider"></div>
-                                        <a class="dropdown-item" href="#">Separated link</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#pablo">
-                                        <span class="no-icon">Log out</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
+                <div class="main-panel">
 
-                <div class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Edit Profile</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <form>
-                                            <div class="row">
-                                                <div class="col-md-5 pr-1">
-                                                    <div class="form-group">
-                                                        <label>Company (disabled)</label>
-                                                        <input type="text" class="form-control" disabled placeholder="Company" value="Creative Code Inc.">
+                <jsp:include page="../common/admin/header.jsp"></jsp:include>
+
+                    <div class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Edit Profile</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col-md-5 pr-1">
+                                                        <div class="form-group">
+                                                            <label>Company (disabled)</label>
+                                                            <input type="text" class="form-control" disabled placeholder="Company" value="Creative Code Inc.">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 px-1">
+                                                        <div class="form-group">
+                                                            <label>Username</label>
+                                                            <input type="text" class="form-control" placeholder="Username" value="michael23">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 pl-1">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputEmail1">Email address</label>
+                                                            <input type="email" class="form-control" placeholder="Email">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 px-1">
-                                                    <div class="form-group">
-                                                        <label>Username</label>
-                                                        <input type="text" class="form-control" placeholder="Username" value="michael23">
+                                                <div class="row">
+                                                    <div class="col-md-6 pr-1">
+                                                        <div class="form-group">
+                                                            <label>First Name</label>
+                                                            <input type="text" class="form-control" placeholder="Company" value="Mike">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 pl-1">
+                                                        <div class="form-group">
+                                                            <label>Last Name</label>
+                                                            <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 pl-1">
-                                                    <div class="form-group">
-                                                        <label for="exampleInputEmail1">Email address</label>
-                                                        <input type="email" class="form-control" placeholder="Email">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Address</label>
+                                                            <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 pr-1">
-                                                    <div class="form-group">
-                                                        <label>First Name</label>
-                                                        <input type="text" class="form-control" placeholder="Company" value="Mike">
+                                                <div class="row">
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>City</label>
+                                                            <input type="text" class="form-control" placeholder="City" value="Mike">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 px-1">
+                                                        <div class="form-group">
+                                                            <label>Country</label>
+                                                            <input type="text" class="form-control" placeholder="Country" value="Andrew">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 pl-1">
+                                                        <div class="form-group">
+                                                            <label>Postal Code</label>
+                                                            <input type="number" class="form-control" placeholder="ZIP Code">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 pl-1">
-                                                    <div class="form-group">
-                                                        <label>Last Name</label>
-                                                        <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>About Me</label>
+                                                            <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label>Address</label>
-                                                        <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4 pr-1">
-                                                    <div class="form-group">
-                                                        <label>City</label>
-                                                        <input type="text" class="form-control" placeholder="City" value="Mike">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 px-1">
-                                                    <div class="form-group">
-                                                        <label>Country</label>
-                                                        <input type="text" class="form-control" placeholder="Country" value="Andrew">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 pl-1">
-                                                    <div class="form-group">
-                                                        <label>Postal Code</label>
-                                                        <input type="number" class="form-control" placeholder="ZIP Code">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label>About Me</label>
-                                                        <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
-                                            <div class="clearfix"></div>
-                                        </form>
+                                                <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
+                                                <div class="clearfix"></div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card card-user">
-                                    <div class="card-image">
-                                        <images src="https://ununsplash.imagesix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400" alt="...">
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="author">
-                                            <a href="#">
-                                                <images class="avatar border-gray" src="${pageContext.request.contextPath}/images/faces/face-3.jpg" alt="...">
-                                                <h5 class="title">Mike Andrew</h5>
+                                <div class="col-md-4">
+                                    <div class="card card-user">
+                                        <div class="card-image">
+                                            <images src="https://ununsplash.imagesix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400" alt="...">
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="author">
+                                                <a href="#">
+                                                    <images class="avatar border-gray" src="${pageContext.request.contextPath}/images/faces/face-3.jpg" alt="...">
+                                                    <h5 class="title">Mike Andrew</h5>
                                             </a>
                                             <p class="description">
                                                 michael24
@@ -330,99 +209,65 @@
                         </div>
                     </div>
                 </div>
-                <footer class="footer">
-                    <div class="container">
-                        <nav>
-                            <ul class="footer-menu">
-                                <li>
-                                    <a href="#">
-                                        Home
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        Company
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        Portfolio
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        Blog
-                                    </a>
-                                </li>
-                            </ul>
-                            <p class="copyright text-center">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear())
-                                </script>
-                                <a href="#">Creative Tim</a>, made with love for a better web
-                            </p>
-                        </nav>
-                    </div>
-                </footer>
+                <jsp:include page="../common/admin/footer.jsp"></jsp:include>
+                </div>
             </div>
-        </div>
-        <script>
-            // Facebook Pixel Code Don't Delete
-            !function (f, b, e, v, n, t, s) {
-                if (f.fbq)
-                    return;
-                n = f.fbq = function () {
-                    n.callMethod ?
-                            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                };
-                if (!f._fbq)
-                    f._fbq = n;
-                n.push = n;
-                n.loaded = !0;
-                n.version = '2.0';
-                n.queue = [];
-                t = b.createElement(e);
-                t.async = !0;
-                t.src = v;
-                s = b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t, s)
-            }(window,
-                    document, 'script', '//connect.facebook.net/en_US/fbevents.js');
+            <script>
+                // Facebook Pixel Code Don't Delete
+                !function (f, b, e, v, n, t, s) {
+                    if (f.fbq)
+                        return;
+                    n = f.fbq = function () {
+                        n.callMethod ?
+                                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    };
+                    if (!f._fbq)
+                        f._fbq = n;
+                    n.push = n;
+                    n.loaded = !0;
+                    n.version = '2.0';
+                    n.queue = [];
+                    t = b.createElement(e);
+                    t.async = !0;
+                    t.src = v;
+                    s = b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t, s)
+                }(window,
+                        document, 'script', '//connect.facebook.net/en_US/fbevents.js');
 
-            try {
-                fbq('init', '111649226022273');
-                fbq('track', "PageView");
+                try {
+                    fbq('init', '111649226022273');
+                    fbq('track', "PageView");
 
-            } catch (err) {
-                console.log('Facebook Track Error:', err);
-            }
-        </script>
-        <noscript>
+                } catch (err) {
+                    console.log('Facebook Track Error:', err);
+                }
+            </script>
+            <noscript>
         <images height="1" width="1" style="display:none"
-             src="https://www.facebook.com/tr?id=111649226022273&ev=PageView&noscript=1"
-             />
+                src="https://www.facebook.com/tr?id=111649226022273&ev=PageView&noscript=1"
+                />
         </noscript>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a4572cd1b8591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
         crossorigin="anonymous"></script>
     </body>
 
     <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
-    <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
-    <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
-    <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
 
-    <script src="${pageContext.request.contextPath}/js/plugins/chartist.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/chartist.min.js"></script>
 
-    <script src="${pageContext.request.contextPath}/js/plugins/jquery.sharrre.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/jquery.sharrre.js"></script>
 
-    <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-notify.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/bootstrap-notify.js"></script>
 
-    <script src="${pageContext.request.contextPath}/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
 
-    <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+<script src="${pageContext.request.contextPath}/js/demo.js"></script>
 
 </html>
