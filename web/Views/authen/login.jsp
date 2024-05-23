@@ -46,13 +46,13 @@
                         <input name="pass" type="password" placeholder="Password" class="form-control" required>
                         <i class="zmdi zmdi-lock"></i>
                     </div>
-                    <div>Forget password? <a href="auth?action=resetPass">Reset</a></div>
+                    <div> <a style="text-decoration: none" href="auth?action=resetPass">Forget password?</a></div>
                     <div style="color: red; margin-top: 10px;">${error}</div>
                     <button type="submit">Login
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
                     <!-- or login by google -->
-                    <div class="signup-link">Don't have an account yet? <a href="auth?action=signup">Sign Up Now<a/></div>
+                    <div class="signup-link">Don't have an account yet? <a style="text-decoration: none" href="auth?action=signup">Sign Up Now<a/></div>
                 </form>
             </div>
         </div>
