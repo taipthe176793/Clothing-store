@@ -59,7 +59,10 @@
 
         <link href="${pageContext.request.contextPath}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+        <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet" type="text/css">
 
+        <link href="${pageContext.request.contextPath}/css/sb-admin.min.css" rel="stylesheet" type="text/css">
+        
         <script>
             (function (w, d, s, l, i) {
                 w[l] = w[l] || [];
@@ -80,11 +83,11 @@
     </head>
 
     <body>
+        
+        ${error}
 
         <div class="wrapper">
             <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
-
-
 
             </div>
             <jsp:include page="../common/admin/side-bar.jsp"></jsp:include>
@@ -103,10 +106,17 @@
                                 <li class="breadcrumb-item active">Products</li>
                             </ol>
 
+
+
                             <div class="card mb-3">
-                                <div class="card-header">
-                                    <i class="fas fa-table"></i>
-                                    Accounts List
+                                <div class="card-header d-flex justify-content-between">
+                                    <div>
+                                        <i class="fas fa-table"></i>
+                                        Products List
+                                    </div>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                                        Add New Product
+                                    </button>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -114,69 +124,168 @@
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
+                                                    <th>Description</th>
+                                                    <th>Price</th>
+                                                    <th>Image 1</th>
+                                                    <th>Image 2</th>
+                                                    <th>Image 3</th>
+                                                    <th>Category</th>
+                                                    <th>Variants</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
+                                        <c:forEach items="${productList}" var="product">
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
+                                                <td>${product.getName()}</td>
+                                                <td>${product.getDescription()}</td>
+                                                <td>$${product.getPrice()}</td>
+                                                <td><img style="height: 100px" src="${product.getImg1()}" alt="img1" /></td>
+                                                <td><img style="height: 100px" src="${product.getImg2()}" alt="img2" /></td>
+                                                <td><img style="height: 100px" src="${product.getImg3()}" alt="img3" /></td>
+                                                    <c:forEach items="${categoryList}" var="category">
+                                                        <c:if test="${product.getCategoryId() == category.getCategoryId()}">
+                                                        <td>${category.getName()}</td>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <td>
+                                                    <a class="d-flex justify-content-center" 
+                                                       href="product/variants?pId=${product.getProductId()}"><i class="fa fa-eye"></i></a>
+                                                </td>
+                                                <td class="d-block">
+                                                    <form action="" method="post">
+                                                        <button class="btn btn-primary">Update</button>
+                                                    </form>
+                                                    <form action="" method="post">
+                                                        <button class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <td>Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>$170,750</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ashton Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>$86,000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>$433,060</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Airi Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>$162,700</td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                        </c:forEach>
+                                    </table>
                                 </div>
-                                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                             </div>
+                            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                         </div>
+
                     </div>
-                <jsp:include page="../common/admin/footer.jsp"></jsp:include>
                 </div>
+                <jsp:include page="../common/admin/footer.jsp"></jsp:include>
+
+                </div>
+
             </div>
 
-            <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
-            crossorigin="anonymous"></script>
-        </body>
 
-        <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+            <!-- Modal -->
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addBookModalLabel">Add</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addProductForm" action="product?action=add" method="post" enctype="multipart/form-data">
+                                <!--Name-->
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="nameInput" name="name">
+                                    <div id="nameError" class="error"></div>
+                                </div>
+                                <!--Price-->
+                                <div class="form-group">
+                                    <label for="price">Price:</label>
+                                    <input type="text" class="form-control" id="priceInput" name="price">
+                                    <div id="priceError" class="error"></div>
+                                </div>
+                                <!--Category-->
+                                <div class="form-group">
+                                    <label for="category">Category: </label>
+                                    <div class="input-group">
+                                        <select class="custom-select" id="category" name="categoryId">
+                                        <c:forEach items="${categoryList}" var="c">
+                                            <option value="${c.getCategoryId()}">${c.getName()}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Category</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Image 1-->
+                            <div class="form-group">
+                                <label for="image1">Image 1: </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="image1" name="image1" onchange="displayImage(this, 'previewImage1')">
+                                        <label class="custom-file-label" >Choose file</label>
+                                    </div>
+                                </div>
+                                <img id="previewImage1" src="#" alt="Preview"
+                                     style="display: none; max-width: 300px; max-height: 300px;">
+
+                            </div>
+                            <!--Image 2-->
+                            <div class="form-group">
+                                <label for="image2">Image 2: </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="image2" name="image2" onchange="displayImage(this, 'previewImage2')">
+                                        <label class="custom-file-label" >Choose file</label>
+                                    </div>
+                                </div>
+                                <img id="previewImage2" src="#" alt="Preview"
+                                     style="display: none; max-width: 300px; max-height: 300px;">
+
+                            </div>
+                            <!--Image 3-->
+                            <div class="form-group">
+                                <label for="image3">Image 3: </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="image3" name="image3" onchange="displayImage(this, 'previewImage3')">
+                                        <label class="custom-file-label" >Choose file</label>
+                                    </div>
+                                </div>
+                                <img id="previewImage3" src="#" alt="Preview"
+                                     style="display: none; max-width: 300px; max-height: 300px;">
+
+                            </div>
+                            <!--Description-->
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea class="form-control" name="description"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" form="addProductForm" onclick="validateForm()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
+        crossorigin="anonymous"></script>
+
+
+
+    </body>
+
+    <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
@@ -209,6 +318,54 @@
     <script src="${pageContext.request.contextPath}/js/demo/chart-area-demo.js"></script>
     <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
+
+    <script>
+                            function validateForm() {
+                                let name = $('#nameInput').val();
+                                let price = $('#priceInput').val();
+
+                                //xoá thông báo lỗi hiện tại
+                                $('.error').html('');
+
+                                if (name === '') {
+                                    $('#nameError').html('Name cannot be empty!');
+                                }
+
+                                if (price === '') {
+                                    $('#priceError').html('Price cannot be empty!');
+                                } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
+                                    $('#priceError').html('Price must greater than 0');
+                                }
+
+                                // Kiểm tra nếu không có lỗi thì submit form
+                                let error = '';
+                                $('.error').each(function () {
+                                    error += $(this).html();
+                                });
+                                if (error === '') {
+                                    $('#addProductForm').submit();
+                                } else {
+                                    event.preventDefault();
+                                }
+                            }
+
+                            function displayImage(input, previewId) {
+                                var previewImage = document.getElementById(previewId);
+                                var file = input.files[0];
+                                var reader = new FileReader();
+
+                                reader.onload = function (e) {
+                                    previewImage.src = e.target.result;
+                                    previewImage.style.display = "block";
+                                };
+
+                                reader.readAsDataURL(file);
+                            }
+
+
+    </script>
+
+
 
 
 </html>

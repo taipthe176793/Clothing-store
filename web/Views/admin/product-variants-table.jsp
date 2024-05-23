@@ -59,6 +59,10 @@
 
         <link href="${pageContext.request.contextPath}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+        <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet" type="text/css">
+
+        <link href="${pageContext.request.contextPath}/css/sb-admin.min.css" rel="stylesheet" type="text/css">
+
 
         <script>
             (function (w, d, s, l, i) {
@@ -107,9 +111,14 @@
                             </ol>
 
                             <div class="card mb-3">
-                                <div class="card-header">
-                                    <i class="fas fa-table"></i>
-                                    Accounts List
+                                <div class="card-header d-flex justify-content-between">
+                                    <div>
+                                        <i class="fas fa-table"></i>
+                                        Product's variants List
+                                    </div>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                                        Add New Variant
+                                    </button>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
