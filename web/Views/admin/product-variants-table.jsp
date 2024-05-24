@@ -64,23 +64,6 @@
         <link href="${pageContext.request.contextPath}/css/sb-admin.min.css" rel="stylesheet" type="text/css">
 
 
-        <script>
-            (function (w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({
-                    'gtm.start': new Date().getTime(),
-                    event: 'gtm.js'
-                });
-                var f = d.getElementsByTagName(s)[0],
-                        j = d.createElement(s),
-                        dl = l != 'dataLayer' ? '&l=' + l : '';
-                j.async = true;
-                j.src =
-                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-                f.parentNode.insertBefore(j, f);
-            })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
-        </script>
-
     </head>
 
     <body>
@@ -107,88 +90,139 @@
                                 <li class="breadcrumb-item">
                                     <a href="../product">Products</a>
                                 </li>
-                                <li class="breadcrumb-item active">product-name</li>
-                            </ol>
+                                <li class="breadcrumb-item active">${product.getName()}</li>
+                        </ol>
 
-                            <div class="card mb-3">
-                                <div class="card-header d-flex justify-content-between">
-                                    <div>
-                                        <i class="fas fa-table"></i>
-                                        Product's variants List
-                                    </div>
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
-                                        Add New Variant
-                                    </button>
+                        <div class="card mb-3">
+                            <div class="card-header d-flex justify-content-between">
+                                <div>
+                                    <i class="fas fa-table"></i>
+                                    Product's variants List
                                 </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </thead>
-                                            <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>$170,750</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ashton Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>$86,000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>$433,060</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Airi Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>$162,700</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
+                                    Add New Variant
+                                </button>
                             </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Variant Id</th>
+                                                <th>Product Name</th>
+                                                <th>Color</th>
+                                                <th>Size</th>
+                                                <th>Quantity</th>
+                                                <th>Action</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <c:forEach items="${variantsList}" var="variant">
+                                            <tr>
+                                                <td>${variant.getProductVariantId()}</td>
+                                                <td>${product.getName()}</td>
+                                                <td>${variant.getColor()}</td>
+                                                <td>${variant.getSize()}</td>
+                                                <td>${variant.getQuantity()}</td>
+                                                <td >
+                                                    <form action="" method="post">
+                                                        <button class="btn btn-primary">Update</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="" method="post">
+                                                        <button class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                         </div>
                     </div>
+                </div>
                 <jsp:include page="../common/admin/footer.jsp"></jsp:include>
                 </div>
             </div>
 
-            <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
-            crossorigin="anonymous"></script>
-        </body>
 
-        <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+            <!-- Modal -->
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addBookModalLabel">Add</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addProductForm" action="variants?pId=${product.getProductId()}&&action=add" method="post">
+                            <!--Color-->
+                            <div class="form-group">
+                                <label for="color">Color: </label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="color" name="color">
+                                        <option selected value="White">White</option>
+                                        <option value="Cream">Cream</option>
+                                        <option value="Black">Black</option>
+                                        <option value="Gray">Gray</option>
+                                        <option value="Pink">Pink</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Orange">Orange</option>
+                                        <option value="Beige">Beige</option>
+                                        <option value="Brown">Brown</option>
+                                        <option value="Yellow">Yellow</option>
+                                        <option value="Moss Green">Moss Green</option>
+                                        <option value="Green">Green</option>
+                                        <option value="Mint">Mint</option>
+                                        <option value="Navy">Navy</option>
+                                        <option value="Purple">Purple</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Color</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Size-->
+                            <div class="form-group">
+                                <label for="size">Size: </label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="size" name="size">
+                                        <option selected="" value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Size</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Quantity-->
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input type="text" class="form-control" id="quantity" name="quantity">
+                                <div id="quantityError" class="error"></div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" form="addProductForm" onclick="validateForm()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
+        crossorigin="anonymous"></script>
+    </body>
+
+    <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
@@ -222,5 +256,33 @@
     <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
+
+    <script>
+                            function validateForm() {
+                                let quantity = $('#quantity').val();
+
+                                //xoá thông báo lỗi hiện tại
+                                $('.error').html('');
+
+                                if (quantity === '') {
+                                    $('#quantityError').html('Quantity cannot be empty!');
+                                } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+                                    $('#quantityError').html('Quantity must greater than 0');
+                                }
+
+                                // Kiểm tra nếu không có lỗi thì submit form
+                                let error = '';
+                                $('.error').each(function () {
+                                    error += $(this).html();
+                                });
+                                if (error === '') {
+                                    $('#addProductForm').submit();
+                                } else {
+                                    event.preventDefault();
+                                }
+                            }
+
+
+    </script>
 
 </html>

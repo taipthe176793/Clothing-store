@@ -67,6 +67,54 @@ public class ProductDAO extends DBContext {
         return productList;
     }
 
+    public Product findProductById(int productId)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product] WHERE [product_id] = ? AND [is_deleted] = 0";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, productId);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    return p;
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return null;
+    }
+
     public void addProduct(Product product) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
