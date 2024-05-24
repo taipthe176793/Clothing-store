@@ -11,21 +11,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author admin
  */
 public class ProductDAO extends DBContext {
-    
+
     public List<Product> getAllProducts()
             throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-        
+
         List<Product> productList = new ArrayList<>();
-        
+
         try {
             //1. Connect DB
             con = connect;
@@ -50,9 +52,9 @@ public class ProductDAO extends DBContext {
                     p.setCategoryId(rs.getInt("category_id"));
                     p.setIsDelete(rs.getBoolean("is_deleted"));
                     p.setRating(rs.getDouble("rating"));
-                    
+
                     productList.add(p);
-                    
+
                 }
             }
         } finally {
@@ -62,17 +64,17 @@ public class ProductDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
         return productList;
     }
-    
+
     public Product findProductById(int productId)
             throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-        
+
         try {
             //1. Connect DB
             con = connect;
@@ -98,9 +100,9 @@ public class ProductDAO extends DBContext {
                     p.setCategoryId(rs.getInt("category_id"));
                     p.setIsDelete(rs.getBoolean("is_deleted"));
                     p.setRating(rs.getDouble("rating"));
-                    
+
                     return p;
-                    
+
                 }
             }
         } finally {
@@ -110,11 +112,11 @@ public class ProductDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
         return null;
     }
-    
+
     public void addProduct(Product product) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -138,19 +140,19 @@ public class ProductDAO extends DBContext {
                 stm.setInt(7, product.getCategoryId());
                 stm.setBoolean(8, false);
                 stm.setDouble(9, product.getRating());
-                
+
                 stm.executeUpdate();
             }
         } finally {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
     }
-    
+
     public void updateProduct(Product product) throws SQLException {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
         try {
@@ -177,20 +179,20 @@ public class ProductDAO extends DBContext {
                 stm.setString(6, product.getImg3());
                 stm.setInt(7, product.getCategoryId());
                 stm.setInt(8, product.getProductId());
-                
+
                 stm.executeUpdate();
             }
         } finally {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
-        
+
     }
-    
+
     public void deleteProduct(int productId) throws SQLException {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
         try {
@@ -205,16 +207,66 @@ public class ProductDAO extends DBContext {
                 stm = con.prepareStatement(sql);
                 stm.setBoolean(1, true);
                 stm.setInt(2, productId);
-                
+
                 stm.executeUpdate();
             }
         } finally {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
-        
+
     }
-    
+
+    public Product findProductByName(String productName)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product] WHERE [name] = ? AND [is_deleted] = 0";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, productName);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+
+                    Product product = new Product();
+                    
+                    product.setProductId(rs.getInt("product_id"));
+                    product.setName(rs.getString("name"));
+                    product.setDescription(rs.getString("description"));
+                    product.setPrice(rs.getInt("price"));
+                    product.setImg1(rs.getString("image1"));
+                    product.setImg2(rs.getString("image2"));
+                    product.setImg3(rs.getString("image3"));
+                    product.setCategoryId(rs.getInt("category_id"));
+                    product.setIsDelete(rs.getBoolean("is_deleted"));
+                    product.setRating(rs.getDouble("rating"));
+                    
+                    return product;
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return null;
+    }
+
 }

@@ -84,8 +84,6 @@
 
     <body>
 
-        ${error}
-
         <div class="wrapper">
             <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
 
@@ -409,6 +407,28 @@
             </div>
         </div>
 
+        <!-- Error Modal -->
+        <div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModal">Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>${error}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
         crossorigin="anonymous"></script>
@@ -575,6 +595,14 @@
             let inputId = document.querySelector("#idDeleteInput");
             inputId.value = id;
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+        <c:if test="${error != null}">
+            $('#errorModal').modal('show');
+        </c:if>
+        });
     </script>
 
 

@@ -80,9 +80,14 @@ public class ProductControllers extends HttpServlet {
             request.setAttribute("productList", productList);
             request.setAttribute("categoryList", categoryList);
 
+            HttpSession session = request.getSession();
+            if (session.getAttribute("error") != null) {
+                request.setAttribute("error", session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
+
             request.getRequestDispatcher("/Views/admin/products-table.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException ex) {
-            request.setAttribute("error", ex.getMessage());
         }
     }
 
@@ -139,6 +144,8 @@ public class ProductControllers extends HttpServlet {
 
             String description = request.getParameter("description") == null ? "" : request.getParameter("description");
 
+            description = formatDescription(description);
+
             Part[] Parts = {request.getPart("image1"), request.getPart("image2"), request.getPart("image3")};
             List<String> imagePaths = new ArrayList<>();
 
@@ -170,7 +177,12 @@ public class ProductControllers extends HttpServlet {
 
             ProductDAO pDAO = new ProductDAO();
 
-            pDAO.addProduct(product);
+            if (pDAO.findProductByName(name) != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("error", "Add failed: This Name is already existed.");
+            } else {
+                pDAO.addProduct(product);
+            }
 
         } catch (IOException | ServletException ex) {
         } catch (Exception ex) {
@@ -190,6 +202,8 @@ public class ProductControllers extends HttpServlet {
             int categoryID = Integer.parseInt(request.getParameter("categoryId"));
 
             String description = request.getParameter("description") == null ? "" : request.getParameter("description");
+
+            description = formatDescription(description);
 
             Part[] parts = {request.getPart("image1"), request.getPart("image2"), request.getPart("image3")};
 
@@ -228,7 +242,14 @@ public class ProductControllers extends HttpServlet {
 
             ProductDAO pDAO = new ProductDAO();
 
-            pDAO.updateProduct(product);
+            Product foundProduct = pDAO.findProductByName(name);
+
+            if (foundProduct != null && foundProduct.getProductId() != productId) {
+                HttpSession session = request.getSession();
+                session.setAttribute("error", "Update failed: This Name is already existed.");
+            } else {
+                pDAO.updateProduct(product);
+            }
 
         } catch (IOException | ServletException ex) {
         } catch (Exception ex) {
@@ -237,16 +258,40 @@ public class ProductControllers extends HttpServlet {
     }
 
     private void deleteProduct(HttpServletRequest request) {
-        
+
         try {
             int productId = Integer.parseInt(request.getParameter("id"));
-            
+
             ProductDAO pDao = new ProductDAO();
-            
+
             pDao.deleteProduct(productId);
         } catch (SQLException ex) {
         }
-        
+
+    }
+
+    //split sentences to lines
+    private String formatDescription(String description) {
+
+        description = description.replaceAll("-", "").trim();
+
+        //check if description contains dot(s) and length > 1
+        if (description.trim().length() > 1 && description.contains(".")) {
+
+            String[] sentences = description.split("\\.");
+
+            description = "";
+
+            for (String sentence : sentences) {
+                description += "- " + sentence.trim() + ".<br />";
+            }
+        }
+
+        //check if description only has single line
+        if (!(description.contains(".") || description.contains("-")) && description.length() > 1) {
+            description = "-" + description;
+        }
+        return description;
     }
 
 }
