@@ -149,4 +149,44 @@ public class ProductDAO extends DBContext {
         }
     }
 
+    public void updateProduct(Product product) throws SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "UPDATE [dbo].[product]\n"
+                        + "   SET [name] = ?\n"
+                        + "      ,[description] = ?\n"
+                        + "      ,[price] = ?\n"
+                        + "      ,[image1] = ?\n"
+                        + "      ,[image2] = ?\n"
+                        + "      ,[image3] = ?\n"
+                        + "      ,[category_id] = ?\n"
+                        + " WHERE [product_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, product.getName());
+                stm.setString(2, product.getDescription());
+                stm.setDouble(3, product.getPrice());
+                stm.setString(4, product.getImg1());
+                stm.setString(5, product.getImg2());
+                stm.setString(6, product.getImg3());
+                stm.setInt(7, product.getCategoryId());
+                stm.setInt(8, product.getProductId());
+
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+
+    }
+
 }

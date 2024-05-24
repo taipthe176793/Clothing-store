@@ -102,6 +102,9 @@ public class ProductControllers extends HttpServlet {
             case "add":
                 addProduct(request);
                 break;
+            case "update":
+                updateProduct(request);
+                break;
             default:
                 throw new AssertionError();
         }
@@ -163,6 +166,64 @@ public class ProductControllers extends HttpServlet {
             ProductDAO pDAO = new ProductDAO();
 
             pDAO.addProduct(product);
+
+        } catch (IOException | ServletException ex) {
+        } catch (Exception ex) {
+        }
+
+    }
+
+    private void updateProduct(HttpServletRequest request) {
+
+        try {
+            int productId = Integer.parseInt(request.getParameter("id"));
+
+            String name = request.getParameter("name");
+
+            double price = Double.parseDouble(request.getParameter("price"));
+
+            int categoryID = Integer.parseInt(request.getParameter("categoryId"));
+
+            String description = request.getParameter("description") == null ? "" : request.getParameter("description");
+
+            Part[] parts = {request.getPart("image1"), request.getPart("image2"), request.getPart("image3")};
+
+            String[] currentImage = {request.getParameter("currentImage1"),
+                request.getParameter("currentImage2"), request.getParameter("currentImage3")};
+
+            List<String> imagePaths = new ArrayList<>();
+
+            for (int i = 0; i < parts.length; i++) {
+
+                Part part = parts[i];
+
+                String imagePath = null;
+
+                if (part == null
+                        || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty()) {
+                    imagePath = currentImage[i];
+                } else {
+                    String path = request.getServletContext().getRealPath("/images");
+                    File dir = new File(path);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+
+                    File image = new File(dir, part.getSubmittedFileName());
+                    part.write(image.getAbsolutePath());
+
+                    imagePath = request.getContextPath() + "/images/" + image.getName();
+                }
+                imagePaths.add(imagePath);
+            }
+
+            Product product = new Product(productId, name, description, price,
+                    imagePaths.get(0), imagePaths.get(1),
+                    imagePaths.get(2), categoryID, false, 0.0);
+
+            ProductDAO pDAO = new ProductDAO();
+
+            pDAO.updateProduct(product);
 
         } catch (IOException | ServletException ex) {
         } catch (Exception ex) {

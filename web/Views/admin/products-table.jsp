@@ -62,7 +62,7 @@
         <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet" type="text/css">
 
         <link href="${pageContext.request.contextPath}/css/sb-admin.min.css" rel="stylesheet" type="text/css">
-        
+
         <script>
             (function (w, d, s, l, i) {
                 w[l] = w[l] || [];
@@ -83,7 +83,7 @@
     </head>
 
     <body>
-        
+
         ${error}
 
         <div class="wrapper">
@@ -123,6 +123,7 @@
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
+                                                    <th>Id</th>
                                                     <th>Name</th>
                                                     <th>Description</th>
                                                     <th>Price</th>
@@ -136,28 +137,29 @@
                                             </thead>
                                         <c:forEach items="${productList}" var="product">
                                             <tr>
-                                                <td>${product.getName()}</td>
-                                                <td>${product.getDescription()}</td>
-                                                <td>$${product.getPrice()}</td>
-                                                <td><img style="height: 100px" src="${product.getImg1()}" alt="img1" /></td>
-                                                <td><img style="height: 100px" src="${product.getImg2()}" alt="img2" /></td>
-                                                <td><img style="height: 100px" src="${product.getImg3()}" alt="img3" /></td>
+                                                <td name="id">${product.getProductId()}</td>
+                                                <td name="name">${product.getName()}</td>
+                                                <td name="description">${product.getDescription()}</td>
+                                                <td name="price">$${product.getPrice()}</td>
+                                                <td name="img1"><img style="height: 100px" src="${product.getImg1()}" alt="img1" /></td>
+                                                <td name="img2"><img style="height: 100px" src="${product.getImg2()}" alt="img2" /></td>
+                                                <td name="img3"><img style="height: 100px" src="${product.getImg3()}" alt="img3" /></td>
                                                     <c:forEach items="${categoryList}" var="category">
                                                         <c:if test="${product.getCategoryId() == category.getCategoryId()}">
-                                                        <td>${category.getName()}</td>
+                                                        <td name="category">${category.getName()}</td>
                                                     </c:if>
                                                 </c:forEach>
                                                 <td>
                                                     <a class="d-flex justify-content-center" 
                                                        href="product/variants?pId=${product.getProductId()}"><i class="fa fa-eye"></i></a>
                                                 </td>
-                                                <td class="d-block">
-                                                    <form action="" method="post">
-                                                        <button class="btn btn-primary">Update</button>
-                                                    </form>
-                                                    <form action="" method="post">
-                                                        <button class="btn btn-danger">Delete</button>
-                                                    </form>
+                                                <td class="d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-primary"
+                                                            data-toggle="modal" data-target="#editProductModal"
+                                                            onclick="editProductModal(this)">Edit</button>
+                                                    <button type="button" class="btn btn-danger" 
+                                                            data-toggle="modal" data-target="#delete-product-modal"
+                                                            onclick="deleteProductModal(${product.getProductId()})">Delete</button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -176,12 +178,12 @@
             </div>
 
 
-            <!-- Modal -->
+            <!-- Add Modal -->
             <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addBookModalLabel">Add</h5>
+                            <h5 class="modal-title" id="">Add Product</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -277,6 +279,110 @@
             </div>
         </div>
 
+        <!-- Update Modal -->
+        <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Edit Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editModalForm" action="product?action=update" method="POST" enctype="multipart/form-data">
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="idEditInput" name="id">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="nameEditInput" name="name">
+                                <div id="nameEditError" class="error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price:</label>
+                                <input type="text" class="form-control" id="priceEditInput" name="price">
+                                <div id="priceEditError" class="error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category: </label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="categoryEditInput" name="categoryId">
+                                        <c:forEach items="${categoryList}" var="c">
+                                            <option value="${c.getCategoryId()}">${c.getName()}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Category</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- img1 -->
+                            <div class="form-group">
+                                <label for="image1">Image 1: </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="imageEdit" name="image1"
+                                               onchange="displayImage2(this, 'previewImageU1')">
+                                        <label class="custom-file-label">Choose file</label>
+                                    </div>
+                                </div>
+                                <img id="previewImageU1" src="#" alt="Preview"
+                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                <input type="hidden" id="currentImage1" name="currentImage1" value="">
+                            </div>
+                            <!-- img2 -->
+                            <div class="form-group">
+                                <label for="image2">Image 2: </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="imageEdit" name="image2"
+                                               onchange="displayImage2(this, 'previewImageU2')">
+                                        <label class="custom-file-label">Choose file</label>
+                                    </div>
+                                </div>
+                                <img id="previewImageU2" src="#" alt="Preview"
+                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                <input type="hidden" id="currentImage2" name="currentImage2" value="">
+                            </div>
+                            <!-- img3 -->
+                            <div class="form-group">
+                                <label for="image3">Image 3: </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="imageEdit" name="image3"
+                                               onchange="displayImage2(this, 'previewImageU3')">
+                                        <label class="custom-file-label">Choose file</label>
+                                    </div>
+                                </div>
+                                <img id="previewImageU3" src="#" alt="Preview"
+                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                <input type="hidden" id="currentImage3" name="currentImage3" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="descriptionEditInput">Description:</label>
+                                <textarea class="form-control" id="descriptionEdit" name="description"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" form="editModalForm"
+                                onclick="validateForm2()">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
         crossorigin="anonymous"></script>
@@ -320,48 +426,121 @@
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
     <script>
-                            function validateForm() {
-                                let name = $('#nameInput').val();
-                                let price = $('#priceInput').val();
+                                    function validateForm() {
+                                        let name = $('#nameInput').val();
+                                        let price = $('#priceInput').val();
 
-                                //xoá thông báo lỗi hiện tại
-                                $('.error').html('');
+                                        $('.error').html('');
 
-                                if (name === '') {
-                                    $('#nameError').html('Name cannot be empty!');
-                                }
+                                        if (name === '') {
+                                            $('#nameError').html('Name cannot be empty!');
+                                        }
 
-                                if (price === '') {
-                                    $('#priceError').html('Price cannot be empty!');
-                                } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
-                                    $('#priceError').html('Price must greater than 0');
-                                }
+                                        if (price === '') {
+                                            $('#priceError').html('Price cannot be empty!');
+                                        } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
+                                            $('#priceError').html('Price must greater than 0');
+                                        }
 
-                                // Kiểm tra nếu không có lỗi thì submit form
-                                let error = '';
-                                $('.error').each(function () {
-                                    error += $(this).html();
-                                });
-                                if (error === '') {
-                                    $('#addProductForm').submit();
-                                } else {
-                                    event.preventDefault();
-                                }
-                            }
+                                        let error = '';
+                                        $('.error').each(function () {
+                                            error += $(this).html();
+                                        });
+                                        if (error === '') {
+                                            $('#addProductForm').submit();
+                                        } else {
+                                            event.preventDefault();
+                                        }
+                                    }
 
-                            function displayImage(input, previewId) {
-                                var previewImage = document.getElementById(previewId);
-                                var file = input.files[0];
-                                var reader = new FileReader();
+                                    function displayImage(input, previewId) {
+                                        var previewImage = document.getElementById(previewId);
+                                        var file = input.files[0];
+                                        var reader = new FileReader();
 
-                                reader.onload = function (e) {
-                                    previewImage.src = e.target.result;
-                                    previewImage.style.display = "block";
-                                };
+                                        reader.onload = function (e) {
+                                            previewImage.src = e.target.result;
+                                            previewImage.style.display = "block";
+                                        };
 
-                                reader.readAsDataURL(file);
-                            }
+                                        reader.readAsDataURL(file);
+                                    }
 
+
+    </script>
+
+    <script>
+        function validateForm2() {
+            let name = $('#nameEditInput').val();
+            let price = $('#priceEditInput').val();
+
+            $('.error').html('');
+
+            if (name === '') {
+                $('#nameEditError').html('Name cannot be empty');
+            }
+
+            if (price === '') {
+                $('#priceEditError').html('Price cannot be empty');
+            } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
+                $('#priceEditError').html('Price must greater than 0');
+            }
+
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#editModalForm').submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+
+        function displayImage2(input, previewId) {
+            var previewImage = document.getElementById(previewId);
+
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function editProductModal(button) {
+            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+            let name = $(button).closest('tr').find('td[name="name"]').text().trim();
+            let price = $(button).closest('tr').find('td[name="price"]').text().trim().replace('$', '');
+            let categoryText = $(button).closest('tr').find('td[name="category"]').text().trim();
+            let description = $(button).closest('tr').find('td[name="description"]').text().trim();
+            let img1 = $(button).closest('tr').find('td[name="img1"]').find('img').attr('src');
+            let img2 = $(button).closest('tr').find('td[name="img2"]').find('img').attr('src');
+            let img3 = $(button).closest('tr').find('td[name="img3"]').find('img').attr('src');
+
+            $('#idEditInput').val(id);
+            $('#nameEditInput').val(name);
+            $('#priceEditInput').val(price);
+
+            $('#categoryEditInput option').each(function () {
+                if ($(this).text() === categoryText) {
+                    $(this).prop('selected', true);
+                }
+            });
+            $('#descriptionEdit').val(description);
+            $('#previewImageU1').attr('src', img1);
+            $('#previewImageU1').css('display', 'block');
+            $('#currentImage1').val(img1);
+            $('#previewImageU2').attr('src', img2);
+            $('#previewImageU2').css('display', 'block');
+            $('#currentImage2').val(img2);
+            $('#previewImageU3').attr('src', img3);
+            $('#previewImageU3').css('display', 'block');
+            $('#currentImage3').val(img3);
+        }
 
     </script>
 
