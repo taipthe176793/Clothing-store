@@ -383,6 +383,32 @@
             </div>
         </div>
 
+        <!-- Delete Modal -->
+        <div class="modal fade" id="delete-product-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete-modal-label">Delete confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this product?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="product?action=delete" method="POST">
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="idDeleteInput" name="id" value="">
+                            </div>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"885a481028a48591","version":"2024.4.1","token":"1b7cbb72744b40c580f8633c6b62637e"}'
         crossorigin="anonymous"></script>
@@ -542,6 +568,13 @@
             $('#currentImage3').val(img3);
         }
 
+    </script>
+
+    <script>
+        function deleteProductModal(id) {
+            let inputId = document.querySelector("#idDeleteInput");
+            inputId.value = id;
+        }
     </script>
 
 

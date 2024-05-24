@@ -21,6 +21,8 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -104,6 +106,9 @@ public class ProductControllers extends HttpServlet {
                 break;
             case "update":
                 updateProduct(request);
+                break;
+            case "delete":
+                deleteProduct(request);
                 break;
             default:
                 throw new AssertionError();
@@ -229,6 +234,19 @@ public class ProductControllers extends HttpServlet {
         } catch (Exception ex) {
         }
 
+    }
+
+    private void deleteProduct(HttpServletRequest request) {
+        
+        try {
+            int productId = Integer.parseInt(request.getParameter("id"));
+            
+            ProductDAO pDao = new ProductDAO();
+            
+            pDao.deleteProduct(productId);
+        } catch (SQLException ex) {
+        }
+        
     }
 
 }

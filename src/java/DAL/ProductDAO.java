@@ -17,15 +17,15 @@ import java.util.List;
  * @author admin
  */
 public class ProductDAO extends DBContext {
-
+    
     public List<Product> getAllProducts()
             throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-
+        
         List<Product> productList = new ArrayList<>();
-
+        
         try {
             //1. Connect DB
             con = connect;
@@ -50,9 +50,9 @@ public class ProductDAO extends DBContext {
                     p.setCategoryId(rs.getInt("category_id"));
                     p.setIsDelete(rs.getBoolean("is_deleted"));
                     p.setRating(rs.getDouble("rating"));
-
+                    
                     productList.add(p);
-
+                    
                 }
             }
         } finally {
@@ -62,17 +62,17 @@ public class ProductDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-
+            
         }
         return productList;
     }
-
+    
     public Product findProductById(int productId)
             throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-
+        
         try {
             //1. Connect DB
             con = connect;
@@ -98,9 +98,9 @@ public class ProductDAO extends DBContext {
                     p.setCategoryId(rs.getInt("category_id"));
                     p.setIsDelete(rs.getBoolean("is_deleted"));
                     p.setRating(rs.getDouble("rating"));
-
+                    
                     return p;
-
+                    
                 }
             }
         } finally {
@@ -110,11 +110,11 @@ public class ProductDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-
+            
         }
         return null;
     }
-
+    
     public void addProduct(Product product) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -138,19 +138,19 @@ public class ProductDAO extends DBContext {
                 stm.setInt(7, product.getCategoryId());
                 stm.setBoolean(8, false);
                 stm.setDouble(9, product.getRating());
-
+                
                 stm.executeUpdate();
             }
         } finally {
             if (stm != null) {
                 stm.close();
             }
-
+            
         }
     }
-
+    
     public void updateProduct(Product product) throws SQLException {
-
+        
         Connection con = null;
         PreparedStatement stm = null;
         try {
@@ -177,16 +177,44 @@ public class ProductDAO extends DBContext {
                 stm.setString(6, product.getImg3());
                 stm.setInt(7, product.getCategoryId());
                 stm.setInt(8, product.getProductId());
-
+                
                 stm.executeUpdate();
             }
         } finally {
             if (stm != null) {
                 stm.close();
             }
-
+            
         }
-
+        
     }
-
+    
+    public void deleteProduct(int productId) throws SQLException {
+        
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "UPDATE [dbo].[product]\n"
+                        + "   SET [is_deleted] = ?\n"
+                        + " WHERE [product_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setBoolean(1, true);
+                stm.setInt(2, productId);
+                
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            
+        }
+        
+    }
+    
 }
