@@ -129,7 +129,7 @@
 
 
         <!-- Title page -->
-        <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('${pageContext.request.contextPath}/images/bg-02.jpg');">
+        <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('${pageContext.request.contextPath}/images/blog/bg-02.jpg');">
             <h2 class="ltext-105 cl0 txt-center">
                 Blog
             </h2>
@@ -145,7 +145,7 @@
                             <!-- item blog -->
                             <div class="p-b-63">
                                 <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
-                                    <img src="${pageContext.request.contextPath}/images/blog-04.jpg" alt="IMG-BLOG">
+                                    <img src="${pageContext.request.contextPath}/images/blog/blog-04.jpg" alt="IMG-BLOG">
 
 
                                 </a>
@@ -175,7 +175,7 @@
                             <!-- item blog -->
                             <div class="p-b-63">
                                 <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
-                                    <img src="${pageContext.request.contextPath}/images/blog-05.jpg" alt="IMG-BLOG">
+                                    <img src="${pageContext.request.contextPath}/images/blog/blog-05.jpg" alt="IMG-BLOG">
 
                                 </a>
 
@@ -203,7 +203,7 @@
                             <!-- item blog -->
                             <div class="p-b-63">
                                 <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
-                                    <img src="${pageContext.request.contextPath}/images/blog-06.jpg" alt="IMG-BLOG">
+                                    <img src="${pageContext.request.contextPath}/images/blog/blog-06.jpg" alt="IMG-BLOG">
 
 
                                 </a>
@@ -293,7 +293,7 @@
                                 <ul>
                                     <li class="flex-w flex-t p-b-30">
                                         <a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-                                            <img src="${pageContext.request.contextPath}/images/product-min-01.jpg" alt="PRODUCT">
+                                            <img src="${pageContext.request.contextPath}/images/blog/product-min-01.jpg" alt="PRODUCT">
                                         </a>
 
                                         <div class="size-215 flex-col-t p-t-8">
@@ -309,7 +309,7 @@
 
                                     <li class="flex-w flex-t p-b-30">
                                         <a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-                                            <img src="${pageContext.request.contextPath}/images/product-min-02.jpg" alt="PRODUCT">
+                                            <img src="${pageContext.request.contextPath}/images/blog/product-min-02.jpg" alt="PRODUCT">
                                         </a>
 
                                         <div class="size-215 flex-col-t p-t-8">
@@ -325,7 +325,7 @@
 
                                     <li class="flex-w flex-t p-b-30">
                                         <a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-                                            <img src="${pageContext.request.contextPath}/images/product-min-03.jpg" alt="PRODUCT">
+                                            <img src="${pageContext.request.contextPath}/images/blog/product-min-03.jpg" alt="PRODUCT">
                                         </a>
 
                                         <div class="size-215 flex-col-t p-t-8">

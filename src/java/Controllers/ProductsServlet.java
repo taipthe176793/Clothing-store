@@ -5,12 +5,18 @@
 
 package Controllers;
 
+import DAL.ProductDAO;
+import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -53,8 +59,31 @@ public class ProductsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        try {
+            ProductDAO pDao = new ProductDAO();
+            
+            int numOfProductPerPage = 8;
+            int currentPage = Integer.parseInt(request.getParameter("page")  == null ? "1" : request.getParameter("page"));
+            int numOfProduct = pDao.getAllProducts().size();
+            int totalPageNumber = numOfProduct/numOfProductPerPage;
+            
+            int numOfProductEndPage = numOfProduct % numOfProductPerPage;
+            if (numOfProductEndPage != 0) {
+                totalPageNumber++;
+            }
+            List<Product> productList = pDao.getProductByPage(currentPage);
+            request.setAttribute("productList", productList);
+            request.setAttribute("totalPageNumber", totalPageNumber);
+            
+
+        } catch (SQLException ex) {
+        } catch (ClassNotFoundException ex) {
+        }
+        
+        
         request.getRequestDispatcher("Views/product.jsp").forward(request, response);
-    } 
+
+    }
 
     /** 
      * Handles the HTTP <code>POST</code> method.

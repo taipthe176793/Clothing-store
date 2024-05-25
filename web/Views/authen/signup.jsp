@@ -15,10 +15,10 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/authentication.css">
     </head>
     <body>
-        <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/auth-bg-l.jpg');">
+        <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/signup/auth-bg-l.jpg');">
             <div class="inner">
                 <div class="image-holder">
-                    <img src="${pageContext.request.contextPath}/images/auth-bg-s.jpg" style="height: 90%; margin-top: 20px" alt>
+                    <img src="${pageContext.request.contextPath}/images/signup/auth-bg-s.jpg" style="height: 90%; margin-top: 20px" alt>
                 </div>
                 <form id="signupForm" action="auth?action=signup" method="post" onsubmit="return validateForm()">
                     <h3>Sign Up</h3>

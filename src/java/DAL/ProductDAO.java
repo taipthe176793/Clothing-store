@@ -20,6 +20,8 @@ import java.util.logging.Logger;
  */
 public class ProductDAO extends DBContext {
 
+    private final int PRODUCTS_PER_PAGE = 8;
+
     public List<Product> getAllProducts()
             throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -241,7 +243,7 @@ public class ProductDAO extends DBContext {
                 if (rs.next()) {
 
                     Product product = new Product();
-                    
+
                     product.setProductId(rs.getInt("product_id"));
                     product.setName(rs.getString("name"));
                     product.setDescription(rs.getString("description"));
@@ -252,7 +254,7 @@ public class ProductDAO extends DBContext {
                     product.setCategoryId(rs.getInt("category_id"));
                     product.setIsDelete(rs.getBoolean("is_deleted"));
                     product.setRating(rs.getDouble("rating"));
-                    
+
                     return product;
 
                 }
@@ -267,6 +269,59 @@ public class ProductDAO extends DBContext {
 
         }
         return null;
+    }
+
+    public List<Product> getProductByPage(int pageNumber) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> productList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * \n"
+                        + "FROM [dbo].[product]\n"
+                        + "WHERE [is_deleted] = 0\n"
+                        + "ORDER BY [product_id]\n"
+                        + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1,(pageNumber-1) * PRODUCTS_PER_PAGE);
+                stm.setInt(2,PRODUCTS_PER_PAGE);
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    productList.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return productList;
     }
 
 }

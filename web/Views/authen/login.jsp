@@ -31,10 +31,10 @@
         </style>
     </head>
     <body>
-        <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/bg-registration-form.jpg');">
+        <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/login/bg-registration-form.jpg');">
             <div class="inner">
                 <div class="image-holder">
-                    <img src="${pageContext.request.contextPath}/images/registration-form.jpg" alt>
+                    <img src="${pageContext.request.contextPath}/images/login/registration-form.jpg" alt>
                 </div>
                 <form action="auth?action=login" method="post">
                     <h3>Login</h3>
