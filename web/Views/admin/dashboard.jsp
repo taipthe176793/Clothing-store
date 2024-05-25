@@ -14,7 +14,7 @@
         <link rel="apple-touch-icon" sizes="76x76" href="${pageContext.request.contextPath}/images/apple-icon.png">
         <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/favicon.ico">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <title>Light Bootstrap Dashboard - Free Bootstrap 4 Admin Template by Creative Tim</title>
+        <title>Dashboard</title>
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
 
         <link rel="canonical" href="#/product/light-bootstrap-dashboard">

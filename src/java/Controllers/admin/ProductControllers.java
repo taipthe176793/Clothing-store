@@ -6,8 +6,10 @@ package Controllers.admin;
 
 import DAL.CategoryDAO;
 import DAL.ProductDAO;
+import DAL.ProductVariantDAO;
 import Models.Category;
 import Models.Product;
+import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -263,6 +265,12 @@ public class ProductControllers extends HttpServlet {
             int productId = Integer.parseInt(request.getParameter("id"));
 
             ProductDAO pDao = new ProductDAO();
+            ProductVariantDAO pvDao = new ProductVariantDAO();
+
+            //Delete all variant of this product
+            for (ProductVariant pv : pvDao.getAllVariantsOfAProduct(productId)) {
+                pvDao.deleteVariant(pv.getProductVariantId());
+            }
 
             pDao.deleteProduct(productId);
         } catch (SQLException ex) {
