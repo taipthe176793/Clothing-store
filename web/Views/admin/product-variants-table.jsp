@@ -289,18 +289,18 @@
             </div>
         </div>
 
-        <!-- Error Modal -->
-        <div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal">
+        <!-- Notification Modal -->
+        <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="errorModal">Error</h5>
+                        <h5 class="modal-title" id="notiModal">Notification</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>${error}</p>
+                        <p>${notification}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -423,8 +423,8 @@
 
         //Display Error
         $(document).ready(function () {
-        <c:if test="${error != null}">
-            $('#errorModal').modal('show');
+        <c:if test="${notification != null}">
+            $('#notiModal').modal('show');
         </c:if>
         });
 

@@ -83,9 +83,9 @@ public class ProductControllers extends HttpServlet {
             request.setAttribute("categoryList", categoryList);
 
             HttpSession session = request.getSession();
-            if (session.getAttribute("error") != null) {
-                request.setAttribute("error", session.getAttribute("error"));
-                session.removeAttribute("error");
+            if (session.getAttribute("notification") != null) {
+                request.setAttribute("notification", session.getAttribute("notification"));
+                session.removeAttribute("notification");
             }
 
             request.getRequestDispatcher("/Views/admin/products-table.jsp").forward(request, response);
@@ -159,7 +159,7 @@ public class ProductControllers extends HttpServlet {
                         || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty()) {
                     imagePath = "";
                 } else {
-                    String path = request.getServletContext().getRealPath("/images");
+                    String path = request.getServletContext().getRealPath("/images/product");
                     File dir = new File(path);
                     if (!dir.exists()) {
                         dir.mkdirs();
@@ -168,7 +168,7 @@ public class ProductControllers extends HttpServlet {
                     File image = new File(dir, part.getSubmittedFileName());
                     part.write(image.getAbsolutePath());
 
-                    imagePath = request.getContextPath() + "/images/" + image.getName();
+                    imagePath = request.getContextPath() + "/images/product/" + image.getName();
                 }
                 imagePaths.add(imagePath);
             }
@@ -178,12 +178,13 @@ public class ProductControllers extends HttpServlet {
                     imagePaths.get(2), categoryID, false, 0.0);
 
             ProductDAO pDAO = new ProductDAO();
+            HttpSession session = request.getSession();
 
             if (pDAO.findProductByName(name) != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("error", "Add failed: This Name is already existed.");
+                session.setAttribute("notification", "Add failed: This Name is already existed.");
             } else {
                 pDAO.addProduct(product);
+                session.setAttribute("notification", "Added successfully");
             }
 
         } catch (IOException | ServletException ex) {
@@ -224,7 +225,7 @@ public class ProductControllers extends HttpServlet {
                         || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty()) {
                     imagePath = currentImage[i];
                 } else {
-                    String path = request.getServletContext().getRealPath("/images");
+                    String path = request.getServletContext().getRealPath("/images/product");
                     File dir = new File(path);
                     if (!dir.exists()) {
                         dir.mkdirs();
@@ -233,7 +234,7 @@ public class ProductControllers extends HttpServlet {
                     File image = new File(dir, part.getSubmittedFileName());
                     part.write(image.getAbsolutePath());
 
-                    imagePath = request.getContextPath() + "/images/" + image.getName();
+                    imagePath = request.getContextPath() + "/images/product/" + image.getName();
                 }
                 imagePaths.add(imagePath);
             }
@@ -246,11 +247,16 @@ public class ProductControllers extends HttpServlet {
 
             Product foundProduct = pDAO.findProductByName(name);
 
+            HttpSession session = request.getSession();
             if (foundProduct != null && foundProduct.getProductId() != productId) {
-                HttpSession session = request.getSession();
-                session.setAttribute("error", "Update failed: This Name is already existed.");
+
+                session.setAttribute("notification", "Update failed: This Name is already existed.");
+
             } else {
+
                 pDAO.updateProduct(product);
+                session.setAttribute("notification", "Updated successfully.");
+
             }
 
         } catch (IOException | ServletException ex) {
@@ -273,6 +279,10 @@ public class ProductControllers extends HttpServlet {
             }
 
             pDao.deleteProduct(productId);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("notification", "Deleted successfully.");
+
         } catch (SQLException ex) {
         }
 
