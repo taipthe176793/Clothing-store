@@ -113,26 +113,23 @@
                                                 <th>Color</th>
                                                 <th>Size</th>
                                                 <th>Quantity</th>
-                                                <th>Action</th>
-                                                <th>Action</th>
+                                                <th width="10%">Action</th>
                                             </tr>
                                         </thead>
                                         <c:forEach items="${variantsList}" var="variant">
                                             <tr>
-                                                <td>${variant.getProductVariantId()}</td>
+                                                <td name="id">${variant.getProductVariantId()}</td>
                                                 <td>${product.getName()}</td>
-                                                <td>${variant.getColor()}</td>
-                                                <td>${variant.getSize()}</td>
-                                                <td>${variant.getQuantity()}</td>
-                                                <td >
-                                                    <form action="" method="post">
-                                                        <button class="btn btn-primary">Update</button>
-                                                    </form>
-                                                </td>
-                                                <td>
-                                                    <form action="" method="post">
-                                                        <button class="btn btn-danger">Delete</button>
-                                                    </form>
+                                                <td name="color">${variant.getColor()}</td>
+                                                <td name="size">${variant.getSize()}</td>
+                                                <td name="quantity">${variant.getQuantity()}</td>
+                                                <td class="d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-primary"
+                                                            data-toggle="modal" data-target="#editProductModal"
+                                                            onclick="editProductModal(this)">Edit</button>
+                                                    <button type="button" class="btn btn-danger" 
+                                                            data-toggle="modal" data-target="#delete-product-modal"
+                                                            onclick="deleteProductModal(${variant.getProductVariantId()})">Delete</button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -207,12 +204,134 @@
                                 <input type="text" class="form-control" id="quantity" name="quantity">
                                 <div id="quantityError" class="error"></div>
                             </div>
-
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary" form="addProductForm" onclick="validateForm()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Modal -->
+        <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Edit Variant</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editModalForm" action="variants?action=update" method="POST" >
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="idEditInput" name="vId">
+                            </div>
+                            <!--Color-->
+                            <div class="form-group">
+                                <label for="category">Color: </label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="colorEditInput" name="color">
+                                        <option selected value="White">White</option>
+                                        <option value="Cream">Cream</option>
+                                        <option value="Black">Black</option>
+                                        <option value="Gray">Gray</option>
+                                        <option value="Pink">Pink</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Orange">Orange</option>
+                                        <option value="Beige">Beige</option>
+                                        <option value="Brown">Brown</option>
+                                        <option value="Yellow">Yellow</option>
+                                        <option value="Moss Green">Moss Green</option>
+                                        <option value="Green">Green</option>
+                                        <option value="Mint">Mint</option>
+                                        <option value="Navy">Navy</option>
+                                        <option value="Purple">Purple</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Color</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Size-->
+                            <div class="form-group">
+                                <label for="category">Size: </label>
+                                <div class="input-group">
+                                    <select class="custom-select" id="sizeEditInput" name="size">
+                                        <option selected="" value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Size</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Quantity -->
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input type="text" class="form-control" id="quantityEditInput" name="quantity">
+                                <div id="quantityEditError" class="error"></div>
+                            </div>
+                            <div class="form-group" hidden="">
+                                <input type="text" name="pId" value="${product.getProductId()}"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" form="editModalForm"
+                                onclick="validateForm2()">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="delete-product-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete-modal-label">Delete confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this variant?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="variants?action=delete" method="POST">
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="idDeleteInput" name="vId">
+                            </div>
+                            <input type="hidden" class="form-control" name="pId" value="${product.getProductId()}">
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModal">Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>${error}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -258,30 +377,88 @@
 
 
     <script>
-                            function validateForm() {
-                                let quantity = $('#quantity').val();
+    </script>
 
-                                //xoá thông báo lỗi hiện tại
-                                $('.error').html('');
+    <script>
 
-                                if (quantity === '') {
-                                    $('#quantityError').html('Quantity cannot be empty!');
-                                } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                                    $('#quantityError').html('Quantity must greater than 0');
-                                }
+        function validateForm() {
+            let quantity = $('#quantity').val();
 
-                                // Kiểm tra nếu không có lỗi thì submit form
-                                let error = '';
-                                $('.error').each(function () {
-                                    error += $(this).html();
-                                });
-                                if (error === '') {
-                                    $('#addProductForm').submit();
-                                } else {
-                                    event.preventDefault();
-                                }
-                            }
+            //xoá thông báo lỗi hiện tại
+            $('.error').html('');
 
+            if (quantity === '') {
+                $('#quantityError').html('Quantity cannot be empty!');
+            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+                $('#quantityError').html('Quantity must greater than 0');
+            }
+
+            // Kiểm tra nếu không có lỗi thì submit form
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#addProductForm').submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+
+        function validateForm2() {
+            let quantity = $('#quantityEditInput').val();
+
+            $('.error').html('');
+
+            if (quantity === '') {
+                $('#quantityEditError').html('Quantity cannot be empty');
+            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+                $('#quantityEditError').html('Quantity must greater than 0');
+            }
+
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#editModalForm').submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+
+        function editProductModal(button) {
+            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+            let colorText = $(button).closest('tr').find('td[name="color"]').text().trim();
+            let sizeText = $(button).closest('tr').find('td[name="size"]').text().trim();
+            let quantity = $(button).closest('tr').find('td[name="quantity"]').text().trim();
+
+            $('#idEditInput').val(id);
+            $('#quantityEditInput').val(quantity);
+
+            $('#colorEditInput option').each(function () {
+                if ($(this).text() === colorText) {
+                    $(this).prop('selected', true);
+                }
+            });
+            $('#sizeEditInput option').each(function () {
+                if ($(this).text() === sizeText) {
+                    $(this).prop('selected', true);
+                }
+            });
+        }
+
+        function deleteProductModal(id) {
+            let inputId = document.querySelector("#idDeleteInput");
+            inputId.value = id;
+        }
+
+        //Display Error
+        $(document).ready(function () {
+        <c:if test="${error != null}">
+            $('#errorModal').modal('show');
+        </c:if>
+        });
 
     </script>
 

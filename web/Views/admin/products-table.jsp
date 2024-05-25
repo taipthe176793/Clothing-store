@@ -472,50 +472,50 @@
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
     <script>
-                                    function validateForm() {
-                                        let name = $('#nameInput').val();
-                                        let price = $('#priceInput').val();
-
-                                        $('.error').html('');
-
-                                        if (name === '') {
-                                            $('#nameError').html('Name cannot be empty!');
-                                        }
-
-                                        if (price === '') {
-                                            $('#priceError').html('Price cannot be empty!');
-                                        } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
-                                            $('#priceError').html('Price must greater than 0');
-                                        }
-
-                                        let error = '';
-                                        $('.error').each(function () {
-                                            error += $(this).html();
-                                        });
-                                        if (error === '') {
-                                            $('#addProductForm').submit();
-                                        } else {
-                                            event.preventDefault();
-                                        }
-                                    }
-
-                                    function displayImage(input, previewId) {
-                                        var previewImage = document.getElementById(previewId);
-                                        var file = input.files[0];
-                                        var reader = new FileReader();
-
-                                        reader.onload = function (e) {
-                                            previewImage.src = e.target.result;
-                                            previewImage.style.display = "block";
-                                        };
-
-                                        reader.readAsDataURL(file);
-                                    }
-
-
     </script>
 
     <script>
+
+        function validateForm() {
+            let name = $('#nameInput').val();
+            let price = $('#priceInput').val();
+
+            $('.error').html('');
+
+            if (name === '') {
+                $('#nameError').html('Name cannot be empty!');
+            }
+
+            if (price === '') {
+                $('#priceError').html('Price cannot be empty!');
+            } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
+                $('#priceError').html('Price must greater than 0');
+            }
+
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#addProductForm').submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+
+        function displayImage(input, previewId) {
+            var previewImage = document.getElementById(previewId);
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        }
+
         function validateForm2() {
             let name = $('#nameEditInput').val();
             let price = $('#priceEditInput').val();
@@ -588,21 +588,18 @@
             $('#currentImage3').val(img3);
         }
 
-    </script>
-
-    <script>
         function deleteProductModal(id) {
             let inputId = document.querySelector("#idDeleteInput");
             inputId.value = id;
         }
-    </script>
 
-    <script>
+        //Display Error
         $(document).ready(function () {
         <c:if test="${error != null}">
             $('#errorModal').modal('show');
         </c:if>
         });
+
     </script>
 
 

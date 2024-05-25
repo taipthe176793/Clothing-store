@@ -14,8 +14,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,10 +71,16 @@ public class ProductVariantControllers extends HttpServlet {
             ProductVariantDAO pvDao = new ProductVariantDAO();
 
             Product product = pDao.findProductById(productId);
-            List<ProductVariant> variantsList = pvDao.getAllVariantsOfAProduct(productId);
+            product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
+            
+            HttpSession session = request.getSession();
+            if(session.getAttribute("error") != null) {
+                request.setAttribute("error", session.getAttribute("error"));
+                session.removeAttribute("error");
+            }
 
             request.setAttribute("product", product);
-            request.setAttribute("variantsList", variantsList);
+            request.setAttribute("variantsList", product.getVariantList());
 
             request.getRequestDispatcher("/Views/admin/product-variants-table.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException ex) {
@@ -94,27 +100,27 @@ public class ProductVariantControllers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        try {
-            int productId = Integer.parseInt(request.getParameter("pId"));
-            
-            String color = request.getParameter("color");
-            
-            String size = request.getParameter("size");
-            
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            
-            ProductVariant variant = new ProductVariant(productId, color, size, quantity);
-            
-            ProductVariantDAO pvDao = new ProductVariantDAO();
-            
-            pvDao.addProductVariant(variant);
-            
-            String url = request.getRequestURL().toString() + "?pId=" + productId;
-            
-            response.sendRedirect(url);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+
+        int productId = Integer.parseInt(request.getParameter("pId"));
+
+        switch (action) {
+            case "add":
+                addVariant(productId, request);
+                break;
+            case "update":
+                updateVariant(productId, request);
+                break;
+            case "delete":
+                deleteVariant(request);
+                break;
+            default:
+                throw new AssertionError();
         }
+
+        String url = request.getRequestURL().toString() + "?pId=" + productId;
+
+        response.sendRedirect(url);
 
     }
 
@@ -127,5 +133,68 @@ public class ProductVariantControllers extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void addVariant(int productId, HttpServletRequest request) {
+
+        try {
+
+            String color = request.getParameter("color");
+
+            String size = request.getParameter("size");
+
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+            ProductVariant variant = new ProductVariant(productId, color, size, quantity);
+
+            ProductVariantDAO pvDao = new ProductVariantDAO();
+
+            ProductVariant foundVariant = pvDao.findProductVariant(variant);
+
+            if (foundVariant != null && foundVariant.isIsDeleted()) {
+                pvDao.updateVariant(foundVariant.getProductVariantId(), variant);
+            } else if (foundVariant != null && !foundVariant.isIsDeleted()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("error", "Add failed: This Variant is already existed.");
+            } else {
+                pvDao.addProductVariant(variant);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    private void updateVariant(int productId, HttpServletRequest request) {
+
+        try {
+            int variantId = Integer.parseInt(request.getParameter("vId"));
+
+            String color = request.getParameter("color");
+
+            String size = request.getParameter("size");
+
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+            ProductVariantDAO pvDao = new ProductVariantDAO();
+
+            pvDao.updateVariant(variantId, new ProductVariant(variantId, productId, color, size, quantity, false));
+        } catch (SQLException ex) {
+        }
+
+    }
+
+    private void deleteVariant(HttpServletRequest request) {
+
+        try {
+            int variantId = Integer.parseInt(request.getParameter("vId"));
+
+            ProductVariantDAO pvDao = new ProductVariantDAO();
+
+            pvDao.deleteVariant(variantId);
+        } catch (SQLException ex) {
+        }
+
+    }
 
 }

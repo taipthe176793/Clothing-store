@@ -9,12 +9,13 @@ package Models;
  * @author admin
  */
 public class ProductVariant {
-    
+
     private int productVariantId;
     private int productId;
     private String color;
     private String size;
     private int quantity;
+    private boolean isDeleted;
 
     public ProductVariant() {
     }
@@ -26,12 +27,21 @@ public class ProductVariant {
         this.quantity = quantity;
     }
     
-    public ProductVariant(int productVariantId, int productId, String color, String size, int quantity) {
+    public ProductVariant(int productVariantId, int productId, String color, String size, int quantity, boolean isDeleted) {
         this.productVariantId = productVariantId;
         this.productId = productId;
         this.color = color;
         this.size = size;
         this.quantity = quantity;
+        this.isDeleted = isDeleted;
+    }
+
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public int getProductVariantId() {
@@ -70,15 +80,13 @@ public class ProductVariant {
         return quantity;
     }
 
-    @Override
-    public String toString() {
-        return "ProductVariant{" + "productVariantId=" + productVariantId + ", productId=" + productId + ", color=" + color + ", size=" + size + ", quantity=" + quantity + '}';
-    }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "ProductVariant{" + "productVariantId=" + productVariantId + ", productId=" + productId + ", color=" + color + ", size=" + size + ", quantity=" + quantity + ", isDeleted=" + isDeleted + '}';
+    }
+
 }
