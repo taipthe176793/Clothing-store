@@ -47,7 +47,7 @@
 
                 <!-- Logo desktop -->
                 <a href="#" class="logo">
-                    <img src="${pageContext.request.contextPath}/images/icons/logo-01.png" alt="IMG-LOGO">
+                    <img src="${pageContext.request.contextPath}/images/icons/logo-01.jpg" alt="IMG-LOGO">
                 </a>
 
                 <!-- Menu desktop -->
