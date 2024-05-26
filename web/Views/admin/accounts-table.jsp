@@ -81,24 +81,26 @@
                                                     <th>Username</th>
                                                     <th>Password</th>
                                                     <th>Email</th>
+                                                    <th>Phone</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            
-                                        <c:forEach items="${accountList}" var="account"> 
-                                            <tr>
-                                                <td>${account.getAccountId()}</td>
-                                                <c:forEach items="${roleList}" var="role"> 
-                                                    <c:if test="${account.getRoleId() == role.getRoleId()}"> 
-                                                        <td>${role.getName()}</td> 
-                                                    </c:if> 
-                                                </c:forEach>
-                                                <td>${account.getUsername()}</td>
-                                                <td><input type="password" name="name" value="${account.getPassword()}" readonly></td>
-                                                <td>${account.getEmail()}</td>
-                                            </tr>
-                                        </c:forEach>
-                                            </tbody>
+
+                                            <c:forEach items="${accountList}" var="account"> 
+                                                <tr>
+                                                    <td>${account.getAccountId()}</td>
+                                                    <c:forEach items="${roleList}" var="role"> 
+                                                        <c:if test="${account.getRoleId() == role.getRoleId()}"> 
+                                                            <td>${role.getName()}</td> 
+                                                        </c:if> 
+                                                    </c:forEach>
+                                                    <td>${account.getUsername()}</td>
+                                                    <td><input class="font-weight-bold border-0" type="password" name="name" value="${account.getPassword()}" readonly></td>
+                                                    <td>${account.getEmail()}</td>
+                                                    <td class="d-flex justify-content-center">${account.getPhone()}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

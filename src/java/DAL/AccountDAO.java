@@ -213,6 +213,7 @@ public class AccountDAO extends DBContext {
                         + "      ,[password]\n"
                         + "      ,[role_id]\n"
                         + "      ,[email]\n"
+                        + "      ,[phone]\n"
                         + "  FROM [dbo].[account]\n"
                         + "  where role_id != 1";
                 //3. Create Statement
@@ -225,6 +226,7 @@ public class AccountDAO extends DBContext {
                     account.setPassword(rs.getString("password"));
                     account.setRoleId(rs.getInt("role_id"));
                     account.setEmail(rs.getString("email"));
+                    account.setPhone(rs.getString("phone"));
                     accountList.add(account);
                 }
             }
