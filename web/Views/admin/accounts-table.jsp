@@ -76,27 +76,40 @@
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
+                                                    <th>ID</th>
                                                     <th>Role</th>
                                                     <th>Username</th>
                                                     <th>Password</th>
                                                     <th>Email</th>
-                                                    <th>Full name</th>
-                                                    <th>Phone number</th>
-                                                    <th>Address</th>
                                                 </tr>
                                             </thead>
-
-                                        </table>
-                                    </div>
+                                            <tbody>
+                                            
+                                        <c:forEach items="${accountList}" var="account"> 
+                                            <tr>
+                                                <td>${account.getAccountId()}</td>
+                                                <c:forEach items="${roleList}" var="role"> 
+                                                    <c:if test="${account.getRoleId() == role.getRoleId()}"> 
+                                                        <td>${role.getName()}</td> 
+                                                    </c:if> 
+                                                </c:forEach>
+                                                <td>${account.getUsername()}</td>
+                                                <td><input type="password" name="name" value="${account.getPassword()}" readonly></td>
+                                                <td>${account.getEmail()}</td>
+                                            </tr>
+                                        </c:forEach>
+                                            </tbody>
+                                    </table>
                                 </div>
-                                <div class="card-footer small text-muted">Updated</div>
                             </div>
+                            <div class="card-footer small text-muted">Updated</div>
                         </div>
                     </div>
+                </div>
                 <jsp:include page="../common/admin/footer.jsp"></jsp:include>
                 </div>
             </div>
-            
+
         </body>
 
         <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>

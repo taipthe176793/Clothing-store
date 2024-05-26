@@ -4,12 +4,21 @@
  */
 package Controllers.admin;
 
+import DAL.AccountDAO;
+import DAL.RoleDAO;
+import Models.Account;
+import Models.Role;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,7 +64,22 @@ public class AccountControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/Views/admin/accounts-table.jsp").forward(request, response);
+        try {
+            AccountDAO aDAO = new AccountDAO();
+            List<Account> accountList = new ArrayList<>();
+            accountList = aDAO.getAccountList();
+            
+            RoleDAO rDAO = new RoleDAO();
+            List<Role> roleList = new ArrayList<>();
+            roleList = rDAO.getRoleList();
+
+            request.setAttribute("roleList", roleList);
+            request.setAttribute("accountList", accountList);
+            request.getRequestDispatcher("/Views/admin/accounts-table.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**

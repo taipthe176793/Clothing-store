@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -193,5 +195,47 @@ public class AccountDAO extends DBContext {
             }
         }
         return null;
+    }
+
+    public List<Account> getAccountList() throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Account> accountList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT [account_id]\n"
+                        + "      ,[username]\n"
+                        + "      ,[password]\n"
+                        + "      ,[role_id]\n"
+                        + "      ,[email]\n"
+                        + "  FROM [dbo].[account]\n"
+                        + "  where role_id != 1";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setEmail(rs.getString("email"));
+                    accountList.add(account);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return accountList;
     }
 }
