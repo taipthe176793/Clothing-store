@@ -50,7 +50,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../auth?action=logout">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/auth?action=logout">
                         <span class="no-icon">Log out</span>
                     </a>
                 </li>

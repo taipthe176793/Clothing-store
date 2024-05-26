@@ -17,7 +17,7 @@
         <title>Dashboard</title>
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
 
-        <link rel="canonical" href="#/product/light-bootstrap-dashboard">
+<!--        <link rel="canonical" href="#/product/light-bootstrap-dashboard">
 
         <meta name="keywords" content="creative tim, html dashboard, html css dashboard, web dashboard, freebie, free bootstrap dashboard, bootstrap, css3 dashboard, bootstrap admin, light bootstrap dashboard, frontend, responsive bootstrap dashboard, bootstrap 4 admin, bootstrap 4 template, bootstrap 4 dashboard, bootstrap 4, free bootstrap 4">
         <meta name="description" content="A bootstrap 4 admin dashboard template designed to be simple and beautiful.">
@@ -43,7 +43,7 @@
         <meta property="og:url" content="https://demos.creative-tim.com/light-bootstrap-dashboard/dashboard">
         <meta property="og:image" content="https://s3.amazonaws.com/creativetim_bucket/products/32/original/opt_lbd_thumbnail.jpg">
         <meta property="og:description" content="A bootstrap 4 admin dashboard template designed to be simple and beautiful.">
-        <meta property="og:site_name" content="Creative Tim">
+        <meta property="og:site_name" content="Creative Tim">-->
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
@@ -53,7 +53,7 @@
 
         <link href="${pageContext.request.contextPath}/css/demo.css" rel="stylesheet" />
 
-        <script>
+<!--        <script>
             (function (w, d, s, l, i) {
                 w[l] = w[l] || [];
                 w[l].push({
@@ -68,14 +68,14 @@
                         'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
                 f.parentNode.insertBefore(j, f);
             })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
-        </script>
+        </script>-->
 
     </head>
 
     <body>
 
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6"
-                          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!--        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6"
+                          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>-->
 
         <div class="wrapper">
 
@@ -338,7 +338,7 @@
 
     <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+<!--    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>-->
 
     <script src="${pageContext.request.contextPath}/js/plugins/chartist.min.js"></script>
 
