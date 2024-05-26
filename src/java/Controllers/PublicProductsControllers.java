@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author admin
  */
-public class ProductsServlet extends HttpServlet {
+public class PublicProductsControllers extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.

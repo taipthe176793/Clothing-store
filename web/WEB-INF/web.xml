@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <filter>
+        <filter-name>AdminAuthenticationFilter</filter-name>
+        <filter-class>Filter.AdminAuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminAuthenticationFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>HomeControllers</servlet-name>
         <servlet-class>Controllers.HomeControllers</servlet-class>
@@ -11,10 +19,6 @@
     <servlet>
         <servlet-name>CartControllers</servlet-name>
         <servlet-class>Controllers.customer.CartControllers</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>SearchServlet</servlet-name>
-        <servlet-class>Controllers.SearchServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProductManagerServlet</servlet-name>
@@ -42,7 +46,7 @@
     </servlet>
     <servlet>
         <servlet-name>ProductsServlet</servlet-name>
-        <servlet-class>Controllers.ProductsServlet</servlet-class>
+        <servlet-class>Controllers.PublicProductsControllers</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ContentsSerlvet</servlet-name>
@@ -71,10 +75,6 @@
     <servlet-mapping>
         <servlet-name>CartControllers</servlet-name>
         <url-pattern>/cart</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SearchServlet</servlet-name>
-        <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductManagerServlet</servlet-name>

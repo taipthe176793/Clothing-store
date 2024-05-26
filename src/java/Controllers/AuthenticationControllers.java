@@ -147,7 +147,7 @@ public class AuthenticationControllers extends HttpServlet {
             String password = request.getParameter("pass");
             String confirmpass = request.getParameter("confirm-pass");
             if (!password.equals(confirmpass)) {
-                request.setAttribute("error", "Password must match ConfirmPassword!");
+                request.setAttribute("error", "Password must match Confirm Password!");
                 return false;
             }
             if (Adao.checkEmailExist(email)) {
