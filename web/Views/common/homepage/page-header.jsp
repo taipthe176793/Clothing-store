@@ -58,12 +58,9 @@
                         </li>
 
                         <li>
-                            <a href="products">Shop</a>
+                            <a href="shop">Shop</a>
                         </li>
 
-                        <li class="label1" data-label1="hot">
-                            <a href="cart">Features</a>
-                        </li>
 
                         <li>
                             <a href="contents">Blog</a>

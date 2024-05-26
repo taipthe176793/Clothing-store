@@ -6,44 +6,11 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="java.util.*" %>
-<%@page import="Models.Product" %>
-<%@page import="DAL.ProductDAO" %>
-<%
-    // Lấy ID sản phẩm từ request
-    String productIdStr = request.getParameter("id");
-    int productId = 0;
-    if (productIdStr != null && !productIdStr.isEmpty()) {
-        try {
-            productId = Integer.parseInt(productIdStr);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
 
-    // Tạo đối tượng ProductDAO và gọi phương thức findProductById
-    ProductDAO productDAO = new ProductDAO();
-    Product product = null;
-    try {
-        product = productDAO.findProductById(productId);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    // Kiểm tra nếu product null, thì chuyển hướng về trang lỗi hoặc thông báo lỗi
-    if (product == null) {
-        // Chuyển hướng hoặc hiển thị thông báo lỗi
-        response.sendRedirect("error.jsp");
-        return;
-    }
-
-    // Đặt đối tượng product vào request attribute để có thể sử dụng trong JSP
-    request.setAttribute("product", product);
-%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Product</title>
+        <title>ProductDetail</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--===============================================================================================-->
@@ -138,7 +105,7 @@
                             </h4>
 
                             <span class="mtext-106 cl2">
-                                ${product.price}
+                                $${product.price}
                             </span>
 
                             <p class="stext-102 cl3 p-t-23">

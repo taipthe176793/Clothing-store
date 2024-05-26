@@ -296,18 +296,18 @@
                         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
-                                    <a href="${pageContext.request.contextPath}/Views/productDetail.jsp?id=${product.getProductId()}">
+                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}">
                                         <img src="${product.getImg1()}" style="height: 250px; width: 250px;" alt="IMG-PRODUCT">
                                        
                                     </a>
                                 </div>
                                 <div class="block2-txt flex-w flex-t p-t-14">
                                     <div class="block2-txt-child1 flex-col-l">
-                                        <a href="${pageContext.request.contextPath}/Views/productDetail.jsp?id=${product.getProductId()}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                             ${product.getName()}
                                         </a>
                                         <span class="stext-105 cl3">
-                                            ${product.getPrice()}
+                                           $${product.getPrice()}
                                         </span>
                                     </div>
 
@@ -323,7 +323,7 @@
 
                            
                                 <c:forEach begin="1" end="${totalPageNumber}" var="page">
-                                <li class="page-item"><a class="page-link" href="products?page=${page}">${page}</a></li>
+                                <li class="page-item"><a class="page-link" href="shop?page=${page}">${page}</a></li>
                                 </c:forEach>
 
 

@@ -14,15 +14,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author admin
+ * @author caoqu
  */
-public class PublicProductsControllers extends HttpServlet {
+public class ProductDetailControllers extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -39,10 +38,10 @@ public class PublicProductsControllers extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductsServlet</title>");  
+            out.println("<title>Servlet ProductDetailServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductsServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,30 +59,17 @@ public class PublicProductsControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         try {
-            ProductDAO pDao = new ProductDAO();
+            int productId = Integer.parseInt(request.getParameter("id"));
+            Product product = new Product();
+            ProductDAO pDAO = new ProductDAO();
+            product = pDAO.findProductById(productId);
             
-            int numOfProductPerPage = 8;
-            int currentPage = Integer.parseInt(request.getParameter("page")  == null ? "1" : request.getParameter("page"));
-            int numOfProduct = pDao.getAllProducts().size();
-            int totalPageNumber = numOfProduct/numOfProductPerPage;
-            
-            int numOfProductEndPage = numOfProduct % numOfProductPerPage;
-            if (numOfProductEndPage != 0) {
-                totalPageNumber++;
-            }
-            List<Product> productList = pDao.getProductByPage(currentPage);
-            request.setAttribute("productList", productList);
-            request.setAttribute("totalPageNumber", totalPageNumber);
-            
-
+            request.setAttribute("product", product);
+            request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
         } catch (SQLException ex) {
         } catch (ClassNotFoundException ex) {
         }
-        
-        
-        request.getRequestDispatcher("Views/publicProducts.jsp").forward(request, response);
-
-    }
+    } 
 
     /** 
      * Handles the HTTP <code>POST</code> method.
