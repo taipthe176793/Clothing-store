@@ -43,6 +43,13 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <!--===============================================================================================-->
+        <style>
+        .star {
+            font-size: 24px;
+            color: gray;
+        }
+      
+    </style>
     </head>
 
     <body>
@@ -107,6 +114,13 @@
                             <span class="mtext-106 cl2">
                                 $${product.price}
                             </span>
+                            <div id="rating-container">
+                                <span class="star">&#9733;</span>
+                                <span class="star ">&#9733;</span>
+                                <span class="star ">&#9733;</span>
+                                <span class="star ">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                            </div>
 
                             <p class="stext-102 cl3 p-t-23">
                                 ${product.description}
