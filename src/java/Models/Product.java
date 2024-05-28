@@ -5,6 +5,7 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -140,6 +141,34 @@ public class Product {
     public void setRating(double rating) {
         this.rating = rating;
     }
+    public List<String> getSortedVariantColors() {
+        List<String> colors = new ArrayList<>();
+        for (ProductVariant pv : this.getVariantList()) {
+            if (!colors.contains(pv.getColor())) {
+                colors.add(pv.getColor());
+            }
+        }
+        Collections.sort(colors);
+        return colors;
+    }
+    
+    public List<String> getSortedVariantSizes() {
+        List<String> sizes = new ArrayList<>();
+        for (ProductVariant pv : this.getVariantList()) {
+            if (!sizes.contains(pv.getSize())) {
+                sizes.add(pv.getSize());
+            }
+        }
+                Collections.sort(sizes);
+        Collections.reverse(sizes);
+        
+        if (sizes.contains("XL")) {
+            sizes.remove("XL");
+            sizes.add("XL");
+        }
+        return sizes;
+    }
+    
 
     @Override
     public String toString() {
