@@ -244,7 +244,7 @@
 
         <div>
             <section class="my-5 bg-light">
-                <h2 class="text-center">Latest Products</h2>
+                <h2 class="text-center ltext-201 cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Latest Products</h2>
                 <div class="container">
                     <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
@@ -258,9 +258,9 @@
                                             <div class="card">
                                                 <img src="${product.getImg1()}" style="height: 400px">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">${product.name}</h5>
-                                                    <p class="card-text">$${product.price}</p>
-                                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Show</a>
+                                                    <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
+                                                    <p class="card-text text-center">$${product.price}</p>
+                                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -285,7 +285,7 @@
 
         <div>
             <section class="my-5 bg-light">
-                <h2 class="text-center">Random Products</h2>
+                <h2 class="text-center ltext-201 cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Random Products</h2>
                 <div class="container">
                     <div id="carouselThreeColumn2" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
@@ -299,9 +299,9 @@
                                             <div class="card">
                                                 <img src="${product.getImg1()}" style="height: 400px">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">${product.name}</h5>
-                                                    <p class="card-text">$${product.price}</p>
-                                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Show</a>
+                                                    <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
+                                                    <p class="card-text text-center">$${product.price}</p>
+                                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
                                                 </div>
                                             </div>
                                         </div>
