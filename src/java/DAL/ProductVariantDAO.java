@@ -291,7 +291,7 @@ public class ProductVariantDAO extends DBContext {
             }
 
         }
-        return null;
+        return new ProductVariant();
 
     }
 

@@ -139,64 +139,105 @@
                                 <span class="star">&#9733;</span>
                             </div>
 
+                            <form action="product" method="post" >
 
-                            <div class="p-t-33">
-                        
+                                <div class="p-t-33">
+
+                                    <div class="flex-w flex-r-m p-b-10">
+                                        <div class="size-203 flex-c-m respon6">
+                                            Size
+                                        </div>
+                                        <div class="size-204 respon6-next">
+                                            <div class="rs1-select2 bor8 bg0">
+                                                <select class="js-select2" name="size">
+                                                    <c:if test="${quantity==null}" >
+                                                        <option value="" selected="">Choose an option</option>
+                                                        <c:forEach var="size" items="${product.getSortedVariantSizes()}">
+                                                            <option value="${size}">${size}</option>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                    <c:if test="${quantity!=null}" >
+                                                        <option value="" selected="">Choose an option</option>
+                                                        <c:forEach var="size" items="${product.getSortedVariantSizes()}">
+                                                            <c:if test="${sizeB == size}" >
+                                                                <option selected="" value="${size}">${size}</option>
+                                                            </c:if>
+                                                            <c:if test="${sizeB != size}" >
+                                                                <option value="${size}">${size}</option>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:if>
+
+                                                </select>
+                                                <div class="dropDownSelect2"> <input type="hidden" name="productId" value="${product.productId}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="flex-w flex-r-m p-b-10">
+                                        <div class="size-203 flex-c-m respon6">
+                                            Color
+                                        </div>
+                                        <div class="size-204 respon6-next">
+                                            <div class="rs1-select2 bor8 bg0">
+                                                <select class="js-select2" name="color">
+                                                    <option value="">Choose an option</option>
+                                                    <c:if test="${quantity==null}" >
+                                                        <c:forEach var="color" items="${product.getSortedVariantColors()}">
+                                                            <option value="${color}">${color}</option>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                    <c:if test="${quantity!=null}" >
+                                                        <option value="" selected="">Choose an option</option>
+                                                        <c:forEach var="color" items="${product.getSortedVariantColors()}">
+                                                            <c:if test="${colorB == color}" >
+                                                                <option selected="" value="${color}">${color}</option>
+                                                            </c:if>
+                                                            <c:if test="${colorB != color}" >
+                                                                <option value="${color}">${color}</option>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                </select>
+                                                <div class="dropDownSelect2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" d-flex justify-content-end"> 
+                                        <button name="checkQuantity" class="btn btn-dark ms-5">
+                                            Check quantity  
+                                        </button>
+                                         
+                                        <span id="quantity-display" class="mt-1 ms-2">
+                                            ${quantity}
+                                        </span>
+                                    </div>
+
+
+                                </div>
+
+
                                 <div class="flex-w flex-r-m p-b-10">
-                                    <div class="size-203 flex-c-m respon6">
-                                        Size
-                                    </div>
-                                    <div class="size-204 respon6-next">
-                                        <div class="rs1-select2 bor8 bg0">
-                                            <select class="js-select2" name="size">
-                                                <option>Choose an option</option>
-                                                <c:forEach var="size" items="${product.getSortedVariantSizes()}">
-                                                    <option> ${size}</option>
-                                                </c:forEach>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
+                                    <div class="size-204 flex-w flex-m respon6-next">
+                                        <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                <i class="fs-16 zmdi zmdi-minus"></i>
+                                            </div>
+
+                                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+
+                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                <i class="fs-16 zmdi zmdi-plus"></i>
+                                            </div>
                                         </div>
+
+                                        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                            Add to cart
+                                        </button>
                                     </div>
                                 </div>
-
-                               
-                                <div class="flex-w flex-r-m p-b-10">
-                                    <div class="size-203 flex-c-m respon6">
-                                        Color
-                                    </div>
-                                    <div class="size-204 respon6-next">
-                                        <div class="rs1-select2 bor8 bg0">
-                                            <select class="js-select2" name="color">
-                                                <option>Choose an option</option>
-                                                <c:forEach var="color" items="${product.getSortedVariantColors()}">
-                                                    <option>${color}</option>
-                                                </c:forEach>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex-w flex-r-m p-b-10">
-                                <div class="size-204 flex-w flex-m respon6-next">
-                                    <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                            <i class="fs-16 zmdi zmdi-minus"></i>
-                                        </div>
-
-                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
-
-                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                            <i class="fs-16 zmdi zmdi-plus"></i>
-                                        </div>
-                                    </div>
-
-                                    <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                                        Add to cart
-                                    </button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
 
 
@@ -222,8 +263,7 @@
                             </a>
                         </div>
                         <br>
-                        <br>
-                        <div class="mt-5">
+                        <div class="mt-3">
                             <h3>Feedback</h3>
                         </div>
 
@@ -245,6 +285,7 @@
     <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
+
     <script>
         $(".js-select2").each(function () {
             $(this).select2({
