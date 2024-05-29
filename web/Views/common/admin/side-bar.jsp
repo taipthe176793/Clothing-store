@@ -1,11 +1,6 @@
 <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
 
     <div class="sidebar-wrapper">
-        <div class="logo">
-            <a href="#" class="simple-text">
-                Creative Tim
-            </a>
-        </div>
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">

@@ -141,6 +141,7 @@ public class Product {
     public void setRating(double rating) {
         this.rating = rating;
     }
+
     public List<String> getSortedVariantColors() {
         List<String> colors = new ArrayList<>();
         for (ProductVariant pv : this.getVariantList()) {
@@ -151,7 +152,7 @@ public class Product {
         Collections.sort(colors);
         return colors;
     }
-    
+
     public List<String> getSortedVariantSizes() {
         List<String> sizes = new ArrayList<>();
         for (ProductVariant pv : this.getVariantList()) {
@@ -159,16 +160,15 @@ public class Product {
                 sizes.add(pv.getSize());
             }
         }
-                Collections.sort(sizes);
+        Collections.sort(sizes);
         Collections.reverse(sizes);
-        
+
         if (sizes.contains("XL")) {
             sizes.remove("XL");
             sizes.add("XL");
         }
         return sizes;
     }
-    
 
     @Override
     public String toString() {

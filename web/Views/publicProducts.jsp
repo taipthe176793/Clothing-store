@@ -323,7 +323,7 @@
                                                 Navy
                                             </a>
                                         </li>
-                                        
+
                                         <li class="p-b-6">
                                             <span class="fs-15 lh-12 m-r-6" style="color: #A020F0;">
                                                 <i class="zmdi zmdi-circle"></i>
@@ -560,6 +560,12 @@
 </script>
 <!--===============================================================================================-->
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+<script>
+
+
+
+</script>
 
 </body>
 </html>

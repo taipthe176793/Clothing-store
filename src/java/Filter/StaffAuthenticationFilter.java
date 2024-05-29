@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author admin
  */
-public class AdminAuthenticationFilter implements Filter {
+public class StaffAuthenticationFilter implements Filter {
 
     private final int ADMIN_ROLE = 1;
     private final int STAFF_ROLE = 2;
@@ -35,13 +35,13 @@ public class AdminAuthenticationFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public AdminAuthenticationFilter() {
+    public StaffAuthenticationFilter() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AdminAuthenticationFilter:DoBeforeProcessing");
+            log("StaffAuthenticationFilter:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -69,7 +69,7 @@ public class AdminAuthenticationFilter implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AdminAuthenticationFilter:DoAfterProcessing");
+            log("StaffAuthenticationFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -116,9 +116,9 @@ public class AdminAuthenticationFilter implements Filter {
         if (account == null) {
             res.sendRedirect(req.getServletContext().getContextPath() + "/auth?action=login");
         } else {
-            if (account.getRoleId() != ADMIN_ROLE) {
-                if (account.getRoleId() == STAFF_ROLE) {
-                    res.sendRedirect(req.getServletContext().getContextPath() + "/staff/dashboard");
+            if (account.getRoleId() != STAFF_ROLE) {
+                if (account.getRoleId() == ADMIN_ROLE) {
+                    res.sendRedirect(req.getServletContext().getContextPath() + "/admin/dashboard");
                 } else {
                     res.sendRedirect(req.getServletContext().getContextPath() + "/home");
                 }
@@ -157,7 +157,7 @@ public class AdminAuthenticationFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("AdminAuthenticationFilter:Initializing filter");
+                log("StaffAuthenticationFilter:Initializing filter");
             }
         }
     }
@@ -168,9 +168,9 @@ public class AdminAuthenticationFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("AdminAuthenticationFilter()");
+            return ("StaffAuthenticationFilter()");
         }
-        StringBuffer sb = new StringBuffer("AdminAuthenticationFilter(");
+        StringBuffer sb = new StringBuffer("StaffAuthenticationFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
