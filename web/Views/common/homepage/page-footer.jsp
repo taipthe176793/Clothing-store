@@ -20,7 +20,7 @@
                 <ul>
                     <c:forEach items="${categoryList}" var="category">
                     <li class="p-b-10">
-                        <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
+                        <a href="shop?categoryId=${category.getCategoryId()}" class="stext-107 cl7 hov-cl1 trans-04">
                             ${category.getName()}
                         </a>
                     </li>

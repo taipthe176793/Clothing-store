@@ -46,7 +46,7 @@
             <nav class="limiter-menu-desktop container">
 
                 <!-- Logo desktop -->
-                <a href="#" class="logo">
+                <a href="home" class="logo">
                     <img src="${pageContext.request.contextPath}/images/icons/logo-01.jpg" alt="IMG-LOGO">
                 </a>
 

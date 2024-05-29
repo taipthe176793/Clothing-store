@@ -69,7 +69,7 @@
                                 </div>
 
                                 <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-                                    <a href="product.jsp" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                                    <a href="shop" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                                         Shop Now
                                     </a>
                                 </div>
@@ -93,7 +93,7 @@
                                 </div>
 
                                 <div class="layer-slick1 animated visible-false" data-appear="slideInUp" data-delay="1600">
-                                    <a href="product.jsp" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                                    <a href="shop" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                                         Shop Now
                                     </a>
                                 </div>
@@ -117,7 +117,7 @@
                                 </div>
 
                                 <div class="layer-slick1 animated visible-false" data-appear="rotateIn" data-delay="1600">
-                                    <a href="product.jsp" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                                    <a href="shop" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                                         Shop Now
                                     </a>
                                 </div>
@@ -136,9 +136,9 @@
                     <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
                         <!-- Block1 -->
                         <div class="block1 wrap-pic-w">
-                            <img src="${pageContext.request.contextPath}/images/banner-01.jpg" alt="IMG-BANNER">
+                            <img src="${pageContext.request.contextPath}/images/banner-03.jpg" alt="IMG-BANNER">
 
-                            <a href="product.jsp" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <a href="shop?categoryId=1" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
                                 <div class="block1-txt-child1 flex-col-l">
                                     <span class="block1-name ltext-102 trans-04 p-b-8">
                                         Tee
@@ -157,9 +157,9 @@
                     <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
                         <!-- Block1 -->
                         <div class="block1 wrap-pic-w">
-                            <img src="${pageContext.request.contextPath}/images/banner-01.jpg" alt="IMG-BANNER">
+                            <img src="${pageContext.request.contextPath}/images/banner-03.jpg" alt="IMG-BANNER">
 
-                            <a href="product.jsp" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <a href="shop?categoryId=2" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
                                 <div class="block1-txt-child1 flex-col-l">
                                     <span class="block1-name ltext-102 trans-04 p-b-8">
                                         Jacket
@@ -178,9 +178,9 @@
                     <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
                         <!-- Block1 -->
                         <div class="block1 wrap-pic-w">
-                            <img src="${pageContext.request.contextPath}/images/banner-01.jpg" alt="IMG-BANNER">
+                            <img src="${pageContext.request.contextPath}/images/banner-03.jpg" alt="IMG-BANNER">
 
-                            <a href="product.jsp" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <a href="shop?categoryId=3" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
                                 <div class="block1-txt-child1 flex-col-l">
                                     <span class="block1-name ltext-102 trans-04 p-b-8">
                                         Hoodie
@@ -199,9 +199,9 @@
                     <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
                         <!-- Block1 -->
                         <div class="block1 wrap-pic-w">
-                            <img src="${pageContext.request.contextPath}/images/banner-02.jpg" alt="IMG-BANNER">
+                            <img src="${pageContext.request.contextPath}/images/banner-03.jpg" alt="IMG-BANNER">
 
-                            <a href="product.jsp" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <a href="shop?categoryId=4" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
                                 <div class="block1-txt-child1 flex-col-l">
                                     <span class="block1-name ltext-102 trans-04 p-b-8">
                                         Sweater
@@ -222,7 +222,7 @@
                         <div class="block1 wrap-pic-w">
                             <img src="${pageContext.request.contextPath}/images/banner-03.jpg" alt="IMG-BANNER">
 
-                            <a href="product.jsp" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                            <a href="shop?categoryId=5" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
                                 <div class="block1-txt-child1 flex-col-l">
                                     <span class="block1-name ltext-102 trans-04 p-b-8">
                                         Bottoms
@@ -246,10 +246,6 @@
             <section class="my-5 bg-light">
                 <h2 class="text-center">Latest Products</h2>
                 <div class="container">
-                    <div class="col-xl-12">
-                        <h2 class="text-center text-white">Carousel 3 Column Product Slider</h2>
-                    </div>
-
                     <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
                             <c:set var="chunkSize" value="3"/>
@@ -291,10 +287,6 @@
             <section class="my-5 bg-light">
                 <h2 class="text-center">Random Products</h2>
                 <div class="container">
-                    <div class="col-xl-12">
-                        <h2 class="text-center text-white">Carousel 3 Column Product Slider</h2>
-                    </div>
-
                     <div id="carouselThreeColumn2" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
                             <c:set var="chunkSize" value="3"/>
