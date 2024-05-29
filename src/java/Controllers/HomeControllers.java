@@ -5,7 +5,9 @@
 package Controllers;
 
 import DAL.CategoryDAO;
+import DAL.ProductDAO;
 import Models.Category;
+import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -64,12 +66,21 @@ public class HomeControllers extends HttpServlet {
             List<Category> categoryList = new ArrayList<>();
             CategoryDAO cDAO = new CategoryDAO();
             categoryList = cDAO.getAllCategories();
+            
+            ProductDAO pDAO = new ProductDAO();
+            List<Product> lastestProducts = pDAO.getLastestProducts();
+            List<Product> randomProducts = pDAO.getRandomProducts();
+            
+            request.setAttribute("lastestProducts", lastestProducts);
+            request.setAttribute("randomProducts", randomProducts);
 
             request.setAttribute("categoryList", categoryList);
             request.getRequestDispatcher("Views/home.jsp").forward(request, response);
         } catch (SQLException ex) {
         } catch (ClassNotFoundException ex) {
         }
+        
+        
     }
 
     /**

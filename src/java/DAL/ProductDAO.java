@@ -290,8 +290,8 @@ public class ProductDAO extends DBContext {
                         + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
-                stm.setInt(1,(pageNumber-1) * PRODUCTS_PER_PAGE);
-                stm.setInt(2,PRODUCTS_PER_PAGE);
+                stm.setInt(1, (pageNumber - 1) * PRODUCTS_PER_PAGE);
+                stm.setInt(2, PRODUCTS_PER_PAGE);
                 //4. Excute Query
                 rs = stm.executeQuery();
                 //5. Process Result
@@ -324,4 +324,106 @@ public class ProductDAO extends DBContext {
         return productList;
     }
 
+    public List<Product> getLastestProducts()
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> lastestProducts = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT TOP 6 * FROM product\n"
+                        + "WHERE [is_deleted] = 0 \n"
+                        + "ORDER BY product_id DESC";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    lastestProducts.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return lastestProducts;
+    }
+
+    
+    public List<Product> getRandomProducts()
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> randomProducts = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT TOP 6 * FROM product\n"
+                        + "WHERE [is_deleted] = 0 \n"
+                        + "ORDER BY NEWID()";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    randomProducts.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return randomProducts;
+    }
 }
