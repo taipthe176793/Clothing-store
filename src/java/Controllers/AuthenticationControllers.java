@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 public class AuthenticationControllers extends HttpServlet {
 
     private final int ADMIN_ROLE = 1;
+    private final int STAFF_ROLE = 2;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -116,6 +117,8 @@ public class AuthenticationControllers extends HttpServlet {
                     session.setAttribute("account", account);
                     if (account.getRoleId() == ADMIN_ROLE) {
                         response.sendRedirect("admin/dashboard");
+                    } else if(account.getRoleId() == STAFF_ROLE){
+                        response.sendRedirect("staff/dashboard");
                     } else {
                         response.sendRedirect("home");
                     }
