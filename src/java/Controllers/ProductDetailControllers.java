@@ -96,8 +96,8 @@ public class ProductDetailControllers extends HttpServlet {
             ProductVariantDAO pvDao = new ProductVariantDAO();
             if (color != "" && size != "") {
                 ProductVariant variant = pvDao.findVariantByProperties(productId, color, size);
-                request.setAttribute("colorB", color);
-                request.setAttribute("sizeB", size);
+                request.setAttribute("selectedColor", color);
+                request.setAttribute("selectedSize", size);
                 request.setAttribute("quantity", variant.getQuantity());
             }
 

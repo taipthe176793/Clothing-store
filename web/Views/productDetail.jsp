@@ -159,10 +159,10 @@
                                                     <c:if test="${quantity!=null}" >
                                                         <option value="" selected="">Choose an option</option>
                                                         <c:forEach var="size" items="${product.getSortedVariantSizes()}">
-                                                            <c:if test="${sizeB == size}" >
+                                                            <c:if test="${selectedSize == size}" >
                                                                 <option selected="" value="${size}">${size}</option>
                                                             </c:if>
-                                                            <c:if test="${sizeB != size}" >
+                                                            <c:if test="${selectedSize != size}" >
                                                                 <option value="${size}">${size}</option>
                                                             </c:if>
                                                         </c:forEach>
@@ -182,8 +182,9 @@
                                         <div class="size-204 respon6-next">
                                             <div class="rs1-select2 bor8 bg0">
                                                 <select class="js-select2" name="color">
-                                                    <option value="">Choose an option</option>
+                                                    
                                                     <c:if test="${quantity==null}" >
+                                                        <option value="">Choose an option</option>
                                                         <c:forEach var="color" items="${product.getSortedVariantColors()}">
                                                             <option value="${color}">${color}</option>
                                                         </c:forEach>
@@ -191,10 +192,10 @@
                                                     <c:if test="${quantity!=null}" >
                                                         <option value="" selected="">Choose an option</option>
                                                         <c:forEach var="color" items="${product.getSortedVariantColors()}">
-                                                            <c:if test="${colorB == color}" >
+                                                            <c:if test="${selectedColor == color}" >
                                                                 <option selected="" value="${color}">${color}</option>
                                                             </c:if>
-                                                            <c:if test="${colorB != color}" >
+                                                            <c:if test="${selectedColor != color}" >
                                                                 <option value="${color}">${color}</option>
                                                             </c:if>
                                                         </c:forEach>
