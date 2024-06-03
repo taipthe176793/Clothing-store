@@ -14,7 +14,7 @@ public class DBContext {
             ex.printStackTrace();
         }
     }
-    
+
     private final String serverName = "localhost";
     private final String dbName = "Online_Clothing_Store";
     private final String portNumber = "1433";

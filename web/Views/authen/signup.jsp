@@ -20,13 +20,13 @@
                 <div class="image-holder">
                     <img src="${pageContext.request.contextPath}/images/signup/auth-bg-s.jpg" style="height: 90%; margin-top: 20px" alt>
                 </div>
-                <form id="signupForm" action="auth?action=signup" method="post" onsubmit="return validateForm()">
+                <form id="signupForm" action="auth?action=signup" method="post" onsubmit="return validateForm()" novalidate>
                     <h3>Sign Up</h3>
                     <div class="form-wrapper">
                         <input name="fullname" type="text" placeholder="Full Name" class="form-control" required>
                     </div>
                     <div class="form-wrapper">
-                        <input name="user" type="text" placeholder="Username" class="form-control" pattern=".{6,}$" required>
+                        <input name="user" type="text" placeholder="Username" class="form-control" required>
                         <i class="zmdi zmdi-account"></i>
                     </div>
                     <div class="form-wrapper">
@@ -34,10 +34,10 @@
                         <i class="zmdi zmdi-email"></i>
                     </div>
                     <div class="form-wrapper">
-                        <input name="phone" type="text" placeholder="Phone Number" class="form-control" pattern="^0\d{9}$"  required>
+                        <input name="phone" type="text" placeholder="Phone Number" class="form-control" required>
                     </div>
                     <div class="form-wrapper">
-                        <input name="pass" type="password" placeholder="Password" class="form-control" pattern="^.{8,}$"  required>
+                        <input name="pass" type="password" placeholder="Password" class="form-control" required>
                         <i class="zmdi zmdi-lock"></i>
                     </div>
                     <div class="form-wrapper">
@@ -57,43 +57,51 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-
-            function gtag() {
-                dataLayer.push(arguments);
-            }
+            function gtag() { dataLayer.push(arguments); }
             gtag('js', new Date());
-
             gtag('config', 'UA-23581568-13');
         </script>
-        <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"88761a3dfc270ebd","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}'
-        crossorigin="anonymous"></script>
-        
+        <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"88761a3dfc270ebd","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+
         <script>
             function validateForm() {
-                var usernamePattern = /^.{6,}$/;
-                var phonePattern = /^0\d{9}$/;
-                var passwordPattern = /^.{8,}$/;
-                
-                var username = doccument.form["signupForm"]["user"].value;
-                var phone = document.forms["signupForm"]["phone"].value;
-                var password = document.forms["signupForm"]["pass"].value;
-                
-                if(!usernamePattern.test(user)){
-                    alert("Username must be at least 6 characters")
-                    return false;
+                var usernamePattern = /^(?!.*\s).{6,}$/;
+                var phonePattern = /^(?!.*\s)0\d{9}$/;
+                var passwordPattern = /^(?!.*\s).{8,}$/;
+
+                var form = document.forms["signupForm"];
+                var username = form["user"];
+                var phone = form["phone"];
+                var password = form["pass"];
+
+                var isValid = true;
+
+                if (!usernamePattern.test(username.value)) {
+                    username.setCustomValidity("Username must be at least 6 characters without spaces.");
+                    isValid = false;
+                } else {
+                    username.setCustomValidity("");
                 }
 
-                if (!phonePattern.test(phone)) {
-                    alert("Phone number must be 10 digits and start with 0.");
-                    return false;
+                if (!phonePattern.test(phone.value)) {
+                    phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
+                    isValid = false;
+                } else {
+                    phone.setCustomValidity("");
                 }
 
-                if (!passwordPattern.test(password)) {
-                    alert("Password must be at least 8 characters.");
-                    return false;
+                if (!passwordPattern.test(password.value)) {
+                    password.setCustomValidity("Password must be at least 8 characters without spaces.");
+                    isValid = false;
+                } else {
+                    password.setCustomValidity("");
                 }
 
-                return true;
+                if (!isValid) {
+                    form.reportValidity();
+                }
+
+                return isValid;
             }
         </script>
     </body>
