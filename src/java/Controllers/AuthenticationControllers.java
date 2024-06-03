@@ -23,8 +23,8 @@ import java.util.logging.Logger;
  */
 public class AuthenticationControllers extends HttpServlet {
 
-    private final int ADMIN_ROLE = 1;
-    private final int STAFF_ROLE = 2;
+    private static final int ADMIN_ROLE = 1;
+    private static final int STAFF_ROLE = 2;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -142,7 +142,7 @@ public class AuthenticationControllers extends HttpServlet {
 
     private boolean signUp(HttpServletRequest request, HttpServletResponse response) {
         try {
-            AccountDAO Adao = new AccountDAO();
+            AccountDAO aDAO = new AccountDAO();
             String fullname = request.getParameter("fullname");
             String username = request.getParameter("user");
             String email = request.getParameter("email");
@@ -153,16 +153,16 @@ public class AuthenticationControllers extends HttpServlet {
                 request.setAttribute("error", "Password must match Confirm Password!");
                 return false;
             }
-            if (Adao.checkEmailExist(email)) {
+            if (aDAO.checkEmailExist(email)) {
                 request.setAttribute("error", "Email is already used for another account!");
                 return false;
             }
-            if (Adao.checkUsernameExist(username)) {
+            if (aDAO.checkUsernameExist(username)) {
                 request.setAttribute("error", "Username is already existed");
                 return false;
             }
             Account acc = new Account(username, password, 3, email, fullname, phone);
-            Adao.addAccount(acc);
+            aDAO.addAccount(acc);
             return true;
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -176,13 +176,13 @@ public class AuthenticationControllers extends HttpServlet {
             String userInput = request.getParameter("user");
             String password = request.getParameter("pass");
             Account account = null;
-            AccountDAO Adao = new AccountDAO();
+            AccountDAO aDAO = new AccountDAO();
             if (userInput.contains("@")) {
 
-                account = Adao.loginByEmail(userInput, password);
+                account = aDAO.loginByEmail(userInput, password);
 
             } else {
-                account = Adao.loginByUsername(userInput, password);
+                account = aDAO.loginByUsername(userInput, password);
             }
             return account;
         } catch (SQLException ex) {

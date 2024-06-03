@@ -36,7 +36,7 @@
                 <div class="image-holder">
                     <img src="${pageContext.request.contextPath}/images/login/registration-form.jpg" alt>
                 </div>
-                <form action="auth?action=login" method="post">
+                <form id="loginForm" action="auth?action=login" method="post" onsubmit="return validateLoginForm()" novalidate>
                     <h3>Login</h3>
                     <div class="form-wrapper">
                         <input name="user" type="text" placeholder="Username or Email" class="form-control" required>
@@ -52,23 +52,56 @@
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
                     <!-- or login by google -->
-                    <div class="signup-link">Don't have an account yet? <a style="text-decoration: none" href="auth?action=signup">Sign Up Now<a/></div>
+                    <div class="signup-link">Don't have an account yet? <a style="text-decoration: none" href="auth?action=signup">Sign Up Now</a></div>
                 </form>
             </div>
         </div>
 
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
+                    window.dataLayer = window.dataLayer || [];
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag('js', new Date());
 
-            gtag('config', 'UA-23581568-13');
+                    gtag('config', 'UA-23581568-13');
         </script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"88761a3dfc270ebd","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}'
         crossorigin="anonymous"></script>
+
+        <script>
+                    function validateLoginForm() {
+                        var usernameOrEmailPattern = /^(?!.*\s).+$/;
+                        var passwordPattern = /^(?!.*\s).{8,}$/;
+
+                        var form = document.forms["loginForm"];
+                        var usernameOrEmail = form["user"];
+                        var password = form["pass"];
+
+                        var isValid = true;
+
+                        if (!usernameOrEmailPattern.test(usernameOrEmail.value)) {
+                            usernameOrEmail.setCustomValidity("Username or Email must not contain spaces.");
+                            isValid = false;
+                        } else {
+                            usernameOrEmail.setCustomValidity("");
+                        }
+
+                        if (!passwordPattern.test(password.value)) {
+                            password.setCustomValidity("Password must be at least 8 characters without spaces.");
+                            isValid = false;
+                        } else {
+                            password.setCustomValidity("");
+                        }
+
+                        if (!isValid) {
+                            form.reportValidity();
+                        }
+
+                        return isValid;
+                    }
+        </script>
     </body>
 </html>
