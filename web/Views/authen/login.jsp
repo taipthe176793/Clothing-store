@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
+        <title>Sign in</title>
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
@@ -37,7 +37,7 @@
                     <img src="${pageContext.request.contextPath}/images/login/registration-form.jpg" alt>
                 </div>
                 <form id="loginForm" action="auth?action=login" method="post" onsubmit="return validateLoginForm()" novalidate>
-                    <h3>Login</h3>
+                    <h3>Sign In</h3>
                     <div class="form-wrapper">
                         <input name="user" type="text" placeholder="Username or Email" class="form-control" required>
                         <i class="zmdi zmdi-account"></i>
@@ -52,6 +52,7 @@
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
                     <!-- or login by google -->
+                    <div style="text-align: center; margin: 10px 0;">Or</div>
                     <button onclick="location.href='https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWP391_SE1817/auth?action=loginWithGoogle&response_type=code&client_id=927392698257-i0te23e7qorb6jr5upat4d8ae26ih03f.apps.googleusercontent.com&approval_prompt=force'" class="gsi-material-button">
                         <div class="gsi-material-button-state"></div>
                         <div class="gsi-material-button-content-wrapper">

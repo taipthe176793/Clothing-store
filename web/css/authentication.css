@@ -63,7 +63,8 @@ a:hover {
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
-    align-items: center
+    align-items: center;
+    border-radius: 20px
 }
 
 .inner {
@@ -163,24 +164,23 @@ select option[value=""][disabled] {
 }
 
 button {
-    border: none;
-    width: 164px;
-    height: 51px;
+    background-color: WHITE;
+    width: 120px;
+    height: 40px;
     margin: auto;
-    margin-top: 40px;
+    margin-top: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    background: #333;
+    border: 1px solid #747775;
     font-size: 15px;
-    color: #fff;
+    color: #1f1f1f;
+    border-radius: 20px;
     vertical-align: middle;
-    -webkit-transform: perspective(1px) translateZ(0);
     transform: perspective(1px) translateZ(0);
-    -webkit-transition-duration: .3s;
-    transition-duration: .3s
+    transition-duration: .3s;
 }
 
 button i {
@@ -392,4 +392,11 @@ button:active i {
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
     background-color: #303030;
     opacity: 8%;
+}
+
+.or-divider {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #747775;
 }
