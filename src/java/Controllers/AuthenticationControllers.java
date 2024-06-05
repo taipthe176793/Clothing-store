@@ -6,6 +6,7 @@ package Controllers;
 
 import DAL.AccountDAO;
 import Models.Account;
+import Models.GoogleAccount;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -38,18 +39,15 @@ public class AuthenticationControllers extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AuthenticationControllers</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AuthenticationControllers at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String code = request.getParameter("code");
+        String error = request.getParameter("error");
+
+        if (error != null) {
+            request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
         }
+        GoogleLogin gg = new GoogleLogin();
+        String accessToken = gg.getToken(code);
+        GoogleAccount acc = gg.getUserInfo(accessToken);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -117,7 +115,7 @@ public class AuthenticationControllers extends HttpServlet {
                     session.setAttribute("account", account);
                     if (account.getRoleId() == ADMIN_ROLE) {
                         response.sendRedirect("admin/dashboard");
-                    } else if(account.getRoleId() == STAFF_ROLE){
+                    } else if (account.getRoleId() == STAFF_ROLE) {
                         response.sendRedirect("staff/dashboard");
                     } else {
                         response.sendRedirect("home");
