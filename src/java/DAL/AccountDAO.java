@@ -240,4 +240,38 @@ public class AccountDAO extends DBContext {
         }
         return accountList;
     }
+
+    public Account updateAccount(Account account) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "UPDATE Account SET fullname = ?, email = ?, phone = ?, address = ? WHERE username = ?";
+
+                stm = con.prepareStatement(sql);
+                stm.setString(1, account.getFullname());
+                stm.setString(2, account.getEmail());
+                stm.setString(3, account.getPhone());
+                stm.setString(4, account.getAddress());
+                stm.setString(5, account.getUsername());
+
+                int rowsUpdated = stm.executeUpdate();
+                if (rowsUpdated > 0) {
+                    return account;
+                }
+            }
+        } finally {
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return null;
+    }
 }

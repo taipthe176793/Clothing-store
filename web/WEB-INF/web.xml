@@ -80,6 +80,10 @@
         <servlet-name>StaffDashboardServlet</servlet-name>
         <servlet-class>Controllers.staff.StaffDashboardServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>Controllers.customer.ProfileController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>StaffDashboardServlet</servlet-name>
         <url-pattern>/staff/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileController</servlet-name>
+        <url-pattern>/customer/profile</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
