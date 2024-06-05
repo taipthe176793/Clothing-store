@@ -52,7 +52,7 @@
                         <i class="zmdi zmdi-arrow-right"></i>
                     </button>
                     <!-- or login by google -->
-                    <button onclick="location.href='https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWP391_SE1817/auth?action=login&response_type=code&client_id=927392698257-i0te23e7qorb6jr5upat4d8ae26ih03f.apps.googleusercontent.com&approval_prompt=force'" class="gsi-material-button">
+                    <button onclick="location.href='https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWP391_SE1817/auth?action=loginWithGoogle&response_type=code&client_id=927392698257-i0te23e7qorb6jr5upat4d8ae26ih03f.apps.googleusercontent.com&approval_prompt=force'" class="gsi-material-button">
                         <div class="gsi-material-button-state"></div>
                         <div class="gsi-material-button-content-wrapper">
                             <div class="gsi-material-button-icon">

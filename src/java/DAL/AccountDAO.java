@@ -95,8 +95,8 @@ public class AccountDAO extends DBContext {
             if (con != null) {
                 //2. Create SQL String
                 String sql = "INSERT INTO [dbo].[account]\n"
-                        + "([username] , [password], [role_id], [email], [fullname], [phone])\n"
-                        + "VALUES( ?, ?, ?, ?, ?, ?)";
+                        + "([username] , [password], [role_id], [email], [fullname], [phone], [address])\n"
+                        + "VALUES( ?, ?, ?, ?, ?, ?, ?)";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setString(1, acc.getUsername());
@@ -105,6 +105,7 @@ public class AccountDAO extends DBContext {
                 stm.setString(4, acc.getEmail());
                 stm.setString(5, acc.getFullname());
                 stm.setString(6, acc.getPhone());
+                stm.setString(7,acc.getAddress());
 
                 stm.executeUpdate();
             }
@@ -239,5 +240,44 @@ public class AccountDAO extends DBContext {
             }
         }
         return accountList;
+    }
+
+    public Account getAccountByEmail(String email) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM account WHERE [email] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setEmail(rs.getString("email"));
+                    account.setFullname(rs.getString("fullname"));
+                    account.setPhone(rs.getString("phone"));
+                    account.setAddress(rs.getString("address"));
+                    return account;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return null;
     }
 }
