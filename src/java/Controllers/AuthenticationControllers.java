@@ -204,12 +204,8 @@ public class AuthenticationControllers extends HttpServlet {
             }
             else {
                 AccountDAO aDAO = new AccountDAO();
-                
-                if (aDAO.checkEmailExist(acc.getEmail())) {
-                    account = aDAO.getAccountByEmail(acc.getEmail());
-                }
-                else {
-                    account = new Account();
+                account = new Account();
+                if (!aDAO.checkEmailExist(acc.getEmail())) {
                     account.setUsername(acc.getEmail());
                     String username = account.getUsername();
                     account.setPassword("12345678");
@@ -219,8 +215,8 @@ public class AuthenticationControllers extends HttpServlet {
                     account.setPhone("");
                     account.setAddress("");
                     aDAO.addAccount(account);
-                    account = aDAO.getAccountByEmail(account.getEmail());
                 }
+                    account = aDAO.getAccountByEmail(acc.getEmail());
                 return account;
             }
         } catch (IOException ex) {
