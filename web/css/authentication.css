@@ -64,10 +64,11 @@ a:hover {
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    border-radius: 20px
 }
 
 .inner {
+    border-radius: 20px;
+    border-style: solid;
     padding: 20px;
     background: #fff;
     max-width: 850px;
