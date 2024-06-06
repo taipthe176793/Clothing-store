@@ -6,6 +6,7 @@ package Controllers;
 
 import DAL.AccountDAO;
 import Models.Account;
+import Models.GoogleAccount;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -38,18 +39,6 @@ public class AuthenticationControllers extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AuthenticationControllers</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AuthenticationControllers at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,6 +67,18 @@ public class AuthenticationControllers extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.removeAttribute("account");
                 response.sendRedirect("home");
+                break;
+            case "loginWithGoogle":
+                Account gAccount = loginWithGoogle(request, response);
+                if (gAccount != null) {
+                    session = request.getSession();
+                    session.setAttribute("account", gAccount);
+                    response.sendRedirect("home");
+                }
+                else {
+                    request.setAttribute("error", "Login Failed");
+                    request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
+                }
                 break;
             default:
                 throw new AssertionError();
@@ -117,7 +118,7 @@ public class AuthenticationControllers extends HttpServlet {
                     session.setAttribute("account", account);
                     if (account.getRoleId() == ADMIN_ROLE) {
                         response.sendRedirect("admin/dashboard");
-                    } else if(account.getRoleId() == STAFF_ROLE){
+                    } else if (account.getRoleId() == STAFF_ROLE) {
                         response.sendRedirect("staff/dashboard");
                     } else {
                         response.sendRedirect("home");
@@ -189,5 +190,47 @@ public class AuthenticationControllers extends HttpServlet {
             request.setAttribute("error", ex.getMessage());
         }
         return null;
+    }
+
+    private Account loginWithGoogle(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String code = request.getParameter("code");
+            GoogleLogin gg = new GoogleLogin();
+            String accessToken = gg.getToken(code);
+            GoogleAccount acc = gg.getUserInfo(accessToken);
+            Account account = null;
+            if (acc == null) {
+                return null;
+            }
+            else {
+                AccountDAO aDAO = new AccountDAO();
+                
+                if (aDAO.checkEmailExist(acc.getEmail())) {
+                    account = aDAO.getAccountByEmail(acc.getEmail());
+                }
+                else {
+                    account = new Account();
+                    account.setUsername(acc.getEmail());
+                    String username = account.getUsername();
+                    account.setPassword("12345678");
+                    account.setEmail(acc.getEmail());
+                    account.setRoleId(3);
+                    account.setFullname(acc.getGiven_name());
+                    account.setPhone("");
+                    account.setAddress("");
+                    aDAO.addAccount(account);
+                    account = aDAO.getAccountByEmail(account.getEmail());
+                }
+                return account;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
     }
 }
