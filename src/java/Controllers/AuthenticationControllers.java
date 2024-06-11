@@ -213,7 +213,6 @@ public class AuthenticationControllers extends HttpServlet {
                     account.setRoleId(3);
                     account.setFullname(acc.getGiven_name());
                     account.setPhone("");
-                    account.setAddress("");
                     aDAO.addAccount(account);
                 }
                     account = aDAO.getAccountByEmail(acc.getEmail());

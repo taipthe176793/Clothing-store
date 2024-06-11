@@ -100,14 +100,14 @@
                         
                         var isValid = true;
                         
-                        if (!usernameOrEmailPattern.test(usernameOrEmail.value)) {
+                        if (!usernameOrEmailPattern.test(usernameOrEmail.value) || usernameOrEmail.value.trim() === "") {
                             usernameOrEmail.setCustomValidity("Username or Email must not contain spaces.");
                             isValid = false;
                         } else {
                             usernameOrEmail.setCustomValidity("");
                         }
                         
-                        if (!passwordPattern.test(password.value)) {
+                        if (!passwordPattern.test(password.value) || password.value.trim() === "") {
                             password.setCustomValidity("Password must be at least 8 characters without spaces.");
                             isValid = false;
                         } else {
