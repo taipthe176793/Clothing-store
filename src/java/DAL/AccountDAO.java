@@ -321,7 +321,7 @@ public class AccountDAO extends DBContext {
         ResultSet rs = null;
         List<CustomerAddress> addresses = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM address WHERE account_id = ?";
+            String sql = "SELECT * FROM customer_address WHERE customer_id = ?";
             stm = con.prepareStatement(sql);
             stm.setInt(1, accountId);
 
