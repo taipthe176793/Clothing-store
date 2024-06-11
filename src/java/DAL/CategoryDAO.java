@@ -44,6 +44,7 @@ public class CategoryDAO extends DBContext {
 
                     c.setCategoryId(rs.getInt("category_id"));
                     c.setName(rs.getString("name"));
+                    c.setImg(rs.getString("img"));
 
                     categoryList.add(c);
 

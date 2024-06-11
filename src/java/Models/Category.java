@@ -11,14 +11,31 @@ package Models;
 public class Category {
     private int categoryId;
     private String name;
+    private String img;
 
     public Category() {
     }
 
-    public Category(int categoryId, String name) {
+    public Category(String name, String img) {
+        this.name = name;
+        this.img = img;
+    }
+    
+    public Category(int categoryId, String name, String image) {
         this.categoryId = categoryId;
         this.name = name;
+        this.img = img;
     }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+    
+    
 
     public int getCategoryId() {
         return categoryId;
@@ -38,7 +55,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category{" + "categoryId=" + categoryId + ", name=" + name + '}';
+        return "Category{" + "categoryId=" + categoryId + ", name=" + name + ", img=" + img + '}';
     }
-    
+
 }

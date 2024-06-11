@@ -63,46 +63,56 @@
         </script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"88761a3dfc270ebd","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
 
-        <script>
-            function validateForm() {
-                var usernamePattern = /^(?!.*\s).{6,}$/;
-                var phonePattern = /^(?!.*\s)0\d{9}$/;
-                var passwordPattern = /^(?!.*\s).{8,}$/;
+        
+    <script>
+        function validateForm() {
+            var usernamePattern = /^(?!.*\s).{6,}$/;
+            var phonePattern = /^(?!.*\s)0\d{9}$/;
+            var passwordPattern = /^(?!.*\s).{8,}$/;
+            var emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+            
+            var form = document.forms["signupForm"];
+            var username = form["user"];
+            var phone = form["phone"];
+            var password = form["pass"];
+            var email = form["email"];
+            
+            var isValid = true;
 
-                var form = document.forms["signupForm"];
-                var username = form["user"];
-                var phone = form["phone"];
-                var password = form["pass"];
-
-                var isValid = true;
-
-                if (!usernamePattern.test(username.value)) {
-                    username.setCustomValidity("Username must be at least 6 characters without spaces.");
-                    isValid = false;
-                } else {
-                    username.setCustomValidity("");
-                }
-
-                if (!phonePattern.test(phone.value)) {
-                    phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
-                    isValid = false;
-                } else {
-                    phone.setCustomValidity("");
-                }
-
-                if (!passwordPattern.test(password.value)) {
-                    password.setCustomValidity("Password must be at least 8 characters without spaces.");
-                    isValid = false;
-                } else {
-                    password.setCustomValidity("");
-                }
-
-                if (!isValid) {
-                    form.reportValidity();
-                }
-
-                return isValid;
+            if (!usernamePattern.test(username.value)) {
+                username.setCustomValidity("Username must be at least 6 characters without spaces.");
+                isValid = false;
+            } else {
+                username.setCustomValidity("");
             }
-        </script>
-    </body>
+
+            if (!phonePattern.test(phone.value)) {
+                phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
+                isValid = false;
+            } else {
+                phone.setCustomValidity("");
+            }
+
+            if (!passwordPattern.test(password.value)) {
+                password.setCustomValidity("Password must be at least 8 characters without spaces.");
+                isValid = false;
+            } else {
+                password.setCustomValidity("");
+            }
+
+            if (!emailPattern.test(email.value)) {
+                email.setCustomValidity("Please enter a valid email address.");
+                isValid = false;
+            } else {
+                email.setCustomValidity("");
+            }
+
+            if (!isValid) {
+                form.reportValidity();
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
 </html>
