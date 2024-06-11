@@ -344,4 +344,77 @@ public class AccountDAO extends DBContext {
         }
         return addresses;
     }
+
+    public boolean updatePassword(Account account) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+            String sql = "UPDATE Account SET password = ? WHERE username = ?";
+            stm = con.prepareStatement(sql);
+            stm.setString(1, account.getPassword());
+            stm.setString(2, account.getUsername());
+            int rowsUpdated = stm.executeUpdate();
+            return rowsUpdated > 0;
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+    }
+
+    public boolean changePassword(String username, String currentPassword, String newPassword) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+
+            if (con != null) {
+                // Verify current password
+                String sql = "UPDATE Account SET password = ? WHERE username = ? AND password = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, newPassword);
+                stm.setString(2, username);
+                stm.setString(3, currentPassword);
+
+                int rowsUpdated = stm.executeUpdate();
+                return rowsUpdated > 0;
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return false;
+    }
+
+    // New method to validate the current password
+    public boolean validateCurrentPassword(String username, String currentPassword) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT username FROM Account WHERE username = ? AND password = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, username);
+                stm.setString(2, currentPassword);
+
+                rs = stm.executeQuery();
+                return rs.next();
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return false;
+    }
 }
+
+

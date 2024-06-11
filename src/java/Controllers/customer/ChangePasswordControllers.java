@@ -14,12 +14,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author caoqu
  */
-public class ProfileController extends HttpServlet {
+public class ChangePasswordControllers extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +40,10 @@ public class ProfileController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileController</title>");
+            out.println("<title>Servlet ChangePasswordController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangePasswordController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,23 +61,8 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
+        request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);
 
-        if (action == null) {
-            action = "view";  // default action
-        }
-
-        switch (action) {
-            case "view":
-                viewProfile(request, response);
-                break;
-            case "update":
-                request.getRequestDispatcher("/Views/user/edit-user-profile.jsp").forward(request, response);
-                break;
-            default:
-                response.sendRedirect("home");
-                break;
-        }
     }
 
     /**
@@ -89,64 +76,53 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if (action == null) {
-            action = ""; // default to no action
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("home");
+            return;
         }
 
-        switch (action) {
-            case "update":
-                updateProfile(request, response);
-                break;
-            default:
-                response.sendRedirect("home");
-                break;
-        }
-    }
+        String currentPassword = request.getParameter("current_password");
+        String newPassword = request.getParameter("new_password");
+        String repeatNewPassword = request.getParameter("repeat_new_password");
 
-    private void updateProfile(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        AccountDAO accountDAO = new AccountDAO();
         try {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
-            if (account == null) {
-                response.sendRedirect("home");
+            boolean isCurrentPasswordValid = accountDAO.validateCurrentPassword(account.getUsername(), currentPassword);
+
+            if (!isCurrentPasswordValid) {
+                request.setAttribute("message", "Current password is incorrect.");
+                request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);
                 return;
             }
 
-            String username = request.getParameter("user");
-            String fullname = request.getParameter("fullname");
-            String email = request.getParameter("email");
-            String phone = request.getParameter("phone");
+            if (newPassword.length() < 8 || newPassword.contains(" ")) {
+                request.setAttribute("message", "New password must be at least 8 characters without spaces.");
+                request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);
+                return;
+            }
 
-            account.setUsername(username);
-            account.setFullname(fullname);
-            account.setEmail(email);
-            account.setPhone(phone);
+            if (!newPassword.equals(repeatNewPassword)) {
+                request.setAttribute("message", "New passwords do not match.");
+                request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);
+                return;
+            }
 
-            AccountDAO accDAO = new AccountDAO();
-            Account updatedAccount = accDAO.updateAccount(account);
+            boolean isPasswordUpdated = accountDAO.updatePassword(new Account(account.getUsername(), newPassword));
 
-            if (updatedAccount != null) {
-                session.setAttribute("account", updatedAccount);
-                request.setAttribute("message", "Update Successfully");
-                response.sendRedirect(request.getContextPath() + "/customer/profile?action=view");
+            if (isPasswordUpdated) {
+                session.invalidate();
+                request.setAttribute("message", "Password changed successfully. Please log in with your new password.");
+                response.sendRedirect(request.getContextPath() + "/auth?action=login");
             } else {
-                request.setAttribute("message", "Update Failed");
-                request.getRequestDispatcher("/Views/user/edit-user-profile.jsp").forward(request, response);
+                request.setAttribute("message", "Failed to change password. Please try again.");
+                request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            request.getRequestDispatcher("/Views/user/edit-user-profile.jsp").forward(request, response);
-        }
-    }
-
-    private void viewProfile(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        if (request.getSession().getAttribute("account") != null) {
-            request.getRequestDispatcher("/Views/user/user-profile.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("home");
+            request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);
         }
     }
 

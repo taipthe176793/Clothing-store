@@ -29,9 +29,9 @@
                             Login
                         </a>
                     </c:if>
-                    
+
                     <c:if test="${sessionScope.account ne null}">
-                        <a href="${pageContext.request.contextPath}/customer/profile" class="flex-c-m trans-04 p-lr-25">
+                        <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="flex-c-m trans-04 p-lr-25">
                             My Profile
                         </a>
                         <a href="auth?action=logout" class="flex-c-m trans-04 p-lr-25">
