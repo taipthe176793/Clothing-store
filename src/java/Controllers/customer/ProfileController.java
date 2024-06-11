@@ -88,13 +88,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
 
         account.setUsername(username);
         account.setFullname(fullname);
         account.setEmail(email);
         account.setPhone(phone);
-        account.setAddress(address);
 
         AccountDAO accDAO = new AccountDAO();
         Account updatedAccount = accDAO.updateAccount(account);
