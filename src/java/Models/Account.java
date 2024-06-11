@@ -4,11 +4,14 @@
  */
 package Models;
 
+import java.util.List;
+
 /**
  *
  * @author admin
  */
 public class Account {
+
     private int accountId;
     private String username;
     private String password;
@@ -16,7 +19,7 @@ public class Account {
     private String email;
     private String fullname;
     private String phone;
-    private String address;
+    private List<CustomerAddress> addresses;
 
     public Account() {
     }
@@ -30,7 +33,8 @@ public class Account {
         this.phone = phone;
     }
 
-    public Account(int accountId, String username, String password, int roleId, String email, String fullname, String phone, String address) {
+    public Account(int accountId, String username, String password, int roleId,
+            String email, String fullname, String phone, List<CustomerAddress> addresses) {
         this.accountId = accountId;
         this.username = username;
         this.password = password;
@@ -38,7 +42,7 @@ public class Account {
         this.email = email;
         this.fullname = fullname;
         this.phone = phone;
-        this.address = address;
+        this.addresses = addresses;
     }
 
     public int getAccountId() {
@@ -51,6 +55,14 @@ public class Account {
 
     public String getUsername() {
         return username;
+    }
+
+    public List<CustomerAddress> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<CustomerAddress> addresses) {
+        this.addresses = addresses;
     }
 
     public void setUsername(String username) {
@@ -97,19 +109,9 @@ public class Account {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     @Override
     public String toString() {
-        return "Account{" + "accountId=" + accountId + ", username=" + username + ", password=" + password + ", roleId=" + roleId + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", address=" + address + '}';
+        return "Account{" + "accountId=" + accountId + ", username=" + username + ", password=" + password + ", roleId=" + roleId + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", addresses=" + addresses + '}';
     }
-    
-    
-    
+
 }

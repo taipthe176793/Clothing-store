@@ -5,6 +5,7 @@
 package DAL;
 
 import Models.Account;
+import Models.CustomerAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ public class AccountDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM account WHERE [email] = ? AND account.role_id = 3";
+                String sql = "SELECT * FROM account WHERE [email] = ? AND account.role_id != 1";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setString(1, email);
@@ -95,7 +96,7 @@ public class AccountDAO extends DBContext {
             if (con != null) {
                 //2. Create SQL String
                 String sql = "INSERT INTO [dbo].[account]\n"
-                        + "([username] , [password], [role_id], [email], [fullname], [phone], [address])\n"
+                        + "([username] , [password], [role_id], [email], [fullname], [phone])\n"
                         + "VALUES( ?, ?, ?, ?, ?, ?, ?)";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
@@ -105,7 +106,6 @@ public class AccountDAO extends DBContext {
                 stm.setString(4, acc.getEmail());
                 stm.setString(5, acc.getFullname());
                 stm.setString(6, acc.getPhone());
-                stm.setString(7,acc.getAddress());
 
                 stm.executeUpdate();
             }
@@ -143,7 +143,8 @@ public class AccountDAO extends DBContext {
                     account.setEmail(rs.getString("email"));
                     account.setFullname(rs.getString("fullname"));
                     account.setPhone(rs.getString("phone"));
-                    account.setAddress(rs.getString("address"));
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(con, account.getAccountId());
+                    account.setAddresses(addresses);
                     return account;
                 }
             }
@@ -183,7 +184,8 @@ public class AccountDAO extends DBContext {
                     account.setEmail(rs.getString("email"));
                     account.setFullname(rs.getString("fullname"));
                     account.setPhone(rs.getString("phone"));
-                    account.setAddress(rs.getString("address"));
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(con, account.getAccountId());
+                    account.setAddresses(addresses);
                     return account;
                 }
             }
@@ -242,47 +244,40 @@ public class AccountDAO extends DBContext {
         return accountList;
     }
 
-
     public Account updateAccount(Account account) throws SQLException {
 
         Connection con = null;
         PreparedStatement stm = null;
-        ResultSet rs = null;
         try {
 
             con = connect;
 
             if (con != null) {
-                String sql = "UPDATE Account SET fullname = ?, email = ?, phone = ?, address = ? WHERE username = ?";
+                String sql = "UPDATE Account SET fullname = ?, email = ?, phone = ? WHERE username = ?";
 
                 stm = con.prepareStatement(sql);
                 stm.setString(1, account.getFullname());
                 stm.setString(2, account.getEmail());
                 stm.setString(3, account.getPhone());
-                stm.setString(4, account.getAddress());
-                stm.setString(5, account.getUsername());
+                stm.setString(4, account.getUsername());
 
                 int rowsUpdated = stm.executeUpdate();
                 if (rowsUpdated > 0) {
-                  return account;
+                    return account;
                 }
             }
-        } catch(SQLException e) {
-          e.printStrackTrace();
+        } catch (SQLException e) {
         } finally {
-          if(rs != null ) {
-            rs.close();
-          }
-          if(stm != null ) {
-            stm.close();
-          }
+            if (stm != null) {
+                stm.close();
+            }
         }
-      return null;
+        return null;
     }
-                  
-  public Account getAccountByEmail(String email) throws SQLException {
 
-    Connection con = null;
+    public Account getAccountByEmail(String email) throws SQLException {
+
+        Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
         try {
@@ -305,8 +300,8 @@ public class AccountDAO extends DBContext {
                     account.setEmail(rs.getString("email"));
                     account.setFullname(rs.getString("fullname"));
                     account.setPhone(rs.getString("phone"));
-                    account.setAddress(rs.getString("address"));
-
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(con, account.getAccountId());
+                    account.setAddresses(addresses);
                     return account;
                 }
             }
@@ -319,5 +314,34 @@ public class AccountDAO extends DBContext {
             }
         }
         return null;
+    }
+
+    private List<CustomerAddress> fetchAddressesForAccount(Connection con, int accountId) throws SQLException {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<CustomerAddress> addresses = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM address WHERE account_id = ?";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, accountId);
+
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                CustomerAddress address = new CustomerAddress();
+                address.setAddressId(rs.getInt("address_id"));
+                address.setCustomerId(rs.getInt("customer_id"));
+                address.setPhone(rs.getString("phone"));
+                address.setAddress(rs.getString("address"));
+                addresses.add(address);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return addresses;
     }
 }

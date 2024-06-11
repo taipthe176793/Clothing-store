@@ -9,7 +9,7 @@ package Models;
  *
  * @author admin
  */
-class CustomerAddress {
+public class CustomerAddress {
 
     private int addressId;
     private int customerId;
