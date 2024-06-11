@@ -59,12 +59,12 @@
                                 <div class="tab-content">
                                     <div class="tab-pane fade active show" id="account-general">
                                         <div class="card-body media align-items-center">
-                                        <img src="${pageContext.request.contextPath}/images/user/user-profile-image.png" alt
-                                                 class="d-block ui-w-80">
-                                           
-                                        </div>
-                                        <div class="card-body">
-                                            <form id="editForm" action="${pageContext.request.contextPath}/customer/profile?action=update" method="post">
+                                            <img src="${pageContext.request.contextPath}/images/user/user-profile-image.png" alt
+                                             class="d-block ui-w-80">
+
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="editForm" action="${pageContext.request.contextPath}/customer/profile?action=update" method="post">
                                             <div class="form-group">
                                                 <label class="form-label">Username</label>
                                                 <input name="user" type="text" class="form-control mb-1" value="${account.username}" readonly>
@@ -81,10 +81,12 @@
                                                 <label class="form-label">Phone</label>
                                                 <input name="phone" type="text" class="form-control" value="${account.phone}">
                                             </div>
-
+                                       
                                             <button type="submit" class="btn btn-dark">Save changes</button>&nbsp;
                                             <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-default">Cancel</a>
                                         </form>
+
+
                                     </div>
                                 </div>
                             </div>

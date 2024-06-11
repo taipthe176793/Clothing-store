@@ -1,16 +1,9 @@
-<%-- 
-    Document   : change-password
-    Created on : 6 thg 6, 2024, 00:12:13
-    Author     : caoqu
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
+<html>    <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Change Password</title>
+        <title>Profile Template</title>
         <link rel="stylesheet" href="profile.css">
         <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/icons/favicon.png" />
         <!--===============================================================================================-->
@@ -43,7 +36,6 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
     </head>
 
-
     <body>
         <jsp:include page="../common/homepage/page-header.jsp"></jsp:include>
 
@@ -72,18 +64,19 @@
                         </div>
                         <button type="submit" class="btn btn-dark">Change Password</button>
                         <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-default">Cancel</a>
+
                     </form>
                 </div>
             </div>
         </div>
 
         <jsp:include page="../common/homepage/page-footer.jsp"></jsp:include>
-                <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-                <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script type="text/javascript">
+            <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+            <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script type="text/javascript">
 
-                </script>
+            </script>
         </body>
         <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
