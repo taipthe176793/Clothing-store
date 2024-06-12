@@ -62,4 +62,98 @@ public class CategoryDAO extends DBContext {
         return categoryList;
     }
 
+    public boolean checkCategoryExisted(String name) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        boolean isExisted = false;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[category] WHERE [name] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+                    isExisted = true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return isExisted;
+    }
+
+    public void addCategory(Category category) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "INSERT INTO [dbo].[category]\n"
+                        + "([name] , [img])\n"
+                        + "VALUES\n"
+                        + "(?,?)";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, category.getName());
+                stm.setString(2, category.getImg());
+
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+    }
+
+    public void updateCategory(Category name) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        
+        Category category = new Category();
+        
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "UPDATE [dbo].[category]\n"
+                        + "   SET [name] = ?\n"
+                        + "      ,[img] = ?\n"
+                        + " WHERE [category_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setString(1, category.getName());
+                stm.setString(2, category.getImg());
+                stm.setInt(3, category.getCategoryId());
+
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+
+    }
+
 }

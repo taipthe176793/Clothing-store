@@ -75,71 +75,155 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <table class="table table-bordered" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
+                                                    <th>Id</th>
                                                     <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
+                                                    <th>Image</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
+                                        <c:forEach items="${categoryList}" var="c">
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>$170,750</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ashton Cox</td>
-                                                <td>Junior Technical Author</td>
-                                                <td>San Francisco</td>
-                                                <td>66</td>
-                                                <td>2009/01/12</td>
-                                                <td>$86,000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cedric Kelly</td>
-                                                <td>Senior Javascript Developer</td>
-                                                <td>Edinburgh</td>
-                                                <td>22</td>
-                                                <td>2012/03/29</td>
-                                                <td>$433,060</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Airi Satou</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>33</td>
-                                                <td>2008/11/28</td>
-                                                <td>$162,700</td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                                <td>${c.getCategoryId()}</td>
+                                                <td>${c.getName()}</td>
+                                                <td><img style="height: 200px" src="${c.getImg()}" alt="img" /></td>
+                                                <td class="d-block align-content-center">
+                                                    <button type="button" class="btn btn-primary"
+                                                            data-toggle="modal" data-target="#editCategoryModal"
+                                                            onclick="editCategoryModal(this)">Edit</button>
+                                                </td>
+                                            </tr>      
+                                        </c:forEach>
+                                    </table>
                                 </div>
-                                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                             </div>
+                            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                         </div>
                     </div>
+                </div>
                 <jsp:include page="../common/admin/footer.jsp"></jsp:include>
                 </div>
             </div>
-            
-        </body>
 
-        <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Add Category</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addCategoryForm" action="category?action=add" method="post" enctype="multipart/form-data">
+                                <!--Name-->
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="nameInput" name="name">
+                                    <div id="nameError" class="error"></div>
+                                </div>
+
+
+                                <!--Image-->
+                                <div class="form-group">
+                                    <label for="image">Image: </label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="image" name="image" onchange="displayImage(this, 'previewImage')">
+                                            <label class="custom-file-label" >Choose file</label>
+                                        </div>
+                                    </div>
+                                    <img id="previewImage" src="#" alt="Preview"
+                                         style="display: none; max-width: 300px; max-height: 300px;">
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" form="addCategoryForm" onclick="validateForm()">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Modal -->
+            <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Edit Category</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editModalForm" action="category?action=update" method="POST" enctype="multipart/form-data">
+                                <div class="form-group" style="display: none">
+                                    <input type="text" class="form-control" id="idEditInput" name="id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="nameEditInput" name="name">
+                                    <div id="nameEditError" class="error"></div>
+                                </div>                              
+                                <!-- img -->
+                                <div class="form-group">
+                                    <label for="image1">Image: </label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="imageEdit" name="image"
+                                                   onchange="displayImage2(this, 'previewImage')">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <img id="previewImage" src="#" alt="Preview"
+                                         style="display: none; max-width: 300px; max-height: 300px;">
+                                    <input type="hidden" id="currentImage" name="currentImage" value="">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" form="editModalForm"
+                                    onclick="validateForm2()">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Modal -->
+            <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="notiModal">Notification</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${notification}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
@@ -172,5 +256,95 @@
     <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
+    
+    <script>
+
+    function validateForm() {
+        let name = $('#nameInput').val();
+
+        $('.error').html('');
+
+        if (name === '') {
+            $('#nameError').html('Name cannot be empty!');
+        }
+
+        let error = '';
+        $('.error').each(function () {
+            error += $(this).html();
+        });
+        if (error === '') {
+            $('#addCategoryForm').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
+
+    function displayImage(input, previewId) {
+        var previewImage = document.getElementById(previewId);
+        var file = input.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function validateForm2() {
+        let name = $('#nameEditInput').val();
+
+        $('.error').html('');
+
+        if (name === '') {
+            $('#nameEditError').html('Name cannot be empty');
+        }
+
+        let error = '';
+        $('.error').each(function () {
+            error += $(this).html();
+        });
+        if (error === '') {
+            $('#editModalForm').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
+
+    function displayImage2(input, previewId) {
+        var previewImage = document.getElementById(previewId);
+
+        var file = input.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function editCategoryModal(button) {
+        let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+        let name = $(button).closest('tr').find('td[name="name"]').text().trim();
+        let image = $(button).closest('tr').find('td[name="image"]').find('img').attr('src');
+
+        $('#idEditInput').val(id);
+        $('#nameEditInput').val(name);
+        $('#previewImage').attr('src', image);
+        $('#previewImage').css('display', 'block');
+        $('#currentImage').val(image);
+    }
+
+    //Display Error
+    $(document).ready(function () {
+        <c:if test="${notification != null}">
+            $('#notiModal').modal('show');
+        </c:if>
+    });
+
+    </script>
 
 </html>
