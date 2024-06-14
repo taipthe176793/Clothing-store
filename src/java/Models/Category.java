@@ -21,7 +21,7 @@ public class Category {
         this.img = img;
     }
     
-    public Category(int categoryId, String name, String image) {
+    public Category(int categoryId, String name, String img) {
         this.categoryId = categoryId;
         this.name = name;
         this.img = img;

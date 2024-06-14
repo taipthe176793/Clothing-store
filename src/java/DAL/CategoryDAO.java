@@ -76,6 +76,7 @@ public class CategoryDAO extends DBContext {
                 String sql = "SELECT * FROM [dbo].[category] WHERE [name] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
+                stm.setString(1, name);
 
                 //4. Excute Query
                 rs = stm.executeQuery();
@@ -124,20 +125,18 @@ public class CategoryDAO extends DBContext {
         }
     }
 
-    public void updateCategory(Category name) throws SQLException {
+    public void updateCategory(Category category) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
-        
-        Category category = new Category();
-        
+        String info = category.toString();
         try {
             //1. Connect DB
             con = connect;
             if (con != null) {
                 //2. Create SQL String
                 String sql = "UPDATE [dbo].[category]\n"
-                        + "   SET [name] = ?\n"
-                        + "      ,[img] = ?\n"
+                        + "   SET [name] = ? \n"
+                        + "      ,[img] = ? \n"
                         + " WHERE [category_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);

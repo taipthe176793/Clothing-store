@@ -86,9 +86,9 @@
                                             </thead>
                                         <c:forEach items="${categoryList}" var="c">
                                             <tr>
-                                                <td>${c.getCategoryId()}</td>
-                                                <td>${c.getName()}</td>
-                                                <td><img style="height: 200px" src="${c.getImg()}" alt="img" /></td>
+                                                <td name="id">${c.getCategoryId()}</td>
+                                                <td name="name">${c.getName()}</td>
+                                                <td name="image"><img style="height: 200px" src="${c.getImg()}" alt="img" /></td>
                                                 <td class="d-block align-content-center">
                                                     <button type="button" class="btn btn-primary"
                                                             data-toggle="modal" data-target="#editCategoryModal"
@@ -182,13 +182,13 @@
                                         </div>
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="imageEdit" name="image"
-                                                   onchange="displayImage2(this, 'previewImage')">
+                                                   onchange="displayImage2(this, 'previewImage2')">
                                             <label class="custom-file-label">Choose file</label>
                                         </div>
                                     </div>
-                                    <img id="previewImage" src="#" alt="Preview"
+                                    <img id="previewImage2" src="#" alt="Preview"
                                          style="display: none; max-width: 300px; max-height: 300px;">
-                                    <input type="hidden" id="currentImage" name="currentImage" value="">
+                                    <input type="hidden" id="currentImage" name="currentImage2" value="">
                                 </div>
                             </form>
                         </div>
@@ -333,9 +333,9 @@
 
         $('#idEditInput').val(id);
         $('#nameEditInput').val(name);
-        $('#previewImage').attr('src', image);
-        $('#previewImage').css('display', 'block');
-        $('#currentImage').val(image);
+        $('#previewImage2').attr('src', image);
+        $('#previewImage2').css('display', 'block');
+        $('#currentImage2').val(image);
     }
 
     //Display Error

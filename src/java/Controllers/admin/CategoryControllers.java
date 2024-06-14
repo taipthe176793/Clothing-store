@@ -9,6 +9,7 @@ import Models.Category;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
  *
  * @author admin
  */
+@MultipartConfig
 public class CategoryControllers extends HttpServlet {
 
     /**
@@ -125,7 +127,7 @@ public class CategoryControllers extends HttpServlet {
         try {
             String id = request.getParameter("id");
             String name = request.getParameter("name");
-            String currentImage = request.getParameter("currentImage");
+            String currentImage = request.getParameter("currentImage2");
 
             Part part = request.getPart("image");
             String imagePath;
@@ -151,7 +153,7 @@ public class CategoryControllers extends HttpServlet {
             boolean isExisted = cDAO.checkCategoryExisted(name);
 
             if (isExisted) {
-                session.setAttribute("notification", "Update failed: This Id is not existed.");
+                session.setAttribute("notification", "Update failed: This name has already existed.");
             } else {
                 Category category = new Category(Integer.parseInt(id), name, imagePath);
                 cDAO.updateCategory(category);
