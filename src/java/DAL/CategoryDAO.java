@@ -100,7 +100,7 @@ public class CategoryDAO extends DBContext {
     public void addCategory(Category category) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         try {
             //1. Connect DB
             con = connect;
@@ -153,6 +153,43 @@ public class CategoryDAO extends DBContext {
 
         }
 
+    }
+
+    public Category getCategoryById(int categoryId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        Category category = null;
+
+        try {
+            // Connect to the database
+            con = connect;
+            if (con != null) {
+                // Create SQL query to retrieve the category by ID
+                String sql = "SELECT * FROM [dbo].[category] WHERE [category_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, categoryId);
+
+                // Execute the query
+                rs = stm.executeQuery();
+
+                // Process the result
+                if (rs.next()) {
+                    category = new Category();
+                    category.setCategoryId(rs.getInt("category_id"));
+                    category.setName(rs.getString("name"));
+                    category.setImg(rs.getString("img"));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return category;
     }
 
 }

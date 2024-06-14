@@ -79,17 +79,17 @@
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
-                                                    <th>Name</th>
                                                     <th>Image</th>
+                                                    <th>Name</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                         <c:forEach items="${categoryList}" var="c">
                                             <tr>
                                                 <td name="id">${c.getCategoryId()}</td>
-                                                <td name="name">${c.getName()}</td>
-                                                <td name="image"><img style="height: 200px" src="${c.getImg()}" alt="img" /></td>
-                                                <td class="d-block align-content-center">
+                                                <td name="image" style="width: 200px"><img style="height: 200px; width: 200px; padding: 0" src="${c.getImg()}" alt="img" /></td>
+                                                <td name="name">${c.getName()}</td>  
+                                                <td>
                                                     <button type="button" class="btn btn-primary"
                                                             data-toggle="modal" data-target="#editCategoryModal"
                                                             onclick="editCategoryModal(this)">Edit</button>
@@ -297,7 +297,7 @@
 
         $('.error').html('');
 
-        if (name === '') {
+        if (name.trim() === '') {
             $('#nameEditError').html('Name cannot be empty');
         }
 

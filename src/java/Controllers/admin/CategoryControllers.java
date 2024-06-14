@@ -150,15 +150,20 @@ public class CategoryControllers extends HttpServlet {
             CategoryDAO cDAO = new CategoryDAO();
             HttpSession session = request.getSession();
 
-            boolean isExisted = cDAO.checkCategoryExisted(name);
+            Category currentCategory = cDAO.getCategoryById(Integer.parseInt(id));
+            String currentName = currentCategory.getName();
 
-            if (isExisted) {
-                session.setAttribute("notification", "Update failed: This name has already existed.");
-            } else {
-                Category category = new Category(Integer.parseInt(id), name, imagePath);
-                cDAO.updateCategory(category);
-                session.setAttribute("notification", "Updated successfully.");
+            if (!name.equals(currentName)) {
+                boolean isExisted = cDAO.checkCategoryExisted(name);
+                if (isExisted) {
+                    session.setAttribute("notification", "Update failed: This name has already existed.");
+                    return;
+                }
             }
+
+            Category category = new Category(Integer.parseInt(id), name, imagePath);
+            cDAO.updateCategory(category);
+            session.setAttribute("notification", "Updated successfully.");
 
         } catch (IOException | ServletException ex) {
             ex.printStackTrace();
