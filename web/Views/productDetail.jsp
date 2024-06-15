@@ -13,6 +13,7 @@
         <title>ProductDetail</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <!--===============================================================================================-->
         <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/icons/favicon.png" />
         <!--===============================================================================================-->
@@ -24,7 +25,6 @@
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/linearicons-v1.0.0/icon-font.min.css">
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/css-hamburgers/hamburgers.min.css">
         <!--===============================================================================================-->
@@ -42,8 +42,6 @@
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
         <!--===============================================================================================-->
         <style>
@@ -139,86 +137,53 @@
                                 <span class="star">&#9733;</span>
                             </div>
 
-                            <form action="product" method="post" >
+                            <form action="product" method="get" >
+                                <input type="hidden" name="id" value="${product.productId}" />
 
                                 <div class="p-t-33">
-
-                                    <div class="flex-w flex-r-m p-b-10">
-                                        <div class="size-203 flex-c-m respon6">
-                                            Size
-                                        </div>
-                                        <div class="size-204 respon6-next">
-                                            <div class="rs1-select2 bor8 bg0">
-                                                <select class="js-select2" name="size">
-                                                    <c:if test="${quantity==null}" >
-                                                        <option value="" selected="">Choose an option</option>
-                                                        <c:forEach var="size" items="${product.getSortedVariantSizes()}">
-                                                            <option value="${size}">${size}</option>
-                                                        </c:forEach>
-                                                    </c:if>
-                                                    <c:if test="${quantity!=null}" >
-                                                        <option value="" selected="">Choose an option</option>
-                                                        <c:forEach var="size" items="${product.getSortedVariantSizes()}">
-                                                            <c:if test="${selectedSize == size}" >
-                                                                <option selected="" value="${size}">${size}</option>
-                                                            </c:if>
-                                                            <c:if test="${selectedSize != size}" >
-                                                                <option value="${size}">${size}</option>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </c:if>
-
-                                                </select>
-                                                <div class="dropDownSelect2"> <input type="hidden" name="productId" value="${product.productId}"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
 
                                     <div class="flex-w flex-r-m p-b-10">
                                         <div class="size-203 flex-c-m respon6">
                                             Color
                                         </div>
                                         <div class="size-204 respon6-next">
-                                            <div class="rs1-select2 bor8 bg0">
-                                                <select class="js-select2" name="color">
-                                                    
-                                                    <c:if test="${quantity==null}" >
-                                                        <option value="">Choose an option</option>
-                                                        <c:forEach var="color" items="${product.getSortedVariantColors()}">
-                                                            <option value="${color}">${color}</option>
-                                                        </c:forEach>
-                                                    </c:if>
-                                                    <c:if test="${quantity!=null}" >
-                                                        <option value="" selected="">Choose an option</option>
-                                                        <c:forEach var="color" items="${product.getSortedVariantColors()}">
-                                                            <c:if test="${selectedColor == color}" >
-                                                                <option selected="" value="${color}">${color}</option>
-                                                            </c:if>
-                                                            <c:if test="${selectedColor != color}" >
-                                                                <option value="${color}">${color}</option>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </c:if>
-                                                </select>
-                                                <div class="dropDownSelect2"></div>
+                                            <div class="rs1-select2 bg0">
+                                                <c:forEach var="vColor" items="${product.getSortedVariantColors()}">
+                                                    <input name="color" onclick="this.closest('form').submit()" type="radio" id="${vColor}" class="btn btn-check" value="${vColor}"
+                                                           <c:if test="${vColor eq color}">checked</c:if>
+                                                               />
+                                                           <label class="btn btn-white btn-outline-dark" for="${vColor}">${vColor}</label>
+                                                </c:forEach>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class=" d-flex justify-content-end"> 
-                                        <button name="checkQuantity" class="btn btn-dark ms-5">
-                                            Check quantity  
-                                        </button>
-                                         
-                                        <span id="quantity-display" class="mt-1 ms-2">
-                                            ${quantity}
-                                        </span>
+
+                                    <div class="flex-w flex-r-m p-b-10">
+                                        <div class="size-203 flex-c-m respon6">
+                                            Size
+                                        </div>
+                                        <div class="size-204 respon6-next">
+                                            <div class="rs1-select2 bg0">
+                                                <c:forEach var="vSize" items="${product.getSortedVariantSizes()}">
+                                                    <input name="size" onclick="this.closest('form').submit()" type="radio" id="${vSize}" class="btn btn-check" value="${vSize}"
+                                                           <c:if test="${vSize eq size && sizeQuantity.get(size) != 0}">checked</c:if>
+                                                           <c:if test="${!sizesOfColor.contains(vSize) || (sizeQuantity.get(vSize) == 0)}">disabled</c:if>
+                                                               />
+                                                           <label class="btn btn-white btn-outline-dark" for="${vSize}">${vSize}</label>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
                                     </div>
 
-
+                                    <div class="flex-w p-b-10"> 
+                                        <div class="size-203 flex-c-m respon6">
+                                            Stock
+                                        </div>
+                                        <div class="respon6-next text-danger font-weight-bold">
+                                            ${sizeQuantity.get(size)}
+                                        </div>
+                                    </div>
                                 </div>
-
-
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-204 flex-w flex-m respon6-next">
                                         <div class="wrap-num-product flex-w m-r-20 m-tb-10">
@@ -226,16 +191,25 @@
                                                 <i class="fs-16 zmdi zmdi-minus"></i>
                                             </div>
 
-                                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+                                            <input class="mtext-104 cl3 txt-center num-product" type="number" id="num-product" 
+                                                   <c:if test="${quantity == 0}">value="0" min="0"</c:if>
+                                                   <c:if test="${quantity != 0}">value="1" min="1"</c:if>
+                                                   max="${quantity}">
 
                                             <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                 <i class="fs-16 zmdi zmdi-plus"></i>
                                             </div>
                                         </div>
-
-                                        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                                            Add to cart
-                                        </button>
+                                        <c:if test="${quantity ==  0}">
+                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" disabled>
+                                                Out of Stock
+                                            </button>
+                                        </c:if>
+                                        <c:if test="${quantity !=  0}">
+                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                                Add to cart
+                                            </button>
+                                        </c:if>
                                     </div>
                                 </div>
                             </form>
@@ -277,7 +251,6 @@
 
         <!--===============================================================================================-->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
@@ -286,15 +259,6 @@
     <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
-
-    <script>
-        $(".js-select2").each(function () {
-            $(this).select2({
-                minimumResultsForSearch: 20,
-                dropdownParent: $(this).next('.dropDownSelect2')
-            });
-        })
-    </script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
     <script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
@@ -304,77 +268,80 @@
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
     <script>
-        $('.parallax100').parallax100();
+                                                        $('.parallax100').parallax100();
     </script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
     <script>
-        $('.gallery-lb').each(function () { // the containers for all your galleries
-            $(this).magnificPopup({
-                delegate: 'a', // the selector for gallery item
-                type: 'image',
-                gallery: {
-                    enabled: true
-                },
-                mainClass: 'mfp-fade'
-            });
-        });
+                                                        $('.gallery-lb').each(function () { // the containers for all your galleries
+                                                            $(this).magnificPopup({
+                                                                delegate: 'a', // the selector for gallery item
+                                                                type: 'image',
+                                                                gallery: {
+                                                                    enabled: true
+                                                                },
+                                                                mainClass: 'mfp-fade'
+                                                            });
+                                                        });
     </script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
-    <script>
-        $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
-            e.preventDefault();
-        });
-
-        $('.js-addwish-b2').each(function () {
-            var nameProduct = $(this).parent().parent().find('.js-name-b2').jsp();
-            $(this).on('click', function () {
-                swal(nameProduct, "is added to wishlist !", "success");
-
-                $(this).addClass('js-addedwish-b2');
-                $(this).off('click');
-            });
-        });
-
-        $('.js-addwish-detail').each(function () {
-            var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').jsp();
-
-            $(this).on('click', function () {
-                swal(nameProduct, "is added to wishlist !", "success");
-
-                $(this).addClass('js-addedwish-detail');
-                $(this).off('click');
-            });
-        });
-
-        /*---------------------------------------------*/
-
-        $('.js-addcart-detail').each(function () {
-            var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').jsp();
-            $(this).on('click', function () {
-                swal(nameProduct, "is added to cart !", "success");
-            });
-        });
-    </script>
+    <!--    <script>
+                                                        $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+                                                            e.preventDefault();
+                                                        });
+    
+                                                        $('.js-addwish-b2').each(function () {
+                                                            var nameProduct = $(this).parent().parent().find('.js-name-b2').jsp();
+                                                            $(this).on('click', function () {
+                                                                swal(nameProduct, "is added to wishlist !", "success");
+    
+                                                                $(this).addClass('js-addedwish-b2');
+                                                                $(this).off('click');
+                                                            });
+                                                        });
+    
+                                                        $('.js-addwish-detail').each(function () {
+                                                            var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').jsp();
+    
+                                                            $(this).on('click', function () {
+                                                                swal(nameProduct, "is added to wishlist !", "success");
+    
+                                                                $(this).addClass('js-addedwish-detail');
+                                                                $(this).off('click');
+                                                            });
+                                                        });
+    
+                                                        /*---------------------------------------------*/
+    
+                                                        $('.js-addcart-detail').each(function () {
+                                                            var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').jsp();
+                                                            $(this).on('click', function () {
+                                                                swal(nameProduct, "is added to cart !", "success");
+                                                            });
+                                                        });
+        </script>-->
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script>
-        $('.js-pscroll').each(function () {
-            $(this).css('position', 'relative');
-            $(this).css('overflow', 'hidden');
-            var ps = new PerfectScrollbar(this, {
-                wheelSpeed: 1,
-                scrollingThreshold: 1000,
-                wheelPropagation: false,
-            });
+                                                        $('.js-pscroll').each(function () {
+                                                            $(this).css('position', 'relative');
+                                                            $(this).css('overflow', 'hidden');
+                                                            var ps = new PerfectScrollbar(this, {
+                                                                wheelSpeed: 1,
+                                                                scrollingThreshold: 1000,
+                                                                wheelPropagation: false,
+                                                            });
 
-            $(window).on('resize', function () {
-                ps.update();
-            })
-        });
+                                                            $(window).on('resize', function () {
+                                                                ps.update();
+                                                            })
+                                                        });
+
+
+
     </script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/js/main.js"></script>

@@ -214,18 +214,40 @@
     $('.js-hide-sidebar').on('click', function() {
         $('.js-sidebar').removeClass('show-sidebar');
     });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+            // Get the input element
+            const input = document.querySelector('input[id="num-product"]');
+            const maxValue = parseInt(input.max);
+            
+            // Check if the input element exists
+            if (input) {
+                
+                input.addEventListener('input', function() {
+                    let currentValue = parseInt(input.value);
+                    if(currentValue < 1) {
+                        input.value = 1;
+                    } else if(currentValue > maxValue) {
+                        input.value = maxValue;
+                    }
+                });
 
-    /*==================================================================
-    [ +/- num product ]*/
-    $('.btn-num-product-down').on('click', function() {
-        var numProduct = Number($(this).next().val());
-        if (numProduct > 0) $(this).next().val(numProduct - 1);
-    });
+                // Add event listeners for the buttons
+                document.querySelector('.btn-num-product-up').addEventListener('click', function() {
+                    let currentValue = parseInt(input.value);
+                    if (currentValue < maxValue) {
+                        input.value = currentValue + 1;
+                    }
+                });
 
-    $('.btn-num-product-up').on('click', function() {
-        var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
-    });
+                document.querySelector('.btn-num-product-down').addEventListener('click', function() {
+                    let currentValue = parseInt(input.value);
+                    if (currentValue > 1) {
+                        input.value = currentValue - 1;
+                    }
+                });
+            }
+        });
 
     /*==================================================================
     [ Rating ]*/

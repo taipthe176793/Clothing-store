@@ -170,6 +170,17 @@ public class Product {
         return sizes;
     }
 
+    public ProductVariant getFirstInStock() {
+        ProductVariant variant = null;
+        for (ProductVariant pv : variantList) {
+            if (pv.getQuantity() != 0) {
+                variant = pv;
+                break;
+            }
+        }
+        return variant;
+    }
+
     @Override
     public String toString() {
         return "Product{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", price=" + price + ", img1=" + img1 + ", img2=" + img2 + ", img3=" + img3 + ", categoryId=" + categoryId + ", isDelete=" + isDelete + ", rating=" + rating + '}';

@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,15 +67,37 @@ public class ProductDetailControllers extends HttpServlet {
             throws ServletException, IOException {
         try {
             int productId = Integer.parseInt(request.getParameter("id"));
-            Product product = new Product();
+            String color = request.getParameter("color") == null ? "" : request.getParameter("color");
+            String size = request.getParameter("size") == null ? "" : request.getParameter("size");
+            List<String> sizesOfColor = new ArrayList<>();
+            HashMap<String, Integer> sizeQuantity = new HashMap<>();
+
             ProductDAO pDAO = new ProductDAO();
-            product = pDAO.findProductById(productId);
+            Product product = pDAO.findProductById(productId);
 
             ProductVariantDAO pvDao = new ProductVariantDAO();
             product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
-
-            request.setAttribute("product", product);
-            request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
+            
+            for (ProductVariant pv : product.getVariantList()) {
+                //Get sizesOfColor
+                if (color.equalsIgnoreCase(pv.getColor())) {
+                    sizesOfColor.add(pv.getSize());
+                }
+                //Get quantity of selected Color
+                if (pv.getColor().equalsIgnoreCase(color)) {
+                    sizeQuantity.put(pv.getSize(), pv.getQuantity());
+                }
+            }
+            if (!sizesOfColor.contains(size) && !(size.isBlank() || color.isBlank())) {
+                response.sendRedirect("product?id=" + productId + "&color=" + color + "&size=" + sizesOfColor.get(0));
+            } else {
+                request.setAttribute("color", color);
+                request.setAttribute("size", size);
+                request.setAttribute("sizesOfColor", sizesOfColor);
+                request.setAttribute("sizeQuantity", sizeQuantity);
+                request.setAttribute("product", product);
+                request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
+            }
         } catch (SQLException ex) {
         } catch (ClassNotFoundException ex) {
         }

@@ -388,10 +388,16 @@
                         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
-                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}">
-                                        <img src="${product.getImg1()}" style="height: 250px; width: 250px;" alt="IMG-PRODUCT">
+                                    <c:set var="variant" value="${product.getFirstInStock()}"></c:set>
+                                    <c:if test="${variant ne null}">
+                                        <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}&size=${variant.getSize()}&color=${variant.getColor()}">
+                                        </c:if>
+                                        <c:if test="${variant eq null}">
+                                            <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}">
+                                            </c:if>
+                                            <img src="${product.getImg1()}" style="height: 250px; width: 250px;" alt="IMG-PRODUCT">
 
-                                    </a>
+                                        </a>
                                 </div>
                                 <div class="block2-txt flex-w flex-t p-t-14">
                                     <div class="block2-txt-child1 flex-col-l">

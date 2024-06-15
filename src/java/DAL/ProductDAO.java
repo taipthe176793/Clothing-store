@@ -307,7 +307,10 @@ public class ProductDAO extends DBContext {
                     p.setCategoryId(rs.getInt("category_id"));
                     p.setIsDelete(rs.getBoolean("is_deleted"));
                     p.setRating(rs.getDouble("rating"));
-
+                    
+                    ProductVariantDAO pDAO = new ProductVariantDAO();
+                    
+                    p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
                     productList.add(p);
 
                 }
