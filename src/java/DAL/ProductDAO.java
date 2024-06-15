@@ -307,9 +307,9 @@ public class ProductDAO extends DBContext {
                     p.setCategoryId(rs.getInt("category_id"));
                     p.setIsDelete(rs.getBoolean("is_deleted"));
                     p.setRating(rs.getDouble("rating"));
-                    
+
                     ProductVariantDAO pDAO = new ProductVariantDAO();
-                    
+
                     p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
                     productList.add(p);
 
@@ -378,7 +378,6 @@ public class ProductDAO extends DBContext {
         return lastestProducts;
     }
 
-    
     public List<Product> getRandomProducts()
             throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -428,5 +427,56 @@ public class ProductDAO extends DBContext {
 
         }
         return randomProducts;
+    }
+
+    public List<Product> getSameCategoryProducts(int categoryId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> products = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT TOP 6 * FROM [dbo].[product]\n"
+                        + "WHERE [category_id] = ? \n"
+                        + "AND [is_deleted] = 0";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, categoryId);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    products.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return products;
     }
 }

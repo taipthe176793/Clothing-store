@@ -74,10 +74,12 @@ public class ProductDetailControllers extends HttpServlet {
 
             ProductDAO pDAO = new ProductDAO();
             Product product = pDAO.findProductById(productId);
+            
+            List<Product> sameCategory = pDAO.getSameCategoryProducts(product.getCategoryId());
 
             ProductVariantDAO pvDao = new ProductVariantDAO();
             product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
-            
+
             for (ProductVariant pv : product.getVariantList()) {
                 //Get sizesOfColor
                 if (color.equalsIgnoreCase(pv.getColor())) {
@@ -88,14 +90,23 @@ public class ProductDetailControllers extends HttpServlet {
                     sizeQuantity.put(pv.getSize(), pv.getQuantity());
                 }
             }
+
             if (!sizesOfColor.contains(size) && !(size.isBlank() || color.isBlank())) {
+
                 response.sendRedirect("product?id=" + productId + "&color=" + color + "&size=" + sizesOfColor.get(0));
+
+            } else if ((color.isBlank() || size.isBlank()) && product.getFirstInStock() != null) {
+
+                response.sendRedirect("product?id=" + productId + "&color="
+                        + product.getFirstInStock().getColor() + "&size=" + product.getFirstInStock().getSize());
+
             } else {
                 request.setAttribute("color", color);
                 request.setAttribute("size", size);
                 request.setAttribute("sizesOfColor", sizesOfColor);
                 request.setAttribute("sizeQuantity", sizeQuantity);
                 request.setAttribute("product", product);
+                request.setAttribute("sameCategory", sameCategory);
                 request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
             }
         } catch (SQLException ex) {
@@ -114,29 +125,7 @@ public class ProductDetailControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            String color = request.getParameter("color");
-            String size = request.getParameter("size");
-            ProductVariantDAO pvDao = new ProductVariantDAO();
-            if (color != "" && size != "") {
-                ProductVariant variant = pvDao.findVariantByProperties(productId, color, size);
-                request.setAttribute("selectedColor", color);
-                request.setAttribute("selectedSize", size);
-                request.setAttribute("quantity", variant.getQuantity());
-            }
 
-            Product product = new Product();
-            ProductDAO pDAO = new ProductDAO();
-            product = pDAO.findProductById(productId);
-
-            product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
-            request.setAttribute("product", product);
-            request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
-
-        } catch (SQLException ex) {
-        } catch (ClassNotFoundException ex) {
-        }
     }
 
     /**

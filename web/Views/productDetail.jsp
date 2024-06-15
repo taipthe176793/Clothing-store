@@ -103,16 +103,7 @@
                                     </div>
                                 </div>
 
-                                <div class="container mt-5 ms-2"> 
-                                    <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                        Description
-                                    </button>
-                                    <div class="collapse"  id="collapseExample">
-                                        <div class="card card-body">
-                                            ${product.getDescription()} 
-                                        </div>
-                                    </div>
-                                </div>
+
 
 
 
@@ -137,7 +128,7 @@
                                 <span class="star">&#9733;</span>
                             </div>
 
-                            <form action="product" method="get" >
+                            <form action="cart?action=addToCart" method="post" >
                                 <input type="hidden" name="id" value="${product.productId}" />
 
                                 <div class="p-t-33">
@@ -149,7 +140,7 @@
                                         <div class="size-204 respon6-next">
                                             <div class="rs1-select2 bg0">
                                                 <c:forEach var="vColor" items="${product.getSortedVariantColors()}">
-                                                    <input name="color" onclick="this.closest('form').submit()" type="radio" id="${vColor}" class="btn btn-check" value="${vColor}"
+                                                    <input name="color" onclick="location.href = 'product?id=${product.getProductId()}&color=${vColor}&size=${size}'" type="radio" id="${vColor}" class="btn btn-check" value="${vColor}"
                                                            <c:if test="${vColor eq color}">checked</c:if>
                                                                />
                                                            <label class="btn btn-white btn-outline-dark" for="${vColor}">${vColor}</label>
@@ -165,7 +156,7 @@
                                         <div class="size-204 respon6-next">
                                             <div class="rs1-select2 bg0">
                                                 <c:forEach var="vSize" items="${product.getSortedVariantSizes()}">
-                                                    <input name="size" onclick="this.closest('form').submit()" type="radio" id="${vSize}" class="btn btn-check" value="${vSize}"
+                                                    <input name="size" onclick="location.href = 'product?id=${product.getProductId()}&color=${color}&size=${vSize}'" type="radio" id="${vSize}" class="btn btn-check" value="${vSize}"
                                                            <c:if test="${vSize eq size && sizeQuantity.get(size) != 0}">checked</c:if>
                                                            <c:if test="${!sizesOfColor.contains(vSize) || (sizeQuantity.get(vSize) == 0)}">disabled</c:if>
                                                                />
@@ -175,14 +166,16 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex-w p-b-10"> 
-                                        <div class="size-203 flex-c-m respon6">
-                                            Stock
+                                    <c:if test="${sizeQuantity.get(size) != 0 && sizeQuantity.get(size) ne null}">
+                                        <div class="flex-w p-b-10"> 
+                                            <div class="size-203 flex-c-m respon6">
+                                                Stock
+                                            </div>
+                                            <div class="respon6-next text-success font-weight-bold">
+                                                ${sizeQuantity.get(size)}
+                                            </div>
                                         </div>
-                                        <div class="respon6-next text-danger font-weight-bold">
-                                            ${sizeQuantity.get(size)}
-                                        </div>
-                                    </div>
+                                    </c:if>
                                 </div>
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-204 flex-w flex-m respon6-next">
@@ -190,25 +183,23 @@
                                             <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                                 <i class="fs-16 zmdi zmdi-minus"></i>
                                             </div>
-
-                                            <input class="mtext-104 cl3 txt-center num-product" type="number" id="num-product" 
-                                                   <c:if test="${quantity == 0}">value="0" min="0"</c:if>
-                                                   <c:if test="${quantity != 0}">value="1" min="1"</c:if>
-                                                   max="${quantity}">
-
+                                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="num-product" 
+                                                   <c:if test="${sizeQuantity.get(size) == 0 || sizeQuantity.get(size) eq null}">value="0" min="0"</c:if>
+                                                   <c:if test="${sizeQuantity.get(size) != 0}">value="1" min="1"</c:if>
+                                                   max="${sizeQuantity.get(size)}">
                                             <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                 <i class="fs-16 zmdi zmdi-plus"></i>
                                             </div>
                                         </div>
-                                        <c:if test="${quantity ==  0}">
-                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" disabled>
-                                                Out of Stock
-                                            </button>
+                                        <c:if test="${sizeQuantity.get(size) == 0 || sizeQuantity.get(size) eq null}">
+                                            <div class="flex-w p-b-10"> 
+                                                <div class="flex-c-s stext-101 cl0 size-101 text-danger font-weight-bold">
+                                                    Out of Stock
+                                                </div>
+                                            </div>
                                         </c:if>
-                                        <c:if test="${quantity !=  0}">
-                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                                                Add to cart
-                                            </button>
+                                        <c:if test="${sizeQuantity.get(size) != 0 && sizeQuantity.get(size) ne null}">
+                                            <input type="submit" value="Add to cart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" />
                                         </c:if>
                                     </div>
                                 </div>
@@ -237,11 +228,64 @@
                                 <i class="fa fa-google-plus"></i>
                             </a>
                         </div>
-                        <br>
-                        <div class="mt-3">
-                            <h3>Feedback</h3>
-                        </div>
 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container mt-5 ms-2 mb-5"> 
+                        <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Description
+                        </button>
+                        <div class="collapse"  id="collapseExample">
+                            <div class="card card-body">
+                                ${product.getDescription()} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <h3>Feedback</h3>
+                </div>
+                <div class="row">
+                    <div>
+                        <section class="my-5 bg-light">
+                            <h2 class="text-center cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Products in the same category</h2>
+                            <div class="container">
+                                <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <c:set var="chunkSize" value="3"/>
+                                        <c:forEach var="product" items="${sameCategory}" varStatus="status">
+                                            <c:if test="${status.index % chunkSize == 0}">
+                                                <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                                    <div class="row">
+                                                    </c:if>
+                                                    <div class="col-4 p-1">
+                                                        <div class="card">
+                                                            <img src="${product.getImg1()}" style="height: 350px">
+                                                            <div class="card-body">
+                                                                <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
+                                                                <p class="card-text text-center">$${product.price}</p>
+                                                                <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <c:if test="${status.index % chunkSize == chunkSize - 1 || status.last}">
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselThreeColumn1" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselThreeColumn1" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -250,7 +294,8 @@
     <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
 
         <!--===============================================================================================-->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
         <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>

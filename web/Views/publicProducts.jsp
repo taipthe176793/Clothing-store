@@ -390,7 +390,7 @@
                                 <div class="block2-pic hov-img0">
                                     <c:set var="variant" value="${product.getFirstInStock()}"></c:set>
                                     <c:if test="${variant ne null}">
-                                        <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}&size=${variant.getSize()}&color=${variant.getColor()}">
+                                        <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}&color=${variant.getColor()}&size=${variant.getSize()}">
                                         </c:if>
                                         <c:if test="${variant eq null}">
                                             <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}">
