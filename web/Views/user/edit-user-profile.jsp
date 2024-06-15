@@ -64,22 +64,22 @@
 
                                     </div>
                                     <div class="card-body">
-                                        <form id="editForm" action="${pageContext.request.contextPath}/customer/profile?action=update" method="post">
+                                        <form id="editForm" action="${pageContext.request.contextPath}/customer/profile?action=update" method="post"  onsubmit="return validateForm()" novalidate>
                                             <div class="form-group">
                                                 <label class="form-label">Username</label>
                                                 <input name="user" type="text" class="form-control mb-1" value="${account.username}" readonly>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Full Name</label>
-                                                <input name="fullname" type="text" class="form-control" value="${account.fullname}">
+                                                <input name="fullname" type="text" class="form-control" value="${account.fullname}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Email</label>
-                                                <input name="email" type="email" class="form-control mb-1" value="${account.email}">
+                                                <input name="email" type="email" class="form-control mb-1" value="${account.email}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Phone</label>
-                                                <input name="phone" type="text" class="form-control" value="${account.phone}">
+                                                <input name="phone" type="text" class="form-control" value="${account.phone}" required>
                                             </div>
                                        
                                             <button type="submit" class="btn btn-dark">Save changes</button>&nbsp;
@@ -105,4 +105,51 @@
         <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
+    
+    <script>
+            function validateForm() {
+                let usernamePattern = /^(?!.*\s).{6,}$/;
+                let phonePattern = /^(?!.*\s)0\d{9}$/;
+                let passwordPattern = /^(?!.*\s).{8,}$/;
+                let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+                
+                let form = document.forms["signupForm"];
+                let username = form["user"];
+                let phone = form["phone"];
+                let fullname = form["fullname"];
+                let email = form["email"];
+
+                
+                let isValid = true;
+                if(fullname.value.trim() === ""){
+                    fullname.setCustomValidity("Fullname cannot be empty!!!");
+                    isValid = false;
+                }
+                if (!usernamePattern.test(username.value) || username.value.trim() === "") {
+                    username.setCustomValidity("Username must be at least 6 characters without spaces.");
+                    isValid = false;
+                } else {
+                    username.setCustomValidity("");
+                }
+
+                if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
+                    phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
+                    isValid = false;
+                } else {
+                    phone.setCustomValidity("");
+                }
+                if (!emailPattern.test(email.value)) {
+                email.setCustomValidity("Please enter a valid email address.");
+                isValid = false;
+                } else {
+                email.setCustomValidity("");
+                }
+
+                if (!isValid) {
+                    form.reportValidity();
+                }
+
+                return isValid;
+            }
+        </script>
 </html>

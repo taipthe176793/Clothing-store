@@ -143,7 +143,7 @@ public class AccountDAO extends DBContext {
                     account.setEmail(rs.getString("email"));
                     account.setFullname(rs.getString("fullname"));
                     account.setPhone(rs.getString("phone"));
-                    List<CustomerAddress> addresses = fetchAddressesForAccount(con, account.getAccountId());
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
                     account.setAddresses(addresses);
                     return account;
                 }
@@ -184,7 +184,7 @@ public class AccountDAO extends DBContext {
                     account.setEmail(rs.getString("email"));
                     account.setFullname(rs.getString("fullname"));
                     account.setPhone(rs.getString("phone"));
-                    List<CustomerAddress> addresses = fetchAddressesForAccount(con, account.getAccountId());
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
                     account.setAddresses(addresses);
                     return account;
                 }
@@ -300,7 +300,7 @@ public class AccountDAO extends DBContext {
                     account.setEmail(rs.getString("email"));
                     account.setFullname(rs.getString("fullname"));
                     account.setPhone(rs.getString("phone"));
-                    List<CustomerAddress> addresses = fetchAddressesForAccount(con, account.getAccountId());
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
                     account.setAddresses(addresses);
                     return account;
                 }
@@ -316,14 +316,50 @@ public class AccountDAO extends DBContext {
         return null;
     }
 
-    private List<CustomerAddress> fetchAddressesForAccount(Connection con, int accountId) throws SQLException {
+    public int getCustomerIdByAccountId(int accountId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int customerId = -1;
+
+        try {
+            con = connect;
+            String sql = "SELECT account_id FROM Account WHERE account_id = ?";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, accountId);
+
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                customerId = rs.getInt("account_id");
+            } else {
+                throw new SQLException("Customer ID not found for Account ID: " + accountId);
+            }
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(); // Xử lý ngoại lệ hoặc log lỗi nếu cần
+            }
+        }
+
+        return customerId;
+    }
+
+    public List<CustomerAddress> fetchAddressesForAccount(int customerId) throws SQLException {
+        Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
         List<CustomerAddress> addresses = new ArrayList<>();
         try {
+            con = connect;
             String sql = "SELECT * FROM customer_address WHERE customer_id = ?";
             stm = con.prepareStatement(sql);
-            stm.setInt(1, accountId);
+            stm.setInt(1, customerId);
 
             rs = stm.executeQuery();
             while (rs.next()) {
@@ -343,6 +379,88 @@ public class AccountDAO extends DBContext {
             }
         }
         return addresses;
+    }
+
+    public void addAddress(CustomerAddress address) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+            String sql = "INSERT INTO customer_address (customer_id, phone, address) VALUES (?, ?, ?)";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, address.getCustomerId());
+            stm.setString(2, address.getPhone());
+            stm.setString(3, address.getAddress());
+            stm.executeUpdate();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+
+    public void updateAddress(CustomerAddress address) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+            String sql = "UPDATE customer_address SET phone = ?, address = ? WHERE address_id = ?";
+            stm = con.prepareStatement(sql);
+            stm.setString(1, address.getPhone());
+            stm.setString(2, address.getAddress());
+            stm.setInt(3, address.getAddressId());
+            stm.executeUpdate();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+
+    public void deleteAddress(int addressId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+            String sql = "DELETE FROM customer_address WHERE address_id = ?";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, addressId);
+            stm.executeUpdate();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+
+    public void setDefaultAddress(int addressId, int customerId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+            String resetSql = "UPDATE customer_address SET isDefault = 0 WHERE customer_id = ?";
+            stm = con.prepareStatement(resetSql);
+            stm.setInt(1, customerId);
+            stm.executeUpdate();
+
+            String sql = "UPDATE customer_address SET isDefault = 1 WHERE address_id = ?";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, addressId);
+            stm.executeUpdate();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
     }
 
     public boolean updatePassword(Account account) throws SQLException {
@@ -370,7 +488,6 @@ public class AccountDAO extends DBContext {
             con = connect;
 
             if (con != null) {
-                // Verify current password
                 String sql = "UPDATE Account SET password = ? WHERE username = ? AND password = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, newPassword);
@@ -388,7 +505,6 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
-    // New method to validate the current password
     public boolean validateCurrentPassword(String username, String currentPassword) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -415,6 +531,5 @@ public class AccountDAO extends DBContext {
         }
         return false;
     }
+
 }
-
-

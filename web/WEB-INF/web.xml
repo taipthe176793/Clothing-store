@@ -88,6 +88,10 @@
         <servlet-name>ChangePasswordControllers</servlet-name>
         <servlet-class>Controllers.customer.ChangePasswordControllers</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddressControllers</servlet-name>
+        <servlet-class>Controllers.customer.AddressControllers</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -159,6 +163,10 @@
     <servlet-mapping>
         <servlet-name>ChangePasswordControllers</servlet-name>
         <url-pattern>/customer/change-password</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddressControllers</servlet-name>
+        <url-pattern>/customer/address</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

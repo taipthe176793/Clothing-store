@@ -15,7 +15,8 @@ public class CustomerAddress {
     private int customerId;
     private String phone;
     private String address;
-
+    private boolean isDefault;
+    
     public CustomerAddress() {
     }
 
@@ -31,6 +32,15 @@ public class CustomerAddress {
         this.phone = phone;
         this.address = address;
     }
+
+    public CustomerAddress(int addressId, int customerId, String phone, String address, boolean isDefault) {
+        this.addressId = addressId;
+        this.customerId = customerId;
+        this.phone = phone;
+        this.address = address;
+        this.isDefault = isDefault;
+    }
+    
 
     public int getAddressId() {
         return addressId;
@@ -63,6 +73,15 @@ public class CustomerAddress {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public boolean isIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+    
 
     @Override
     public String toString() {

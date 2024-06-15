@@ -24,6 +24,12 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
+        <style>
+            .list-group-item-action.active {
+                background-color: black !important;
+                border-color: black !important;
+            }
+        </style>
     </head>
 
     <body>
@@ -41,9 +47,9 @@
                                    href="#account-general">General</a>
                                 <a class="list-group-item list-group-item-action"
                                    href="${pageContext.request.contextPath}/customer/change-password">Change password</a>
+                            <a class="list-group-item list-group-item-action" 
+                               href="${pageContext.request.contextPath}/customer/address">My Address</a>
 
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                               href="#account-coupon">My Address</a>
                             <a class="list-group-item list-group-item-action" data-toggle="list"
                                href="#account-coupon">My Coupon</a>
                             <a class="list-group-item list-group-item-action" data-toggle="list"
@@ -63,26 +69,26 @@
                                 </div>
                                 <hr class="border-light m-0">
                                 <div class="card-body">
-                                  
-                                        <div class="form-group">
-                                            <label class="form-label">Username</label>
-                                            <input name="user" type="text" class="form-control mb-1" value="${account.username}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Full Name</label>
-                                            <input name="fullname" type="text" class="form-control mb-1" value="${account.fullname}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Email</label>
-                                            <input name="email" type="email" class="form-control mb-1" value="${account.email}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Phone</label>
-                                            <input name="phone" type="text" class="form-control" value="${account.phone}" readonly>
-                                        </div>
 
-                                        <button onclick="location.href='profile?action=update'" class="btn btn-dark">Edit Profile</button>
-                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Username</label>
+                                        <input name="user" type="text" class="form-control mb-1" value="${account.username}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Full Name</label>
+                                        <input name="fullname" type="text" class="form-control mb-1" value="${account.fullname}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input name="email" type="email" class="form-control mb-1" value="${account.email}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Phone</label>
+                                        <input name="phone" type="text" class="form-control" value="${account.phone}" readonly>
+                                    </div>
+
+                                    <button onclick="location.href = 'profile?action=update'" class="btn btn-dark">Edit Profile</button>
+
                                 </div>
                             </div>
 
