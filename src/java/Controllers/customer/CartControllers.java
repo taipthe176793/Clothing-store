@@ -80,19 +80,25 @@ public class CartControllers extends HttpServlet {
         String color = request.getParameter("color") == null ? "" : request.getParameter("color");
         String size = request.getParameter("size") == null ? "" : request.getParameter("size");
 
-        String url = request.getServletContext().getContextPath() + "/product?id=" + productId;
+        String url = "";
 
         switch (action) {
             case "addToCart":
                 addToCart(request, response);
-                url += "&color=" + color + "&size=" + size;
+                url = request.getServletContext().getContextPath() + "/product?id=" + productId + "&color=" + color + "&size=" + size;
                 break;
             case "update":
                 //code update cart logic
 
+                url = request.getServletContext().getContextPath() + "/cart";
                 break;
             case "remove":
                 //code remove to cart logic
+
+                url = request.getServletContext().getContextPath() + "/cart";
+                break;
+            case "checkout":
+                //code checkout
 
                 break;
 
@@ -157,7 +163,7 @@ public class CartControllers extends HttpServlet {
     private String updateCartCookie(String txt, ProductVariant variant, int quantity) {
 
         String updateCartCookie = "";
-        String[] items = txt.contains("/") ? txt.split("/") : new String[]{txt};
+        String[] items = txt.split("/");
         for (String i : items) {
             //find item to update
             if (i.contains(variant.getProductVariantId() + ":")) {

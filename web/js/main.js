@@ -1,8 +1,8 @@
-(function($) {
+(function ($) {
     "use strict";
 
     /*[ Load page ]
-    ===========================================================*/
+     ===========================================================*/
 //    $(".animsition").animsition({
 //        inClass: 'fade-in',
 //        outClass: 'fade-out',
@@ -26,10 +26,10 @@
 //    });
 
     /*[ Back to top ]
-    ===========================================================*/
+     ===========================================================*/
     var windowH = $(window).height() / 2;
 
-    $(window).on('scroll', function() {
+    $(window).on('scroll', function () {
         if ($(this).scrollTop() > windowH) {
             $("#myBtn").css('display', 'flex');
         } else {
@@ -37,7 +37,7 @@
         }
     });
 
-    $('#myBtn').on("click", function() {
+    $('#myBtn').on("click", function () {
         $('html, body').animate({
             scrollTop: 0
         }, 300);
@@ -45,7 +45,7 @@
 
 
     /*==================================================================
-    [ Fixed Header ]*/
+     [ Fixed Header ]*/
     var headerDesktop = $('.container-menu-desktop');
     var wrapMenu = $('.wrap-menu-desktop');
 
@@ -64,7 +64,7 @@
         $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
     }
 
-    $(window).on('scroll', function() {
+    $(window).on('scroll', function () {
         if ($(this).scrollTop() > posWrapHeader) {
             $(headerDesktop).addClass('fix-menu-desktop');
             $(wrapMenu).css('top', 0);
@@ -76,8 +76,8 @@
 
 
     /*==================================================================
-    [ Menu mobile ]*/
-    $('.btn-show-menu-mobile').on('click', function() {
+     [ Menu mobile ]*/
+    $('.btn-show-menu-mobile').on('click', function () {
         $(this).toggleClass('is-active');
         $('.menu-mobile').slideToggle();
     });
@@ -85,20 +85,20 @@
     var arrowMainMenu = $('.arrow-main-menu-m');
 
     for (var i = 0; i < arrowMainMenu.length; i++) {
-        $(arrowMainMenu[i]).on('click', function() {
+        $(arrowMainMenu[i]).on('click', function () {
             $(this).parent().find('.sub-menu-m').slideToggle();
             $(this).toggleClass('turn-arrow-main-menu-m');
         })
     }
 
-    $(window).resize(function() {
+    $(window).resize(function () {
         if ($(window).width() >= 992) {
             if ($('.menu-mobile').css('display') == 'block') {
                 $('.menu-mobile').css('display', 'none');
                 $('.btn-show-menu-mobile').toggleClass('is-active');
             }
 
-            $('.sub-menu-m').each(function() {
+            $('.sub-menu-m').each(function () {
                 if ($(this).css('display') == 'block') {
                     console.log('hello');
                     $(this).css('display', 'none');
@@ -111,30 +111,30 @@
 
 
     /*==================================================================
-    [ Show / hide modal search ]*/
-    $('.js-show-modal-search').on('click', function() {
+     [ Show / hide modal search ]*/
+    $('.js-show-modal-search').on('click', function () {
         $('.modal-search-header').addClass('show-modal-search');
         $(this).css('opacity', '0');
     });
 
-    $('.js-hide-modal-search').on('click', function() {
+    $('.js-hide-modal-search').on('click', function () {
         $('.modal-search-header').removeClass('show-modal-search');
         $('.js-show-modal-search').css('opacity', '1');
     });
 
-    $('.container-search-header').on('click', function(e) {
+    $('.container-search-header').on('click', function (e) {
         e.stopPropagation();
     });
 
 
     /*==================================================================
-    [ Isotope ]*/
+     [ Isotope ]*/
     var $topeContainer = $('.isotope-grid');
     var $filter = $('.filter-tope-group');
 
     // filter items on button click
-    $filter.each(function() {
-        $filter.on('click', 'button', function() {
+    $filter.each(function () {
+        $filter.on('click', 'button', function () {
             var filterValue = $(this).attr('data-filter');
             $topeContainer.isotope({
                 filter: filterValue
@@ -144,8 +144,8 @@
     });
 
     // init Isotope
-    $(window).on('load', function() {
-        var $grid = $topeContainer.each(function() {
+    $(window).on('load', function () {
+        var $grid = $topeContainer.each(function () {
             $(this).isotope({
                 itemSelector: '.isotope-item',
                 layoutMode: 'fitRows',
@@ -160,8 +160,8 @@
 
     var isotopeButton = $('.filter-tope-group button');
 
-    $(isotopeButton).each(function() {
-        $(this).on('click', function() {
+    $(isotopeButton).each(function () {
+        $(this).on('click', function () {
             for (var i = 0; i < isotopeButton.length; i++) {
                 $(isotopeButton[i]).removeClass('how-active1');
             }
@@ -171,8 +171,8 @@
     });
 
     /*==================================================================
-    [ Filter / Search product ]*/
-    $('.js-show-filter').on('click', function() {
+     [ Filter / Search product ]*/
+    $('.js-show-filter').on('click', function () {
         $(this).toggleClass('show-filter');
         $('.panel-filter').slideToggle(400);
 
@@ -182,7 +182,7 @@
         }
     });
 
-    $('.js-show-search').on('click', function() {
+    $('.js-show-search').on('click', function () {
         $(this).toggleClass('show-search');
         $('.panel-search').slideToggle(400);
 
@@ -196,68 +196,70 @@
 
 
     /*==================================================================
-    [ Cart ]*/
-    $('.js-show-cart').on('click', function() {
+     [ Cart ]*/
+    $('.js-show-cart').on('click', function () {
         $('.js-panel-cart').addClass('show-header-cart');
     });
 
-    $('.js-hide-cart').on('click', function() {
+    $('.js-hide-cart').on('click', function () {
         $('.js-panel-cart').removeClass('show-header-cart');
     });
 
     /*==================================================================
-    [ Cart ]*/
-    $('.js-show-sidebar').on('click', function() {
+     [ Cart ]*/
+    $('.js-show-sidebar').on('click', function () {
         $('.js-sidebar').addClass('show-sidebar');
     });
 
-    $('.js-hide-sidebar').on('click', function() {
+    $('.js-hide-sidebar').on('click', function () {
         $('.js-sidebar').removeClass('show-sidebar');
     });
-    
-    document.addEventListener('DOMContentLoaded', function() {
-            // Get the input element
-            const input = document.querySelector('input[id="num-product"]');
-            const maxValue = parseInt(input.max);
-            
-            // Check if the input element exists
-            if (input) {
-                
-                input.addEventListener('input', function() {
-                    let currentValue = parseInt(input.value);
-                    if(currentValue < 1) {
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the input element
+        const input = document.querySelector('input[id="num-product"]');
+        const maxValue = parseInt(input.max);
+
+        if (input) {
+            input.addEventListener('input', function () {
+                let currentValue = parseInt(input.value);
+
+                if (isNaN(currentValue) || input.value.trim() === "") {
+                    input.value = 1;
+                } else {
+                    if (currentValue < 1) {
                         input.value = 1;
-                    } else if(currentValue > maxValue) {
+                    } else if (currentValue > maxValue) {
                         input.value = maxValue;
                     }
-                });
+                }
+            });
 
-                // Add event listeners for the buttons
-                document.querySelector('.btn-num-product-up').addEventListener('click', function() {
-                    let currentValue = parseInt(input.value);
-                    if (currentValue < maxValue) {
-                        input.value = currentValue + 1;
-                    }
-                });
+            document.querySelector('.btn-num-product-up').addEventListener('click', function () {
+                let currentValue = parseInt(input.value);
+                if (currentValue < maxValue) {
+                    input.value = currentValue + 1;
+                }
+            });
 
-                document.querySelector('.btn-num-product-down').addEventListener('click', function() {
-                    let currentValue = parseInt(input.value);
-                    if (currentValue > 1) {
-                        input.value = currentValue - 1;
-                    }
-                });
-            }
-        });
+            document.querySelector('.btn-num-product-down').addEventListener('click', function () {
+                let currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                }
+            });
+        }
+    });
 
     /*==================================================================
-    [ Rating ]*/
-    $('.wrap-rating').each(function() {
+     [ Rating ]*/
+    $('.wrap-rating').each(function () {
         var item = $(this).find('.item-rating');
         var rated = -1;
         var input = $(this).find('input');
         $(input).val(0);
 
-        $(item).on('mouseenter', function() {
+        $(item).on('mouseenter', function () {
             var index = item.index(this);
             var i = 0;
             for (i = 0; i <= index; i++) {
@@ -271,13 +273,13 @@
             }
         });
 
-        $(item).on('click', function() {
+        $(item).on('click', function () {
             var index = item.index(this);
             rated = index;
             $(input).val(index + 1);
         });
 
-        $(this).on('mouseleave', function() {
+        $(this).on('mouseleave', function () {
             var i = 0;
             for (i = 0; i <= rated; i++) {
                 $(item[i]).removeClass('zmdi-star-outline');
@@ -292,13 +294,13 @@
     });
 
     /*==================================================================
-    [ Show modal1 ]*/
-    $('.js-show-modal1').on('click', function(e) {
+     [ Show modal1 ]*/
+    $('.js-show-modal1').on('click', function (e) {
         e.preventDefault();
         $('.js-modal1').addClass('show-modal1');
     });
 
-    $('.js-hide-modal1').on('click', function() {
+    $('.js-hide-modal1').on('click', function () {
         $('.js-modal1').removeClass('show-modal1');
     });
 

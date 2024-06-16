@@ -355,10 +355,10 @@
             //xoá thông báo lỗi hiện tại
             $('.error').html('');
 
-            if (quantity === '') {
+            if (quantity.trim() === '') {
                 $('#quantityError').html('Quantity cannot be empty!');
             } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                $('#quantityError').html('Quantity must greater than 0');
+                $('#quantityError').html('Invalid quantity');
             }
 
             // Kiểm tra nếu không có lỗi thì submit form
@@ -378,10 +378,10 @@
 
             $('.error').html('');
 
-            if (quantity === '') {
+            if (quantity.trim() === '') {
                 $('#quantityEditError').html('Quantity cannot be empty');
             } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                $('#quantityEditError').html('Quantity must greater than 0');
+                $('#quantityEditError').html('Invalid quantity');
             }
 
             let error = '';

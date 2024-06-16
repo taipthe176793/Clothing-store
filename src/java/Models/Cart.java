@@ -54,4 +54,21 @@ public class Cart {
         return "Cart{" + "cartId=" + cartId + ", customerId=" + customerId + '}';
     }
 
+    public void setCartFromCookie(String txt) {
+        List<CartDetails> items = new ArrayList<>();
+        if (txt != null && txt.length() > 0) {
+            String[] s = txt.split("/");
+            for (String i : s) {
+                String[] item = i.split(":");
+                int variantId = Integer.parseInt(item[0]);
+                int quantity = Integer.parseInt(item[1]);
+                CartDetails cartDetail = new CartDetails();
+                cartDetail.setProductVariantId(variantId);
+                cartDetail.setQuantity(quantity);
+                items.add(cartDetail);
+            }
+            setCartDetailsList(items);
+        }
+    }
+
 }

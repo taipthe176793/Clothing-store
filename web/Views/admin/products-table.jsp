@@ -418,14 +418,14 @@
 
             $('.error').html('');
 
-            if (name === '') {
+            if (name.trim() === '') {
                 $('#nameError').html('Name cannot be empty!');
             }
 
-            if (price === '') {
+            if (price.trim() === '') {
                 $('#priceError').html('Price cannot be empty!');
             } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
-                $('#priceError').html('Price must greater than 0');
+                $('#priceError').html('Invalid Price');
             }
 
             let error = '';
@@ -458,14 +458,14 @@
 
             $('.error').html('');
 
-            if (name === '') {
+            if (name.trim() === '') {
                 $('#nameEditError').html('Name cannot be empty');
             }
 
-            if (price === '') {
+            if (price.trim() === '') {
                 $('#priceEditError').html('Price cannot be empty');
             } else if (!$.isNumeric(price) || parseFloat(price) < 0) {
-                $('#priceEditError').html('Price must greater than 0');
+                $('#priceEditError').html('Invalid Price');
             }
 
             let error = '';
