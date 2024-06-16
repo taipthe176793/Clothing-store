@@ -4,12 +4,18 @@
  */
 package Controllers;
 
+import Controllers.customer.CartControllers;
 import DAL.AccountDAO;
+import DAL.CartDAO;
+import DAL.CartDetailsDAO;
 import Models.Account;
+import Models.Cart;
+import Models.CartDetails;
 import Models.GoogleAccount;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,37 +59,59 @@ public class AuthenticationControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
 
-        String action = (request.getParameter("action") != null ? request.getParameter("action") : "");
+            String action = (request.getParameter("action") != null ? request.getParameter("action") : "");
 
-        switch (action) {
-            case "login":
-                request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
-                break;
-            case "signup":
-                request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
-                break;
-            case "logout":
-                HttpSession session = request.getSession();
-                session.removeAttribute("account");
-                response.sendRedirect("home");
-                break;
-            case "loginWithGoogle":
-                Account gAccount = loginWithGoogle(request, response);
-                if (gAccount != null) {
-                    session = request.getSession();
-                    session.setAttribute("account", gAccount);
-                    response.sendRedirect("home");
-                }
-                else {
-                    request.setAttribute("error", "Login Failed");
+            switch (action) {
+                case "login":
                     request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
-                }
-                break;
-            default:
-                throw new AssertionError();
-        }
+                    break;
+                case "signup":
+                    request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
+                    break;
+                case "logout":
+                    HttpSession session = request.getSession();
+                    session.invalidate();
+                    Cookie[] arr = request.getCookies();
+                    if (arr != null) {
+                        for (Cookie o : arr) {
+                            if (o.getName().equals("cart")) {
+                                o.setMaxAge(0);
+                                response.addCookie(o);
+                            }
+                        }
+                    }
+                    response.sendRedirect("home");
+                    break;
+                case "loginWithGoogle":
+                    Account gAccount = loginWithGoogle(request, response);
+                    if (gAccount != null) {
+                        arr = request.getCookies();
+                        String cartCookie = "";
+                        if (arr != null) {
+                            for (Cookie o : arr) {
+                                if (o.getName().equals("cart")) {
+                                    CartControllers.mergeCart(response, gAccount, o);
+                                }
+                            }
+                        }
 
+                        session = request.getSession();
+                        session.setAttribute("account", gAccount);
+                        response.sendRedirect("home");
+                    } else {
+                        request.setAttribute("error", "Login Failed");
+                        request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
+                    }
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+
+        } catch (SQLException ex) {
+            response.sendRedirect("404");
+        }
     }
 
     /**
@@ -97,38 +125,53 @@ public class AuthenticationControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = (request.getParameter("action") != null ? request.getParameter("action") : "");
-        switch (action) {
-            case "signup":
-                boolean success = signUp(request, response);
-                if (!success) {
-                    request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
-                } else {
-                    request.setAttribute("Success", "Sign Up Successfully!");
-                    request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
-                }
-                break;
-            case "login":
-                Account account = login(request, response);
-                if (account == null) {
-                    request.setAttribute("error", "Username or password is wrong.");
-                    request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
-                } else {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("account", account);
-                    if (account.getRoleId() == ADMIN_ROLE) {
-                        response.sendRedirect("admin/dashboard");
-                    } else if (account.getRoleId() == STAFF_ROLE) {
-                        response.sendRedirect("staff/dashboard");
+        try {
+            String action = (request.getParameter("action") != null ? request.getParameter("action") : "");
+            switch (action) {
+                case "signup":
+                    boolean success = signUp(request, response);
+                    if (!success) {
+                        request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
                     } else {
-                        response.sendRedirect("home");
+                        request.setAttribute("Success", "Sign Up Successfully!");
+                        request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
                     }
-                }
-                break;
-            default:
-                throw new AssertionError();
-        }
+                    break;
+                case "login":
+                    Account account = login(request, response);
+                    if (account == null) {
+                        request.setAttribute("error", "Username or password is wrong.");
+                        request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
+                    } else {
 
+                        Cookie[] arr = request.getCookies();
+                        String cartCookie = "";
+                        if (arr != null) {
+                            for (Cookie o : arr) {
+                                if (o.getName().equals("cart")) {
+                                    CartControllers.mergeCart(response, account, o);
+                                }
+                            }
+                        }
+
+                        HttpSession session = request.getSession();
+                        session.setAttribute("account", account);
+                        if (account.getRoleId() == ADMIN_ROLE) {
+                            response.sendRedirect("admin/dashboard");
+                        } else if (account.getRoleId() == STAFF_ROLE) {
+                            response.sendRedirect("staff/dashboard");
+                        } else {
+                            response.sendRedirect("home");
+                        }
+                    }
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+
+        } catch (SQLException ex) {
+            response.sendRedirect("404");
+        }
     }
 
     /**
@@ -164,6 +207,8 @@ public class AuthenticationControllers extends HttpServlet {
             }
             Account acc = new Account(username, password, 3, email, fullname, phone);
             aDAO.addAccount(acc);
+            CartDAO cDAO = new CartDAO();
+            cDAO.insertCartByAccountId(acc.getAccountId());
             return true;
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -201,8 +246,7 @@ public class AuthenticationControllers extends HttpServlet {
             Account account = null;
             if (acc == null) {
                 return null;
-            }
-            else {
+            } else {
                 AccountDAO aDAO = new AccountDAO();
                 account = new Account();
                 if (!aDAO.checkEmailExist(acc.getEmail())) {
@@ -215,7 +259,7 @@ public class AuthenticationControllers extends HttpServlet {
                     account.setPhone("");
                     aDAO.addAccount(account);
                 }
-                    account = aDAO.getAccountByEmail(acc.getEmail());
+                account = aDAO.getAccountByEmail(acc.getEmail());
                 return account;
             }
         } catch (IOException ex) {
@@ -226,7 +270,6 @@ public class AuthenticationControllers extends HttpServlet {
             Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-        
+
     }
 }
- 

@@ -4,7 +4,12 @@
  */
 package Controllers.customer;
 
+import DAL.CartDAO;
+import DAL.CartDetailsDAO;
 import DAL.ProductVariantDAO;
+import Models.Account;
+import Models.Cart;
+import Models.CartDetails;
 import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +18,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,7 +69,28 @@ public class CartControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Cart cart = new Cart();
+        Cookie[] arr = request.getCookies();
+
+        if (arr != null) {
+            for (Cookie o : arr) {
+                if (o.getName().equals("cart")) {
+                    cart.setCartFromCookie(o.getValue());
+                    o.setMaxAge(0);
+                    response.addCookie(o);
+                    break;
+                }
+            }
+        }
+
+        request.setAttribute("cart", cart);
+
+        Cookie cartCookie = new Cookie("cart", cart.cartToCookieValue());
+        cartCookie.setMaxAge(60 * 60 * 24 * 30);
+        response.addCookie(cartCookie);
+
         request.getRequestDispatcher("Views/shoping-cart.jsp").forward(request, response);
+
     }
 
     /**
@@ -151,9 +180,20 @@ public class CartControllers extends HttpServlet {
                     txt += "/" + variant.getProductVariantId() + ":" + quantity;
                 }
             }
+
             Cookie cart = new Cookie("cart", txt);
             cart.setMaxAge(60 * 60 * 24 * 30);
             response.addCookie(cart);
+            //check if user is logged in
+            HttpSession session = request.getSession();
+            Account account = (Account) session.getAttribute("account");
+            if (account != null) {
+                CartDAO cDAO = new CartDAO();
+                Cart customerCart = cDAO.getCartByUserId(account.getAccountId());
+                customerCart.setCartFromCookie(txt);
+                //update cart detail id
+                updateCartDetailId(customerCart);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -175,8 +215,58 @@ public class CartControllers extends HttpServlet {
             }
             updateCartCookie += i + "/";
         }
-        return updateCartCookie = updateCartCookie.substring(0, updateCartCookie.lastIndexOf("/"));
+        return updateCartCookie.substring(0, updateCartCookie.lastIndexOf("/"));
 
+    }
+
+    public static void mergeCart(HttpServletResponse response, Account account, Cookie cookie) throws SQLException {
+        CartDAO cDAO = new CartDAO();
+        //fetch cart from database
+        Cart cart = cDAO.getCartByUserId(account.getAccountId());
+
+        //check if customer cart is not empty
+        if (!cart.getCartDetailsList().isEmpty()) {
+            Cart cookieCart = new Cart();
+            cookieCart.setCartFromCookie(cookie.getValue());
+            cart.mergeCart(cart, cookieCart);
+            cDAO.updateCartToDatabase(cart);
+            cart = cDAO.getCartByUserId(account.getAccountId());
+        } else {
+            cart.setCartFromCookie(cookie.getValue());
+            //Insert cart details into database
+            for (CartDetails cd : cart.getCartDetailsList()) {
+                CartDetailsDAO cdDAO = new CartDetailsDAO();
+                cdDAO.addNewCartDetails(cart, cd);
+            }
+        }
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        Cookie cartCookie = new Cookie("cart", cart.cartToCookieValue());
+
+        cartCookie.setMaxAge(60 * 60 * 24 * 30);
+        response.addCookie(cartCookie);
+    }
+
+    private void updateCartDetailId(Cart customerCart) {
+        try {
+            CartDetailsDAO cdDAO = new CartDetailsDAO();
+            CartDAO cDAO = new CartDAO();
+            List<CartDetails> cartDetailList = customerCart.getCartDetailsList();
+            //update cart detail id
+            for (int i = 0; i < cartDetailList.size(); i++) {
+                CartDetails cd = new CartDetails();
+                cd.setCartId(customerCart.getCartId());
+                cd.setProductVariantId(cartDetailList.get(i).getProductVariantId());
+                cd.setQuantity(cartDetailList.get(i).getQuantity());
+                cd.setCartDetailId(cdDAO.getCartDetailId(cd));
+                customerCart.getCartDetailsList().set(i, cd);
+            }
+            //update cart to db
+            cDAO.updateCartToDatabase(customerCart);
+        } catch (SQLException ex) {
+            Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

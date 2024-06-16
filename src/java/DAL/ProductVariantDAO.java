@@ -295,4 +295,54 @@ public class ProductVariantDAO extends DBContext {
 
     }
 
+    public ProductVariant findProductVariantById(int productVariantId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT [product_variant_id]\n"
+                        + "      ,[product_id]\n"
+                        + "      ,[color]\n"
+                        + "      ,[size]\n"
+                        + "      ,[quantity]\n"
+                        + "      ,[is_deleted]\n"
+                        + "  FROM [dbo].[product_variants]\n"
+                        + "  WHERE [product_variant_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, productVariantId);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    ProductVariant v = new ProductVariant();
+                    v.setProductVariantId(rs.getInt("product_variant_id"));
+                    v.setProductId(rs.getInt("product_id"));
+                    v.setColor(rs.getString("color"));
+                    v.setSize(rs.getString("size"));
+                    v.setQuantity(rs.getInt("quantity"));
+                    v.setIsDeleted(rs.getBoolean("is_deleted"));
+
+                    return v;
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return new ProductVariant();
+    }
+
 }
