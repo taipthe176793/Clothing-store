@@ -15,6 +15,7 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -108,16 +109,24 @@ public class StaffAuthenticationFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
 
         String uri = req.getRequestURI();
+        
+        Cookie[] arr = req.getCookies();
+        int role = 4;
+        if (arr != null) {
+            for (Cookie o : arr) {
+                if (o.getName().equals("role")) {
+                    role = Integer.parseInt(o.getValue());
+                }
+            }
+        }
 
-        HttpSession session = req.getSession();
 
-        Account account = (Account) session.getAttribute("account");
 
-        if (account == null) {
+        if (role == 4) {
             res.sendRedirect(req.getServletContext().getContextPath() + "/auth?action=login");
         } else {
-            if (account.getRoleId() != STAFF_ROLE) {
-                if (account.getRoleId() == ADMIN_ROLE) {
+            if (role != STAFF_ROLE) {
+                if (role == ADMIN_ROLE) {
                     res.sendRedirect(req.getServletContext().getContextPath() + "/admin/dashboard");
                 } else {
                     res.sendRedirect(req.getServletContext().getContextPath() + "/home");
