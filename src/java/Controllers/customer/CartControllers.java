@@ -4,12 +4,18 @@
  */
 package Controllers.customer;
 
+import DAL.ProductVariantDAO;
+import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -70,7 +76,7 @@ public class CartControllers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action") == null ? "" : request.getParameter("action");
-        int productId = Integer.parseInt(request.getParameter("id"));
+        String productId = request.getParameter("id") == null ? "" : request.getParameter("id");
         String color = request.getParameter("color") == null ? "" : request.getParameter("color");
         String size = request.getParameter("size") == null ? "" : request.getParameter("size");
 
@@ -78,9 +84,7 @@ public class CartControllers extends HttpServlet {
 
         switch (action) {
             case "addToCart":
-                int quantity = Integer.parseInt(request.getParameter("quantity"));
-                //code add to cart logic
-
+                addToCart(request, response);
                 url += "&color=" + color + "&size=" + size;
                 break;
             case "update":
@@ -108,5 +112,65 @@ public class CartControllers extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void addToCart(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String color = request.getParameter("color");
+            String size = request.getParameter("size");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+            ProductVariantDAO pvDAO = new ProductVariantDAO();
+            ProductVariant variant = pvDAO.findVariantByProperties(id, color, size);
+
+            Cookie[] arr = request.getCookies();
+            String txt = "";
+            if (arr != null) {
+                for (Cookie o : arr) {
+                    if (o.getName().equals("cart")) {
+                        txt += o.getValue();
+                        o.setMaxAge(0);
+                        response.addCookie(o);
+                    }
+                }
+            }
+
+            if (txt.isBlank()) {
+                txt = variant.getProductVariantId() + ":" + quantity;
+            } else {
+                //check if this item already existed in cart
+                if (txt.contains(variant.getProductVariantId() + ":")) {
+                    txt = updateCartCookie(txt, variant, quantity);
+                } else {
+                    txt += "/" + variant.getProductVariantId() + ":" + quantity;
+                }
+            }
+            Cookie cart = new Cookie("cart", txt);
+            cart.setMaxAge(60 * 60 * 24 * 30);
+            response.addCookie(cart);
+        } catch (SQLException ex) {
+            Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private String updateCartCookie(String txt, ProductVariant variant, int quantity) {
+
+        String updateCartCookie = "";
+        String[] items = txt.contains("/") ? txt.split("/") : new String[]{txt};
+        for (String i : items) {
+            //find item to update
+            if (i.contains(variant.getProductVariantId() + ":")) {
+                String[] itemDetail = i.split(":");
+                int quantityToAdd = Integer.parseInt(itemDetail[1]);
+                itemDetail[1] = (quantity + quantityToAdd) > variant.getQuantity()
+                        ? variant.getQuantity() + "" : (quantity + quantityToAdd) + "";
+                i = itemDetail[0] + ":" + itemDetail[1];
+            }
+            updateCartCookie += i + "/";
+        }
+        return updateCartCookie = updateCartCookie.substring(0, updateCartCookie.lastIndexOf("/"));
+
+    }
 
 }
