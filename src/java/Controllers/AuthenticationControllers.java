@@ -6,11 +6,9 @@ package Controllers;
 
 import Controllers.customer.CartControllers;
 import DAL.AccountDAO;
-import DAL.CartDAO;
-import DAL.CartDetailsDAO;
+import DAL.CartItemDAO;
 import Models.Account;
-import Models.Cart;
-import Models.CartDetails;
+import Models.CartItem;
 import Models.GoogleAccount;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -71,8 +69,6 @@ public class AuthenticationControllers extends HttpServlet {
                     request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
                     break;
                 case "logout":
-                    HttpSession session = request.getSession();
-                    session.invalidate();
                     Cookie[] arr = request.getCookies();
                     if (arr != null) {
                         for (Cookie o : arr) {
@@ -80,7 +76,22 @@ public class AuthenticationControllers extends HttpServlet {
                                 o.setMaxAge(0);
                                 response.addCookie(o);
                             }
+                            if (o.getName().equals("userId")) {
+                                o.setMaxAge(0);
+                                response.addCookie(o);
+                            }
+                            if (o.getName().equals("username")) {
+                                o.setMaxAge(0);
+                                response.addCookie(o);
+                            }
+                            if (o.getName().equals("role")) {
+                                o.setMaxAge(0);
+                                response.addCookie(o);
+                            }
                         }
+                        Cookie cartCookie = new Cookie("cart", "");
+                        cartCookie.setMaxAge(60*60*24*7);
+                        response.addCookie(cartCookie);
                     }
                     response.sendRedirect("home");
                     break;
@@ -92,13 +103,23 @@ public class AuthenticationControllers extends HttpServlet {
                         if (arr != null) {
                             for (Cookie o : arr) {
                                 if (o.getName().equals("cart")) {
-                                    CartControllers.mergeCart(response, gAccount, o);
+                                    CartControllers.mergeAndSyncCart(response, gAccount, o);
                                 }
                             }
                         }
 
-                        session = request.getSession();
-                        session.setAttribute("account", gAccount);
+                        Cookie userId = new Cookie("userId", gAccount.getAccountId() + "");
+                        userId.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(userId);
+
+                        Cookie username = new Cookie("username", gAccount.getUsername());
+                        username.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(username);
+
+                        Cookie role = new Cookie("role", gAccount.getRoleId() + "");
+                        role.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(role);
+
                         response.sendRedirect("home");
                     } else {
                         request.setAttribute("error", "Login Failed");
@@ -149,16 +170,28 @@ public class AuthenticationControllers extends HttpServlet {
                         if (arr != null) {
                             for (Cookie o : arr) {
                                 if (o.getName().equals("cart")) {
-                                    CartControllers.mergeCart(response, account, o);
+                                    CartControllers.mergeAndSyncCart(response, account, o);
+                                    break;
                                 }
                             }
+
                         }
 
-                        HttpSession session = request.getSession();
-                        session.setAttribute("account", account);
-                        if (account.getRoleId() == ADMIN_ROLE) {
+                        Cookie userId = new Cookie("userId", account.getAccountId() + "");
+                        userId.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(userId);
+
+                        Cookie username = new Cookie("username", account.getUsername());
+                        username.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(username);
+
+                        Cookie role = new Cookie("role", account.getRoleId() + "");
+                        role.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(role);
+
+                        if (Integer.parseInt(role.getValue()) == ADMIN_ROLE) {
                             response.sendRedirect("admin/dashboard");
-                        } else if (account.getRoleId() == STAFF_ROLE) {
+                        } else if (Integer.parseInt(role.getValue()) == STAFF_ROLE) {
                             response.sendRedirect("staff/dashboard");
                         } else {
                             response.sendRedirect("home");
@@ -207,8 +240,6 @@ public class AuthenticationControllers extends HttpServlet {
             }
             Account acc = new Account(username, password, 3, email, fullname, phone);
             aDAO.addAccount(acc);
-            CartDAO cDAO = new CartDAO();
-            cDAO.insertCartByAccountId(acc.getAccountId());
             return true;
 
         } catch (SQLException | ClassNotFoundException ex) {

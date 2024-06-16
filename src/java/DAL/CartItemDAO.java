@@ -4,8 +4,7 @@
  */
 package DAL;
 
-import Models.Cart;
-import Models.CartDetails;
+import Models.CartItem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,40 +16,40 @@ import java.util.List;
  *
  * @author admin
  */
-public class CartDetailsDAO extends DBContext {
+public class CartItemDAO extends DBContext {
 
-    public List<CartDetails> getCartDetails(int cartId) throws SQLException {
+    public List<CartItem> getCartItems(int customerId) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
 
-        List<CartDetails> items = new ArrayList<>();
+        List<CartItem> cartItems = new ArrayList<>();
 
         try {
             //1. Connect DB
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT [cart_detail_id]\n"
-                        + "      ,[cart_id]\n"
+                String sql = "SELECT [cart_item_id]\n"
+                        + "      ,[customer_id]\n"
+                        + "      ,[variant_id]\n"
                         + "      ,[quantity]\n"
-                        + "      ,[product_variant_id]\n"
-                        + "  FROM [dbo].[cart_detail]\n"
-                        + "  WHERE [cart_id] = ?";
+                        + "  FROM [dbo].[cart_item]\n"
+                        + "  WHERE [customer_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, cartId);
+                stm.setInt(1, customerId);
 
                 //4. Excute Query
                 rs = stm.executeQuery();
                 //5. Process Result
                 while (rs.next()) {
-                    CartDetails cd = new CartDetails();
-                    cd.setCartId(cartId);
-                    cd.setCartDetailId(Integer.parseInt(rs.getString("cart_detail_id")));
-                    cd.setProductVariantId(Integer.parseInt(rs.getString("product_variant_id")));
-                    cd.setQuantity(Integer.parseInt(rs.getString("quantity")));
-                    items.add(cd);
+                    CartItem item = new CartItem();
+                    item.setCustomerId(customerId);
+                    item.setCartItemId(rs.getInt("cart_item_id"));
+                    item.setProductVariantId(rs.getInt("variant_id"));
+                    item.setQuantity(rs.getInt("quantity"));
+                    cartItems.add(item);
                 }
             }
         } finally {
@@ -62,10 +61,10 @@ public class CartDetailsDAO extends DBContext {
             }
 
         }
-        return items;
+        return cartItems;
     }
 
-    public void updateCartDetails(CartDetails item) throws SQLException {
+    public void updateCartItem(CartItem item) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
 
@@ -74,47 +73,47 @@ public class CartDetailsDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "UPDATE [dbo].[cart_detail]\n"
-                        + "   SET [quantity] = ?\n"
-                        + "      ,[product_variant_id] = ?\n"
-                        + " WHERE [cart_detail_id] = ?";
+                String sql = "UPDATE [dbo].[cart_item]\n"
+                        + "   SET [variant_id] = ?\n"
+                        + "      ,[quantity] = ?\n"
+                        + " WHERE [cart_item_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, item.getQuantity());
-                stm.setInt(2, item.getProductVariantId());
-                stm.setInt(3, item.getCartDetailId());
-
-                stm.executeUpdate();
-
-            }
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-
-        }
-    }
-
-    public void addNewCartDetails(Cart cart, CartDetails item) throws SQLException {
-        Connection con = null;
-        PreparedStatement stm = null;
-
-        try {
-            //1. Connect DB
-            con = connect;
-            if (con != null) {
-                //2. Create SQL String
-                String sql = "INSERT INTO [dbo].[cart_detail]\n"
-                        + "           ([cart_id]\n"
-                        + "           ,[quantity]\n"
-                        + "           ,[product_variant_id])\n"
-                        + "     VALUES\n"
-                        + "           (?, ?, ?)";
-                //3. Create Statement
-                stm = con.prepareStatement(sql);
-                stm.setInt(1, cart.getCartId());
+                stm.setInt(1, item.getProductVariantId());
                 stm.setInt(2, item.getQuantity());
-                stm.setInt(3, item.getProductVariantId());
+                stm.setInt(3, item.getCartItemId());
+
+                stm.executeUpdate();
+
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+    }
+
+    public void addNewCartItem(int customerId, CartItem item) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "INSERT INTO [dbo].[cart_item]\n"
+                        + "           ([customer_id]\n"
+                        + "           ,[variant_id]\n"
+                        + "           ,[quantity])\n"
+                        + "     VALUES\n"
+                        + "           ( ?, ?, ?)";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, customerId);
+                stm.setInt(2, item.getProductVariantId());
+                stm.setInt(3, item.getQuantity());
 
                 stm.executeUpdate();
             }
@@ -126,7 +125,7 @@ public class CartDetailsDAO extends DBContext {
 
     }
 
-    public int getCartDetailId(CartDetails cd) throws SQLException {
+    public int getCartItemId(CartItem item) throws SQLException {
         int id = 0;
         Connection con = null;
         PreparedStatement stm = null;
@@ -137,20 +136,20 @@ public class CartDetailsDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT [cart_detail_id]\n"
-                        + "  FROM [dbo].[cart_detail]\n"
-                        + "  WHERE [cart_id] = ? \n"
-                        + "  AND [product_variant_id] = ?";
+                String sql = "SELECT [cart_item_id]\n"
+                        + "  FROM [dbo].[cart_item]\n"
+                        + "  WHERE [customer_id] = ?\n"
+                        + "  AND [variant_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
-                stm.setInt(1, cd.getCartId());
-                stm.setInt(2, cd.getProductVariantId());
+                stm.setInt(1, item.getCustomerId());
+                stm.setInt(2, item.getProductVariantId());
 
                 //4. Excute Query
                 rs = stm.executeQuery();
                 //5. Process Result
                 if (rs.next()) {
-                    id = rs.getInt("cart_detail_id");
+                    id = rs.getInt("cart_item_id");
                 }
             }
         } finally {
@@ -164,4 +163,16 @@ public class CartDetailsDAO extends DBContext {
         }
         return id;
     }
+
+    public void updateCartToDatabase(int customerId, List<CartItem> cartItems) throws SQLException {
+        CartItemDAO cdDAO = new CartItemDAO();
+        for (CartItem cd : cartItems) {
+            if (cd.getCartItemId() != 0) {
+                cdDAO.updateCartItem(cd);
+            } else {
+                cdDAO.addNewCartItem(customerId, cd);
+            }
+        }
+    }
+
 }

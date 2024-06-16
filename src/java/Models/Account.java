@@ -4,6 +4,9 @@
  */
 package Models;
 
+import DAL.ProductVariantDAO;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +23,7 @@ public class Account {
     private String fullname;
     private String phone;
     private List<CustomerAddress> addresses;
+    private List<CartItem> cartItems = new ArrayList<>();
 
     public Account() {
     }
@@ -32,13 +36,15 @@ public class Account {
         this.fullname = fullname;
         this.phone = phone;
     }
+
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
     public Account(int accountId, String username, String password, int roleId,
-            String email, String fullname, String phone, List<CustomerAddress> addresses) {
+            String email, String fullname, String phone,
+            List<CustomerAddress> addresses, List<CartItem> cartItems) {
         this.accountId = accountId;
         this.username = username;
         this.password = password;
@@ -47,6 +53,7 @@ public class Account {
         this.fullname = fullname;
         this.phone = phone;
         this.addresses = addresses;
+        this.cartItems = cartItems;
     }
 
     public int getAccountId() {
@@ -113,9 +120,72 @@ public class Account {
         this.phone = phone;
     }
 
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
     @Override
     public String toString() {
         return "Account{" + "accountId=" + accountId + ", username=" + username + ", password=" + password + ", roleId=" + roleId + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", addresses=" + addresses + '}';
+    }
+
+    public void setCartFromCookie(String txt) {
+        this.getCartItems().clear();
+        if (txt != null && txt.length() > 0) {
+            String[] s = txt.split("/");
+            for (String i : s) {
+                String[] item = i.split(":");
+                int variantId = Integer.parseInt(item[0]);
+                int quantity = Integer.parseInt(item[1]);
+                CartItem cartDetail = new CartItem();
+                cartDetail.setProductVariantId(variantId);
+                cartDetail.setQuantity(quantity);
+                this.getCartItems().add(cartDetail);
+            }
+        }
+    }
+
+    public String cartToCookieValue() {
+        String txt = "";
+        for (CartItem item : this.getCartItems()) {
+            if (txt.isBlank()) {
+                txt = item.getProductVariantId() + ":" + item.getQuantity();
+            } else {
+                txt += "/" + item.getProductVariantId() + ":" + item.getQuantity();
+            }
+        }
+        return txt;
+    }
+
+    public static void mergeCart(Account customer, List<CartItem> cookieCart) throws SQLException {
+
+        if (cookieCart.isEmpty()) {
+            return;
+        }
+
+        for (CartItem cookieItem : cookieCart) {
+            boolean itemExists = false;
+            ProductVariantDAO pvDAO = new ProductVariantDAO();
+            ProductVariant pv = pvDAO.findProductVariantById(cookieItem.getProductVariantId());
+
+            for (CartItem cartItem : customer.getCartItems()) {
+                if (cartItem.getProductVariantId() == cookieItem.getProductVariantId()) {
+                    cartItem.setQuantity((cartItem.getQuantity() + cookieItem.getQuantity())
+                            > pv.getQuantity() ? pv.getQuantity()
+                            : (cartItem.getQuantity() + cookieItem.getQuantity()));
+                    itemExists = true;
+                    break;
+                }
+            }
+
+            if (!itemExists) {
+                customer.getCartItems().add(cookieItem);
+            }
+        }
     }
 
 }

@@ -8,36 +8,36 @@ package Models;
  *
  * @author admin
  */
-public class CartDetails {
-    private int cartDetailId;
-    private int cartId;
+public class CartItem {
+    private int cartItemId;
+    private int customerId;
     private int productVariantId;
     private int quantity;
 
-    public CartDetails() {
+    public CartItem() {
     }
 
-    public CartDetails(int cartDetailId, int cartId, int productVariantId, int quantity) {
-        this.cartDetailId = cartDetailId;
-        this.cartId = cartId;
+    public CartItem(int cartItemId, int customerId, int productVariantId, int quantity) {
+        this.cartItemId = cartItemId;
+        this.customerId = customerId;
         this.productVariantId = productVariantId;
         this.quantity = quantity;
     }
 
-    public int getCartDetailId() {
-        return cartDetailId;
+    public int getCartItemId() {
+        return cartItemId;
     }
 
-    public void setCartDetailId(int cartDetailId) {
-        this.cartDetailId = cartDetailId;
+    public void setCartItemId(int cartItemId) {
+        this.cartItemId = cartItemId;
     }
 
-    public int getCartId() {
-        return cartId;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public int getProductVariantId() {
@@ -58,7 +58,7 @@ public class CartDetails {
 
     @Override
     public String toString() {
-        return "CartDetails{" + "cartDetailId=" + cartDetailId + ", cartId=" + cartId + ", productVariantId=" + productVariantId + ", quantity=" + quantity + '}';
+        return "CartDetails{" + "cartItemId=" + cartItemId + ", customerId=" + customerId + ", productVariantId=" + productVariantId + ", quantity=" + quantity + '}';
     }
 
     

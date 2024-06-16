@@ -23,14 +23,16 @@
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         Help & FAQs
                     </a>
+                    
+                    <c:set var="cookie" value="${pageContext.request.cookies}"></c:set>
 
-                    <c:if test="${sessionScope.account eq null}">
+                    <c:if test="${cookie.userId.value eq null}">
                         <a href="auth?action=login" class="flex-c-m trans-04 p-lr-25">
                             Login
                         </a>
                     </c:if>
 
-                    <c:if test="${sessionScope.account ne null}">
+                    <c:if test="${cookie.userId.value ne null}">
                         <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="flex-c-m trans-04 p-lr-25">
                             My Profile
                         </a>

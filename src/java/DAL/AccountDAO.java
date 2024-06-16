@@ -5,6 +5,7 @@
 package DAL;
 
 import Models.Account;
+import Models.CartItem;
 import Models.CustomerAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -145,6 +146,9 @@ public class AccountDAO extends DBContext {
                     account.setPhone(rs.getString("phone"));
                     List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
                     account.setAddresses(addresses);
+                    CartItemDAO ciDAO = new CartItemDAO();
+                    List<CartItem> cartItems = ciDAO.getCartItems(account.getAccountId());
+                    account.setCartItems(cartItems);
                     return account;
                 }
             }
@@ -186,6 +190,9 @@ public class AccountDAO extends DBContext {
                     account.setPhone(rs.getString("phone"));
                     List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
                     account.setAddresses(addresses);
+                    CartItemDAO ciDAO = new CartItemDAO();
+                    List<CartItem> cartItems = ciDAO.getCartItems(account.getAccountId());
+                    account.setCartItems(cartItems);
                     return account;
                 }
             }
@@ -302,6 +309,10 @@ public class AccountDAO extends DBContext {
                     account.setPhone(rs.getString("phone"));
                     List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
                     account.setAddresses(addresses);
+                    CartItemDAO ciDAO = new CartItemDAO();
+                    List<CartItem> cartItems = ciDAO.getCartItems(account.getAccountId());
+                    account.setCartItems(cartItems);
+                    
                     return account;
                 }
             }
@@ -530,6 +541,50 @@ public class AccountDAO extends DBContext {
             }
         }
         return false;
+    }
+
+    public Account getAccountById(int accountId) throws SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        Account account = new Account();
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM account WHERE [account_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, accountId);
+
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setEmail(rs.getString("email"));
+                    account.setFullname(rs.getString("fullname"));
+                    account.setPhone(rs.getString("phone"));
+                    List<CustomerAddress> addresses = fetchAddressesForAccount(account.getAccountId());
+                    account.setAddresses(addresses);
+                    CartItemDAO ciDAO = new CartItemDAO();
+                    List<CartItem> cartItems = ciDAO.getCartItems(accountId);
+                    account.setCartItems(cartItems);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return account;
+
     }
 
 }
