@@ -98,7 +98,7 @@ public class AccountDAO extends DBContext {
                 //2. Create SQL String
                 String sql = "INSERT INTO [dbo].[account]\n"
                         + "([username] , [password], [role_id], [email], [fullname], [phone])\n"
-                        + "VALUES( ?, ?, ?, ?, ?, ?, ?)";
+                        + "VALUES( ?, ?, ?, ?, ?, ?)";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setString(1, acc.getUsername());
