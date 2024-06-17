@@ -78,10 +78,7 @@ public class CartControllers extends HttpServlet {
                 for (Cookie o : arr) {
                     if (o.getName().equals("userId")) {
                         account = aDAO.getAccountById(Integer.parseInt(o.getValue()));
-                        o.setMaxAge(0);
-                        response.addCookie(o);
                         break;
-
                     }
                 }
             }
