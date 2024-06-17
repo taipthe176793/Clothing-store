@@ -8,6 +8,7 @@ import DAL.ProductVariantDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -24,6 +25,7 @@ public class Account {
     private String phone;
     private List<CustomerAddress> addresses;
     private List<CartItem> cartItems = new ArrayList<>();
+    private Map<Integer, Integer> wishlist;
 
     public Account() {
     }
@@ -54,6 +56,18 @@ public class Account {
         this.phone = phone;
         this.addresses = addresses;
         this.cartItems = cartItems;
+    }
+
+    public Account(int accountId, String username, String password, int roleId, String email, String fullname, String phone, List<CustomerAddress> addresses, Map<Integer, Integer> wishlist) {
+        this.accountId = accountId;
+        this.username = username;
+        this.password = password;
+        this.roleId = roleId;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.addresses = addresses;
+        this.wishlist = wishlist;
     }
 
     public int getAccountId() {
@@ -186,6 +200,30 @@ public class Account {
                 customer.getCartItems().add(cookieItem);
             }
         }
+    }
+
+    public Map<Integer, Integer> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(Map<Integer, Integer> wishlist) {
+        this.wishlist = wishlist;
+    }
+
+    public void addToWishlist(int wishlistId, int productId) {
+        wishlist.put(wishlistId, productId);
+    }
+
+    public void removeFromWishlist(int wishlistId) {
+        wishlist.remove(wishlistId);
+    }
+
+    public boolean isInWishlist(int productId) {
+        return wishlist.containsValue(productId);
+    }
+
+    public void addToWishlist(int productId) {
+        wishlist.put(productId, productId);
     }
 
 }

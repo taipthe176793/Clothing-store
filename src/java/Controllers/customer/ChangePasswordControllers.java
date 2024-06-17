@@ -9,6 +9,7 @@ import Models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,20 +77,38 @@ public class ChangePasswordControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
 
-        if (account == null) {
-            response.sendRedirect("home");
-            return;
-        }
-
-        String currentPassword = request.getParameter("current_password");
-        String newPassword = request.getParameter("new_password");
-        String repeatNewPassword = request.getParameter("repeat_new_password");
-
-        AccountDAO accountDAO = new AccountDAO();
         try {
+
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId")) {
+                    accountId = Integer.parseInt(o.getValue());
+                    AccountDAO aDAO = new AccountDAO();
+
+                    account = aDAO.getAccountById(accountId);
+
+                    break;
+                    }
+
+                }
+            }
+
+            if (account == null) {
+                response.sendRedirect("home");
+                return;
+            }
+
+            String currentPassword = request.getParameter("current_password");
+            String newPassword = request.getParameter("new_password");
+            String repeatNewPassword = request.getParameter("repeat_new_password");
+
+            AccountDAO accountDAO = new AccountDAO();
             boolean isCurrentPasswordValid = accountDAO.validateCurrentPassword(account.getUsername(), currentPassword);
 
             if (!isCurrentPasswordValid) {
@@ -113,9 +132,8 @@ public class ChangePasswordControllers extends HttpServlet {
             boolean isPasswordUpdated = accountDAO.updatePassword(new Account(account.getUsername(), newPassword));
 
             if (isPasswordUpdated) {
-                session.invalidate();
                 request.setAttribute("message", "Password changed successfully. Please log in with your new password.");
-                response.sendRedirect(request.getContextPath() + "/auth?action=login");
+                response.sendRedirect(request.getContextPath() + "/auth?action=logout");
             } else {
                 request.setAttribute("message", "Failed to change password. Please try again.");
                 request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);

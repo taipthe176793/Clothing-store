@@ -7,6 +7,7 @@ package DAL;
 import Models.Account;
 import Models.CartItem;
 import Models.CustomerAddress;
+import Models.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -312,7 +313,7 @@ public class AccountDAO extends DBContext {
                     CartItemDAO ciDAO = new CartItemDAO();
                     List<CartItem> cartItems = ciDAO.getCartItems(account.getAccountId());
                     account.setCartItems(cartItems);
-                    
+
                     return account;
                 }
             }
@@ -585,6 +586,96 @@ public class AccountDAO extends DBContext {
         }
         return account;
 
+    }
+
+    public List<Product> getWishlistProducts(int accountId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Product> wishlistProducts = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT p.product_id, p.name, p.description, p.price, p.image1, p.image2, p.image3, p.category_id, p.is_deleted, p.rating "
+                        + "FROM wishlist w "
+                        + "JOIN product p ON w.product_id = p.product_id "
+                        + "WHERE w.account_id = ? AND p.is_deleted = 0";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, accountId);
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getDouble("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+                    wishlistProducts.add(p);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return wishlistProducts;
+    }
+
+    public boolean addToWishlist(int accountId, int productId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "INSERT INTO wishlist (account_id, product_id) VALUES (?, ?)";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, accountId);
+                stm.setInt(2, productId);
+
+                int rowsInserted = stm.executeUpdate();
+                return rowsInserted > 0;
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return false;
+    }
+
+    public boolean removeFromWishlist(int accountId, int productId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "DELETE FROM wishlist WHERE account_id = ? AND product_id = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, accountId);
+                stm.setInt(2, productId);
+
+                int rowsDeleted = stm.executeUpdate();
+                return rowsDeleted > 0;
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return false;
     }
 
 }

@@ -10,6 +10,7 @@ import Models.CustomerAddress;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -110,8 +111,24 @@ public class AddressControllers extends HttpServlet {
     private void showAddresses(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
+
+                        account = aDAO.getAccountById(accountId);
+
+                        break;
+                    }
+
+                }
+            }
 
             if (account == null) {
                 response.sendRedirect(request.getContextPath() + "/Views/authen/login.jsp");
@@ -133,8 +150,24 @@ public class AddressControllers extends HttpServlet {
     private void addAddress(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
+
+                        account = aDAO.getAccountById(accountId);
+
+                        break;
+                    }
+
+                }
+            }
 
             if (account == null) {
                 response.sendRedirect(request.getContextPath() + "/Views/authen/login.jsp");
@@ -198,8 +231,24 @@ public class AddressControllers extends HttpServlet {
         try {
             int addressId = Integer.parseInt(request.getParameter("id"));
 
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
+
+                        account = aDAO.getAccountById(accountId);
+
+                        break;
+                    }
+
+                }
+            }
 
             if (account == null) {
                 response.sendRedirect(request.getContextPath() + "/Views/authen/login.jsp");

@@ -9,11 +9,14 @@ import Models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,22 +62,45 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
 
-        if (action == null) {
-            action = "view";  // default action
-        }
+        try {
+            String action = request.getParameter("action");
 
-        switch (action) {
-            case "view":
-                viewProfile(request, response);
-                break;
-            case "update":
-                request.getRequestDispatcher("/Views/user/edit-user-profile.jsp").forward(request, response);
-                break;
-            default:
-                response.sendRedirect("home");
-                break;
+            if (action == null) {
+                action = "view";  // default action
+            }
+
+            switch (action) {
+                case "view":
+                    viewProfile(request, response);
+                    break;
+                case "update":
+                    Cookie[] arr = request.getCookies();
+                    int accountId = 0;
+                    Account account = null;
+
+                    if (arr != null) {
+                        for (Cookie o : arr) {
+
+                            if (o.getName().equals("userId"));
+                            accountId = Integer.parseInt(o.getValue());
+                            AccountDAO aDAO = new AccountDAO();
+
+                            account = aDAO.getAccountById(accountId);
+
+                            break;
+
+                        }
+                    }
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("/Views/user/edit-user-profile.jsp").forward(request, response);
+                    break;
+                default:
+                    response.sendRedirect("home");
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -107,8 +133,23 @@ public class ProfileController extends HttpServlet {
     private void updateProfile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId"));
+                    accountId = Integer.parseInt(o.getValue());
+                    AccountDAO aDAO = new AccountDAO();
+
+                    account = aDAO.getAccountById(accountId);
+
+                    break;
+
+                }
+            }
             if (account == null) {
                 response.sendRedirect("home");
                 return;
@@ -128,7 +169,7 @@ public class ProfileController extends HttpServlet {
             Account updatedAccount = accDAO.updateAccount(account);
 
             if (updatedAccount != null) {
-                session.setAttribute("account", updatedAccount);
+                request.setAttribute("account", updatedAccount);
                 request.setAttribute("message", "Update Successfully");
                 response.sendRedirect(request.getContextPath() + "/customer/profile?action=view");
             } else {
@@ -143,10 +184,35 @@ public class ProfileController extends HttpServlet {
 
     private void viewProfile(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getSession().getAttribute("account") != null) {
-            request.getRequestDispatcher("/Views/user/user-profile.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("home");
+
+        try {
+
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId"));
+                    accountId = Integer.parseInt(o.getValue());
+                    AccountDAO aDAO = new AccountDAO();
+
+                    account = aDAO.getAccountById(accountId);
+
+                    break;
+
+                }
+            }
+
+            if (account != null) {
+                request.setAttribute("account", account);
+                request.getRequestDispatcher("/Views/user/user-profile.jsp").forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/home");
+            }
+        } catch (SQLException ex) {
+            response.sendRedirect("404");
         }
     }
 
