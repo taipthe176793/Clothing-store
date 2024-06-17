@@ -48,7 +48,7 @@
             <nav class="limiter-menu-desktop container">
 
                 <!-- Logo desktop -->
-                <a href="home" class="logo">
+                <a href="${pageContext.request.contextPath}/home" class="logo">
                     <img src="${pageContext.request.contextPath}/images/icons/logo-01.jpg" alt="IMG-LOGO">
                 </a>
 
@@ -88,7 +88,7 @@
                         <i onclick="location.href='${pageContext.request.contextPath}/cart'" class="zmdi zmdi-shopping-cart"></i>
                     </div>
 
-                    <a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
+                    <a href="${pageContext.request.contextPath}/customer/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
                         <i class="zmdi zmdi-favorite-outline"></i>
                     </a>
                 </div>

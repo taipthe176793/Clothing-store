@@ -70,12 +70,12 @@ public class WishlistControllers extends HttpServlet {
 
             if (arr != null) {
                 for (Cookie o : arr) {
-                    if (o.getName().equals("userId"));
-                    accountId = Integer.parseInt(o.getValue());
-                    AccountDAO aDAO = new AccountDAO();
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
 
-                    account = aDAO.getAccountById(accountId);
-
+                        account = aDAO.getAccountById(accountId);
+                    }
                 }
             }
 
@@ -83,8 +83,10 @@ public class WishlistControllers extends HttpServlet {
                 AccountDAO accountDAO = new AccountDAO();
                 List<Product> favoriteProducts = accountDAO.getWishlistProducts(account.getAccountId());
                 request.setAttribute("favoriteProducts", favoriteProducts);
+                request.getRequestDispatcher("/Views/wishlist.jsp").forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/auth?action=login");
             }
-            request.getRequestDispatcher("/Views/wishlist.jsp").forward(request, response);
         } catch (SQLException ex) {
             response.sendRedirect("404");
         }

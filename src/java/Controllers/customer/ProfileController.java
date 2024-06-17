@@ -82,14 +82,14 @@ public class ProfileController extends HttpServlet {
                     if (arr != null) {
                         for (Cookie o : arr) {
 
-                            if (o.getName().equals("userId"));
-                            accountId = Integer.parseInt(o.getValue());
-                            AccountDAO aDAO = new AccountDAO();
+                            if (o.getName().equals("userId")) {
+                                accountId = Integer.parseInt(o.getValue());
+                                AccountDAO aDAO = new AccountDAO();
 
-                            account = aDAO.getAccountById(accountId);
+                                account = aDAO.getAccountById(accountId);
 
-                            break;
-
+                                break;
+                            }
                         }
                     }
                     request.setAttribute("account", account);
@@ -140,13 +140,12 @@ public class ProfileController extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId"));
-                    accountId = Integer.parseInt(o.getValue());
-                    AccountDAO aDAO = new AccountDAO();
-
-                    account = aDAO.getAccountById(accountId);
-
-                    break;
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
+                        account = aDAO.getAccountById(accountId);
+                        break;
+                    }
 
                 }
             }
@@ -194,13 +193,14 @@ public class ProfileController extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId"));
-                    accountId = Integer.parseInt(o.getValue());
-                    AccountDAO aDAO = new AccountDAO();
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
 
-                    account = aDAO.getAccountById(accountId);
+                        account = aDAO.getAccountById(accountId);
 
-                    break;
+                        break;
+                    }
 
                 }
             }
