@@ -27,7 +27,7 @@
                     <c:set var="cookie" value="${pageContext.request.cookies}"></c:set>
 
                     <c:if test="${cookie.userId.value eq null}">
-                        <a href="auth?action=login" class="flex-c-m trans-04 p-lr-25">
+                        <a href="${pageContext.request.contextPath}/auth?action=login" class="flex-c-m trans-04 p-lr-25">
                             Login
                         </a>
                     </c:if>
@@ -36,7 +36,7 @@
                         <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="flex-c-m trans-04 p-lr-25">
                             My Profile
                         </a>
-                        <a href="auth?action=logout" class="flex-c-m trans-04 p-lr-25">
+                        <a href="${pageContext.request.contextPath}/auth?action=logout" class="flex-c-m trans-04 p-lr-25">
                             Logout
                         </a>
                     </c:if>
@@ -56,24 +56,24 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li class="active-menu">
-                            <a href="home">Home</a>
+                            <a href="${pageContext.request.contextPath}/home">Home</a>
                         </li>
 
                         <li>
-                            <a href="shop">Shop</a>
+                            <a href="${pageContext.request.contextPath}/shop">Shop</a>
                         </li>
 
 
                         <li>
-                            <a href="contents">Blog</a>
+                            <a href="${pageContext.request.contextPath}/contents">Blog</a>
                         </li>
 
                         <li>
-                            <a href="about">About</a>
+                            <a href="${pageContext.request.contextPath}/about">About</a>
                         </li>
 
                         <li>
-                            <a href="contact">Contact</a>
+                            <a href="${pageContext.request.contextPath}/contact">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="2">
-                        <i class="zmdi zmdi-shopping-cart"></i>
+                        <i onclick="location.href='${pageContext.request.contextPath}/cart'" class="zmdi zmdi-shopping-cart"></i>
                     </div>
 
                     <a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">

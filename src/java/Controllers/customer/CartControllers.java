@@ -6,9 +6,11 @@ package Controllers.customer;
 
 import DAL.AccountDAO;
 import DAL.CartItemDAO;
+import DAL.ProductDAO;
 import DAL.ProductVariantDAO;
 import Models.Account;
 import Models.CartItem;
+import Models.Product;
 import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -140,7 +142,7 @@ public class CartControllers extends HttpServlet {
 
                 url = request.getServletContext().getContextPath() + "/cart";
                 break;
-            case "remove":
+            case "delete":
                 //code remove to cart logic
 
                 url = request.getServletContext().getContextPath() + "/cart";

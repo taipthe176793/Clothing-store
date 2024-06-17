@@ -6,14 +6,17 @@ package Controllers;
 
 import DAL.CategoryDAO;
 import DAL.ProductDAO;
+import DAL.ProductVariantDAO;
 import Models.Category;
 import Models.Product;
+import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,21 +69,33 @@ public class HomeControllers extends HttpServlet {
             List<Category> categoryList = new ArrayList<>();
             CategoryDAO cDAO = new CategoryDAO();
             categoryList = cDAO.getAllCategories();
-            
             ProductDAO pDAO = new ProductDAO();
+            List<Product> products = pDAO.getAllProducts();
+            ProductVariantDAO pvDAO = new ProductVariantDAO();
+            List<ProductVariant> variants = pvDAO.getAllVariantsOfAllProducts();
+
+            for (int i = 0; i < products.size(); i++) {
+                Product p = products.get(i);
+                p.setVariantList(pvDAO.getAllVariantsOfAProduct(p.getProductId()));
+                products.set(i, p);
+            }
+
             List<Product> lastestProducts = pDAO.getLastestProducts();
             List<Product> randomProducts = pDAO.getRandomProducts();
-            
+
+            HttpSession session = request.getSession();
+            session.setAttribute("productsSession", products);
+            session.setAttribute("variantsSession", variants);
+
             request.setAttribute("lastestProducts", lastestProducts);
             request.setAttribute("randomProducts", randomProducts);
 
             request.setAttribute("categoryList", categoryList);
             request.getRequestDispatcher("Views/home.jsp").forward(request, response);
-        } catch (SQLException ex) {
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.sendRedirect("404");
         }
-        
-        
+
     }
 
     /**

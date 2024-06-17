@@ -31,7 +31,7 @@ public class ProductVariantDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM [dbo].[product_variants]  WHERE [is_deleted] = 0";
+                String sql = "SELECT * FROM [dbo].[product_variants]";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
 

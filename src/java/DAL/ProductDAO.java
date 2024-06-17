@@ -35,7 +35,7 @@ public class ProductDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM [dbo].[product] WHERE [is_deleted] = 0";
+                String sql = "SELECT * FROM [dbo].[product]";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
 
