@@ -77,27 +77,33 @@
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Role</th>
                                                     <th>Username</th>
-                                                    <th>Password</th>
+                                                    <th>Full name</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
+                                                    <th>Role</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
 
                                             <c:forEach items="${accountList}" var="account"> 
                                                 <tr>
-                                                    <td>${account.getAccountId()}</td>
+                                                    <td name="id">${account.getAccountId()}</td>
+                                                    <td name="username">${account.getUsername()}</td>
+                                                    <td name="fullname">${account.getFullname()}</td>
+                                                    <td name="email">${account.getEmail()}</td>
+                                                    <td name="phone">${account.getPhone()}</td>
                                                     <c:forEach items="${roleList}" var="role"> 
                                                         <c:if test="${account.getRoleId() == role.getRoleId()}"> 
                                                             <td>${role.getName()}</td> 
                                                         </c:if> 
                                                     </c:forEach>
-                                                    <td>${account.getUsername()}</td>
-                                                    <td><input class="font-weight-bold border-0" type="password" name="name" value="${account.getPassword()}" readonly></td>
-                                                    <td>${account.getEmail()}</td>
-                                                    <td class="d-flex justify-content-center">${account.getPhone()}</td>
+                                                    <td name="edit" class="d-flex justify-content-center">
+                                                        <button type="button" class="btn btn-primary"
+                                                            data-toggle="modal" data-target="#editUserModal"
+                                                            onclick="editUserModal(this)">Edit</button>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -111,7 +117,63 @@
                 <jsp:include page="../common/admin/footer.jsp"></jsp:include>
                 </div>
             </div>
-
+                
+        <!-- Update Modal -->
+        <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Edit User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editModalForm" action="variants?action=update" method="POST" >
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="idEditInput" name="id">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control" id="usernameEditInput" name="username" readonly>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fullname">Full name:</label>
+                                <input type="text" class="form-control" id="fullnameEditInput" name="fullname">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Phone:</label>
+                                <input type="text" class="form-control" id="phoneEditInput" name="phone">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="text" class="form-control" id="emailEditInput" name="email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="role">Role:</label>
+                                <br/>
+                                <input type="radio" id="" name="role" value="customer"> Customer
+                                <input type="radio" id="" name="role" value="staff" style="margin-left: 40px"> Staff
+                            </div>
+                            
+                            <div class="form-group" hidden="">
+                                <input type="text" name="pId" value=""/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" form="editModalForm"
+                                onclick="validateForm2()">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         </body>
 
         <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
@@ -146,5 +208,66 @@
     <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
+    <script>
+        function validateForm() {
+            let quantity = $('#quantity').val();
 
+            //xoá thông báo lỗi hiện tại
+            $('.error').html('');
+
+            if (quantity === '') {
+                $('#quantityError').html('Quantity cannot be empty!');
+            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+                $('#quantityError').html('Quantity must greater than 0');
+            }
+
+            // Kiểm tra nếu không có lỗi thì submit form
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#addProductForm').submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+
+        function validateForm2() {
+            let quantity = $('#quantityEditInput').val();
+
+            $('.error').html('');
+
+            if (quantity === '') {
+                $('#quantityEditError').html('Quantity cannot be empty');
+            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+                $('#quantityEditError').html('Quantity must greater than 0');
+            }
+
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#editModalForm').submit();
+            } else {
+                event.preventDefault();
+            }
+        }
+        function editUserModal(button) {
+            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+            let username = $(button).closest('tr').find('td[name="username"]').text().trim();
+            let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
+            let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
+            let email = $(button).closest('tr').find('td[name="email"]').text().trim();
+            let role = $(button).closest('tr').find('td[name="role"]').text().trim();
+
+            $('#idEditInput').val(id);
+            $('#usernameEditInput').val(username);
+            $('#fullnameEditInput').val(fullname);
+            $('#phoneEditInput').val(phone);
+            $('#emailEditInput').val(email);
+            $('#roleEditInput').val(role);
+        }
+    </script>
 </html>
