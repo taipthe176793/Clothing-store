@@ -136,7 +136,8 @@
                                                         <td class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
                                                         <td class="p-r-15 text-center">
                                                             <form action="cart?action=delete" method="post">
-                                                                <input name="item" value="${item.getCartItemId()}" hidden=""/>
+                                                                <input name="cartItemId" value="${item.getCartItemId()}" hidden=""/>
+                                                                <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
                                                                 <button class="btn btn-danger text-white">
                                                                     <i onclick="this.closest('form').submit()" class="bi bi-trash"></i>
                                                                 </button>
@@ -211,7 +212,8 @@
                                                         </td>
                                                         <td class="p-r-15 text-center">
                                                             <form action="cart?action=delete" method="post">
-                                                                <input name="item" value="${item.getCartItemId()}" hidden=""/>
+                                                                <input name="cartItemId" value="${item.getCartItemId()}" hidden=""/>
+                                                                <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
                                                                 <button class="btn btn-danger text-white" />
                                                                 <i onclick="this.closest('form').submit()" class="bi bi-trash"></i>
                                                                 </button>

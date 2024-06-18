@@ -72,25 +72,16 @@ public class AuthenticationControllers extends HttpServlet {
                     Cookie[] arr = request.getCookies();
                     if (arr != null) {
                         for (Cookie o : arr) {
-                            if (o.getName().equals("cart")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                            if (o.getName().equals("userId")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                            if (o.getName().equals("username")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                            if (o.getName().equals("role")) {
+                            if (o.getName().equals("cart")
+                                    || o.getName().equals("userId")
+                                    || o.getName().equals("username")
+                                    || o.getName().equals("role")) {
                                 o.setMaxAge(0);
                                 response.addCookie(o);
                             }
                         }
                         Cookie cartCookie = new Cookie("cart", "");
-                        cartCookie.setMaxAge(60*60*24*7);
+                        cartCookie.setMaxAge(60 * 60 * 24 * 7);
                         response.addCookie(cartCookie);
                     }
                     response.sendRedirect("home");
