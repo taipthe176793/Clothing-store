@@ -19,6 +19,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +163,12 @@ public class CartControllers extends HttpServlet {
             case "checkout":
                 //code checkout
 
+                break;
+            case "applyCoupon":
+                //code checkout
+                int discount = applyCoupon(request, response);
+                HttpSession session = request.getSession();
+                session.setAttribute("discount", discount);
                 break;
 
             default:
@@ -315,8 +322,8 @@ public class CartControllers extends HttpServlet {
     private void deleteCartItem(HttpServletRequest request, HttpServletResponse response) {
         try {
 
-            int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
-            int variantId = Integer.parseInt(request.getParameter("itemId"));
+            int cartItemId = Integer.parseInt(request.getParameter("cItemIdDelete"));
+            int variantId = Integer.parseInt(request.getParameter("itemIdDelete"));
 
             String cartTxt = "";
             String userId = "";
@@ -376,9 +383,9 @@ public class CartControllers extends HttpServlet {
 
         try {
 
-            int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
+            int cartItemId = Integer.parseInt(request.getParameter("cItemId"));
             int variantId = Integer.parseInt(request.getParameter("itemId"));
-            int updateQuantity = Integer.parseInt(request.getParameter("quantity"));
+            int updateQuantity = Integer.parseInt(request.getParameter("cItemQuantity"));
 
             ProductVariantDAO pvDAO = new ProductVariantDAO();
 
@@ -424,6 +431,10 @@ public class CartControllers extends HttpServlet {
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private int applyCoupon(HttpServletRequest request, HttpServletResponse response) {
+        return 0;
     }
 
 }
