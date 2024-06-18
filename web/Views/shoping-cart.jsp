@@ -108,7 +108,7 @@
                                                     <tr class="table_row">
 
                                                         <td class="column-5">
-                                                            <input type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItemId" value="${item.getCartItemId()}"/>
+                                                            <input id="itemSelected" type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItemId" value="${item.getCartItemId()}"/>
                                                         </td>
                                                         <td class="">
                                                             <div class="" style="padding: 0">
@@ -135,7 +135,7 @@
                                                                 </div>
                                                             </form>
                                                         </td>
-                                                        <td class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
+                                                        <td id="itemTotal" class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
                                                         <td class="p-r-15 text-center">
                                                             <form action="cart?action=delete" method="post">
                                                                 <input name="cartItemId" value="${item.getCartItemId()}" hidden=""/>
@@ -246,22 +246,7 @@
                                         </div>
 
                                         <div class="size-209">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex-w flex-t bor12 p-t-15 p-b-30">
-                                        <div class="size-208 w-full-ssm">
-                                            <span class="stext-110 cl2">
-                                                Shipping:
-                                            </span>
-                                        </div>
-
-                                        <div class="size-209">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
+                                            <span class="mtext-110 cl2" id="subTotalTxt">
                                             </span>
                                         </div>
                                     </div>
@@ -274,11 +259,10 @@
                                         </div>
 
                                         <div class="size-209">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
-                                            </span>
+                                            <span class="mtext-110 cl2" id="discountTxt"></span>
                                         </div>
                                     </div>
+                                    <input name="discount" id="discount" hidden="" type="number" value="${discount}"/>
 
                                     <div class="flex-w flex-t p-t-27 p-b-33">
                                         <div class="size-208">
@@ -288,11 +272,10 @@
                                         </div>
 
                                         <div class="size-209 p-t-1">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
-                                            </span>
+                                            <span class="mtext-110 cl2" id="totalTxt"></span>
                                         </div>
                                     </div>
+                                    <input name="totalAmount" id="totalAmount" hidden="" type="number" value="0"/>
 
                                     <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                                         Proceed to Checkout
@@ -366,6 +349,12 @@
         <script>
                                         document.addEventListener('DOMContentLoaded', function () {
 
+                                            document.querySelector('#subTotalTxt').innerText = "$ 0.0";
+                                            document.querySelector('#discountTxt').innerText = "$ "
+                                                    + (document.querySelector('#discount').value.trim() === '' ? "0.0"
+                                                            : parseFloat(document.querySelector('#discount').value.trim()).toFixed(1));
+                                            document.querySelector('#totalTxt').innerText = "$ 0.0";
+
                                             const inputs = document.querySelectorAll('input[id="num-product"]');
 
                                             if (inputs.length > 0) {
@@ -438,17 +427,50 @@
                                                     });
                                                 });
                                             }
-                                            
+
+                                            const checkboxs = document.querySelectorAll('input[id="itemSelected"]');
+
+                                            if (checkboxs.length > 0) {
+
+                                                let subTotal = 0;
+                                                const discountTxt = document.querySelector('#discountTxt').textContent.trim();
+                                                const discount = parseFloat(discountTxt.replace('$', '').trim());
+                                                let total = 0;
+
+                                                checkboxs.forEach(function (checkbox) {
+                                                    checkbox.addEventListener('change', function () {
+                                                        const itemTotalText = this.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
+                                                        const itemTotal = parseFloat(itemTotalText.replace('$', '').trim());
+                                                        if (this.checked) {
+                                                            subTotal += itemTotal;
+                                                        } else {
+                                                            subTotal -= itemTotal;
+                                                        }
+                                                        let subTotalDisplay = document.querySelector('#subTotalTxt');
+                                                        subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
+                                                        let totalText = document.querySelector('#totalTxt');
+                                                        if (subTotal === 0 || subTotal - discount === 0) {
+                                                            totalText.innerText = "$ 0.0";
+                                                        } else {
+                                                            total = subTotal - discount;
+                                                            totalText.innerText = "$ " + total.toFixed(1);
+                                                            document.querySelector('#totalAmount').value = total;
+                                                        }
+                                                    });
+                                                });
+
+                                            }
+
                                             let tableTitle = document.querySelector('#inactiveTitle');
                                             let table = document.querySelector('#inactiveTable');
-                                            if(table) {
+                                            if (table) {
                                                 let rows = table.querySelectorAll('td');
-                                                if(rows.length > 0) {
+                                                if (rows.length > 0) {
                                                     tableTitle.style.display = 'block';
                                                     table.style.display = 'block';
                                                 }
                                             }
-                                            
+
                                         });
 
         </script>
