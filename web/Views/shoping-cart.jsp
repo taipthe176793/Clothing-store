@@ -73,7 +73,7 @@
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                                 <div class="m-l-25 m-r--38 m-lr-0-xl">
-                                    <h5 class="m-b-20 font-weight-bold">Active List</h5>
+                                    <h5 class="m-b-20 font-weight-bold">Available Products</h5>
                                     <div class="wrap-table-shopping-cart">
 
                                         <table class="table-shopping-cart">
@@ -88,13 +88,13 @@
                                             </tr>
                                             <c:forEach items="${cart}" var="item">
 
-                                                <c:forEach items="${sessionScope.variantsSession}" var="variant">
+                                                <c:forEach items="${allVariant}" var="variant">
                                                     <c:if test="${variant.getProductVariantId() == item.getProductVariantId()}">
                                                         <c:set var="v" value="${variant}" />
                                                     </c:if>
                                                 </c:forEach>
 
-                                                <c:forEach items="${sessionScope.productsSession}" var="product">
+                                                <c:forEach items="${allProduct}" var="product">
                                                     <c:forEach items="${product.getVariantList()}" var="pVari">
                                                         <c:if test="${pVari.getProductId() == v.getProductId()}">
                                                             <c:set var="p" value="${product}" />
@@ -121,17 +121,19 @@
                                                         </td>
                                                         <td class="column-3">$ ${p.getPrice()}</td>
                                                         <td class="column-4">
-                                                            <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                                                <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                                                    <i class="fs-16 zmdi zmdi-minus"></i>
+                                                            <form action="cart?action=updateQuantity" method="post">
+                                                                <input name="cartItemId" value="${item.getCartItemId()}" hidden=""/>
+                                                                <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
+                                                                <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                                        <i class="fs-16 zmdi zmdi-minus"></i>
+                                                                    </div>
+                                                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="num-product" value="${item.getQuantity()}" max="${v.getQuantity()}">
+                                                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                                        <i class="fs-16 zmdi zmdi-plus"></i>
+                                                                    </div>
                                                                 </div>
-
-                                                                <input class="mtext-104 cl3 txt-center num-product" type="number" id="num-product" value="${item.getQuantity()}" max="${v.getQuantity()}">
-
-                                                                <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                                    <i class="fs-16 zmdi zmdi-plus"></i>
-                                                                </div>
-                                                            </div>
+                                                            </form>
                                                         </td>
                                                         <td class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
                                                         <td class="p-r-15 text-center">
@@ -164,9 +166,10 @@
                                     </div>
                                     <br />
                                     <br />
-                                    <h5 class="m-b-20 font-weight-bold">Inactive List</h5>
+                                    <!-- Inactive items -->
+                                    <h5 class="m-b-20 font-weight-bold" id="inactiveTitle" style="display: none">Unavailable Products</h5>
                                     <div class="wrap-table-shopping-cart">
-                                        <table class="table-shopping-cart" id="inactiveTable">
+                                        <table class="table-shopping-cart" id="inactiveTable" style="display: none">
                                             <tr class="table_head">
                                                 <th class="column-5">Product</th>
                                                 <th class="column-5"></th>
@@ -177,13 +180,13 @@
                                             </tr>
                                             <c:forEach items="${cart}" var="item">
 
-                                                <c:forEach items="${sessionScope.variantsSession}" var="variant">
+                                                <c:forEach items="${allVariant}" var="variant">
                                                     <c:if test="${variant.getProductVariantId() == item.getProductVariantId()}">
                                                         <c:set var="v" value="${variant}" />
                                                     </c:if>
                                                 </c:forEach>
 
-                                                <c:forEach items="${sessionScope.productsSession}" var="product">
+                                                <c:forEach items="${allProduct}" var="product">
                                                     <c:forEach items="${product.getVariantList()}" var="pVari">
                                                         <c:if test="${pVari.getProductId() == v.getProductId()}">
                                                             <c:set var="p" value="${product}" />
@@ -195,7 +198,7 @@
                                                     <tr class="table_row">
 
                                                         <td class="column-5 text-center">
-                                                            <p class="text-white bg-secondary" style="border: solid 1px gray; margin-left: 10px; border-radius: 100px;">Inactive</p>
+                                                            <p class="text-white bg-secondary" style="border: solid 1px gray; margin-left: 10px; border-radius: 100px;">${v.getQuantity() == 0 ? "Sold out" : "Inactive"}</p>
                                                         </td>
                                                         <td class="">
                                                             <div class="">
@@ -336,7 +339,7 @@
                                                 minimumResultsForSearch: 20,
                                                 dropdownParent: $(this).next('.dropDownSelect2')
                                             });
-                                        })
+                                        });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
@@ -350,15 +353,105 @@
                                                 wheelSpeed: 1,
                                                 scrollingThreshold: 1000,
                                                 wheelPropagation: false,
-                                            });
+                                            })
 
                                             $(window).on('resize', function () {
                                                 ps.update();
-                                            })
+                                            });
                                         });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+        <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+
+                                            const inputs = document.querySelectorAll('input[id="num-product"]');
+
+                                            if (inputs.length > 0) {
+                                                inputs.forEach(function (input) {
+
+                                                    input.addEventListener('input', function (e) {
+                                                        const maxValue = parseInt(input.max);
+                                                        let currentValue = parseInt(e.target.value);
+
+                                                        if (isNaN(currentValue) || e.target.value.trim() === "") {
+                                                            e.target.value = 1;
+                                                        } else {
+                                                            if (currentValue < 1) {
+                                                                e.target.value = 1;
+                                                            } else if (currentValue > maxValue) {
+                                                                e.target.value = maxValue;
+                                                            }
+                                                        }
+                                                    });
+
+                                                    // Add 'focusout' event listener
+                                                    input.addEventListener('focusout', function (e) {
+                                                        e.target.closest('form').submit();
+                                                    });
+
+                                                    // Add 'keypress' event listener
+                                                    input.addEventListener('keypress', function (e) {
+                                                        if (e.key === "Enter") {
+                                                            e.preventDefault();
+                                                            e.target.closest('form').submit();
+                                                        }
+                                                    });
+                                                });
+
+                                                // Add click event listener for 'btn-num-product-up'
+                                                document.querySelectorAll('.btn-num-product-up').forEach(function (button) {
+                                                    button.addEventListener('click', function (e) {
+                                                        const inputContainer = button.closest('.wrap-num-product');
+                                                        if (inputContainer) {
+                                                            const input = inputContainer.querySelector('input[id="num-product"]');
+                                                            if (input) {
+                                                                const maxValue = parseInt(input.max);
+                                                                let currentValue = parseInt(input.value);
+
+                                                                if (currentValue < maxValue) {
+                                                                    input.value = currentValue + 1;
+                                                                }
+                                                                e.target.closest('form').submit();
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                                // Add click event listener for 'btn-num-product-down'
+                                                document.querySelectorAll('.btn-num-product-down').forEach(function (button) {
+                                                    button.addEventListener('click', function (e) {
+                                                        const inputContainer = button.closest('.wrap-num-product');
+                                                        if (inputContainer) {
+                                                            const input = inputContainer.querySelector('input[id="num-product"]');
+                                                            if (input) {
+                                                                const maxValue = parseInt(input.max);
+                                                                let currentValue = parseInt(input.value);
+
+                                                                if (currentValue > 1) {
+                                                                    input.value = currentValue - 1;
+                                                                }
+                                                                e.target.closest('form').submit();
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            }
+                                            
+                                            let tableTitle = document.querySelector('#inactiveTitle');
+                                            let table = document.querySelector('#inactiveTable');
+                                            if(table) {
+                                                let rows = table.querySelectorAll('td');
+                                                if(rows.length > 0) {
+                                                    tableTitle.style.display = 'block';
+                                                    table.style.display = 'block';
+                                                }
+                                            }
+                                            
+                                        });
+
+        </script>
 
     </body>
 </html>
