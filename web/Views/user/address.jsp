@@ -30,29 +30,7 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
-        <style>
-            .btn-cancel {
-                display: inline-block;
-                padding: 0.375rem 0.75rem;
-                font-size: 1rem;
-                line-height: 1.5;
-                border: 1px solid #ccc;
-                border-radius: 0.25rem;
-                color: #212529;
-                text-align: center;
-                white-space: nowrap;
-                vertical-align: middle;
-                background-color: transparent;
-                transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-                text-decoration: none;
-            }
 
-            .btn-cancel:hover {
-                border-color: #6c757d;
-                color: #212529;
-                text-decoration: none;
-            }
-        </style>
     </head>
 
     <body>
@@ -92,7 +70,7 @@
                                 <div class="form-group">
                                     <label for="addAddress">Address</label>
                                     <textarea id="addAddress" name="address" class="form-control" rows="3" required></textarea>
-                                    <div class="invalid-feedback">Address must not be empty or contain spaces.</div>
+                                    <div class="invalid-feedback">Address must not be empty.</div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -147,7 +125,7 @@
                         </tbody>
                     </table>
                 </div>
-                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-cancel">Cancel</a>
+                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-black">Cancel</a>
             </div>
 
             <div id="updateAddressModal" class="modal fade" role="dialog">
@@ -191,29 +169,28 @@
         <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
         <script>
-                            $(document).ready(function () {
-                                // Xử lý khi nhấn nút Update trong bảng
-                                $('.btn-update').click(function (e) {
-                                    e.preventDefault();
-                                    var addressId = $(this).closest('tr').find('td:first').text();
-                                    var phone = $(this).closest('tr').find('td:eq(1)').text();
-                                    var address = $(this).closest('tr').find('td:eq(2)').text();
+                                $(document).ready(function () {
+                                    // Xử lý khi nhấn nút Update trong bảng
+                                    $('.btn-update').click(function (e) {
+                                        e.preventDefault();
+                                        var addressId = $(this).closest('tr').find('td:first').text();
+                                        var phone = $(this).closest('tr').find('td:eq(1)').text();
+                                        var address = $(this).closest('tr').find('td:eq(2)').text();
 
-                                    // Đổ dữ liệu vào modal
-                                    $('#updateAddressId').val(addressId);
-                                    $('#updatePhone').val(phone);
-                                    $('#updateAddress').val(address);
+                                        // Đổ dữ liệu vào modal
+                                        $('#updateAddressId').val(addressId);
+                                        $('#updatePhone').val(phone);
+                                        $('#updateAddress').val(address);
 
-                                    // Hiển thị modal
-                                    $('#updateAddressModal').modal('show');
+                                        // Hiển thị modal
+                                        $('#updateAddressModal').modal('show');
+                                    });
                                 });
-                            });
 
-                            $(document).ready(function () {
-                                // Xử lý khi nhấn nút "Add Address"
+// Xử lý khi nhấn nút "Add Address"
                                 $('#addAddressForm').submit(function (e) {
                                     e.preventDefault();
-                                    if (validateForm()) {
+                                    if (validateForm('addAddressForm')) {
                                         $.ajax({
                                             type: 'POST',
                                             url: $(this).attr('action'),
@@ -230,33 +207,53 @@
                                         });
                                     }
                                 });
-                            });
 
-                            function validateForm() {
-                                let phonePattern = /^(?!.*\s)0\d{9}$/;
+// Xử lý khi nhấn nút "Update Address"
+                                $('#updateAddressForm').submit(function (e) {
+                                    e.preventDefault();
+                                    if (validateForm('updateAddressForm')) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: $(this).attr('action'),
+                                            data: $(this).serialize(),
+                                            success: function (data) {
+                                                // Đóng modal khi cập nhật thành công
+                                                $('#updateAddressModal').modal('hide');
+                                                // Cập nhật lại nội dung trang hoặc reload trang
+                                                location.reload(); // Có thể sử dụng location.reload() để reload trang
+                                            },
+                                            error: function () {
+                                                alert('Failed to update address.');
+                                            }
+                                        });
+                                    }
+                                });
 
-                                let form = document.forms["addAddressForm"];
-                                let address = form["address"];
-                                let phone = form["phone"];
+                                function validateForm(formId) {
+                                    let phonePattern = /^(?!.*\s)0\d{9}$/;
 
-                                let isValid = true;
+                                    let form = document.forms[formId];
+                                    let address = form["address"];
+                                    let phone = form["phone"];
 
-                                if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
-                                    phone.classList.add("is-invalid");
-                                    isValid = false;
-                                } else {
-                                    phone.classList.remove("is-invalid");
+                                    let isValid = true;
+
+                                    if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
+                                        phone.classList.add("is-invalid");
+                                        isValid = false;
+                                    } else {
+                                        phone.classList.remove("is-invalid");
+                                    }
+
+                                    if (address.value.trim() === "") {
+                                        address.classList.add("is-invalid");
+                                        isValid = false;
+                                    } else {
+                                        address.classList.remove("is-invalid");
+                                    }
+
+                                    return isValid;
                                 }
-
-                                if (address.value.trim() === "") {
-                                    address.classList.add("is-invalid");
-                                    isValid = false;
-                                } else {
-                                    address.classList.remove("is-invalid");
-                                }
-
-                                return isValid;
-                            }
         </script>
     </body>
 </html>

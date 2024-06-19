@@ -75,13 +75,13 @@
                                         <td class="price">$${product.getPrice()}</td>
                                         <td><span class="in-stock-box">In Stock</span></td>
                                         <td>
-                                            <form action="" method="post">
+                                            <form action="${pageContext.request.contextPath}/addToCart" method="post">
                                                 <input type="hidden" name="productId" value="${product.getProductId()}">
                                                 <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
                                             </form>
                                         </td>
                                         <td>
-                                            <form action="" method="post">
+                                            <form action="${pageContext.request.contextPath}/removeFromWishlist" method="post">
                                                 <input type="hidden" name="productId" value="${product.getProductId()}">
                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                     <i class="far fa-trash-alt"></i> Remove
@@ -96,7 +96,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
 
         <jsp:include page="./common/homepage/page-footer.jsp"></jsp:include>
             <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
