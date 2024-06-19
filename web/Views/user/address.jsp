@@ -87,16 +87,17 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Address ID</th>
+                                <th>#</th>
                                 <th>Phone</th>
                                 <th>Address</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+
                             <c:forEach var="address" items="${addresses}" varStatus="loop">
                                 <tr>
-                                    <td>${address.addressId}</td>
+                                    <td>${loop.index + 1}</td>
                                     <td>${address.phone}</td>
                                     <td>${address.address}</td>
                                     <td>
@@ -106,11 +107,13 @@
                                             <button type="submit" class="btn btn-info btn-sm btn-update">Update</button>
                                         </form>
 
-                                        <form action="${pageContext.request.contextPath}/customer/address" method="post" style="display: inline;">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="${address.addressId}">
-                                            <button type="submit" class="btn btn-danger btn-sm" ${loop.index == 0 ? 'disabled' : ''}>Delete</button>
-                                        </form>
+                                        <c:if test="${loop.index != 0}">
+                                            <form action="${pageContext.request.contextPath}/customer/address" method="post" style="display: inline;">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="id" value="${address.addressId}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </c:if>
 
                                         <c:if test="${loop.index != 0}">
                                             <form action="${pageContext.request.contextPath}/customer/address" method="post" style="display: inline;">
@@ -119,13 +122,16 @@
                                                 <button type="submit" class="btn btn-dark btn-sm">Set as Default</button>
                                             </form>
                                         </c:if>
+                                        <c:if test="${loop.index == 0}">
+                                            <span class="badge bg-warning p-2">Default</span>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-black">Cancel</a>
+                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-dark " style="width: 10%; margin: 0 auto">Back to Profile</a>
             </div>
 
             <div id="updateAddressModal" class="modal fade" role="dialog">
