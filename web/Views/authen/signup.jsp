@@ -85,37 +85,52 @@
                         let password = form["pass"];
                         let fullname = form["fullname"];
                         let email = form["email"];
+                        let confirmPassword = form["confirm-pass"];
 
                         let isValid = true;
+
+                        // Reset custom validity messages
+                        fullname.setCustomValidity("");
+                        username.setCustomValidity("");
+                        phone.setCustomValidity("");
+                        password.setCustomValidity("");
+                        email.setCustomValidity("");
+                        confirmPassword.setCustomValidity("");
+
+                        // Validate Fullname
                         if (fullname.value.trim() === "") {
-                            fullname.setCustomValidity("Fullname cannot be empty!!!");
+                            fullname.setCustomValidity("Fullname không được để trống hoặc chỉ chứa dấu cách.");
                             isValid = false;
-                        }
-                        if (!usernamePattern.test(username.value) || username.value.trim() === "") {
-                            username.setCustomValidity("Username must be at least 6 characters without spaces.");
-                            isValid = false;
-                        } else {
-                            username.setCustomValidity("");
                         }
 
-                        if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
-                            phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
+                        // Validate Username
+                        if (!usernamePattern.test(username.value)) {
+                            username.setCustomValidity("Username phải có ít nhất 6 ký tự và không có dấu cách.");
                             isValid = false;
-                        } else {
-                            phone.setCustomValidity("");
                         }
 
-                        if (!passwordPattern.test(password.value) || password.value.trim() === "") {
-                            password.setCustomValidity("Password must be at least 8 characters without spaces.");
+                        // Validate Phone
+                        if (!phonePattern.test(phone.value)) {
+                            phone.setCustomValidity("Số điện thoại phải có 10 chữ số và bắt đầu bằng 0, không có dấu cách.");
                             isValid = false;
-                        } else {
-                            password.setCustomValidity("");
                         }
+
+                        // Validate Password
+                        if (!passwordPattern.test(password.value)) {
+                            password.setCustomValidity("Password phải có ít nhất 8 ký tự và không có dấu cách.");
+                            isValid = false;
+                        }
+
+                        // Validate Confirm Password
+                        if (password.value !== confirmPassword.value) {
+                            confirmPassword.setCustomValidity("Password xác nhận không khớp.");
+                            isValid = false;
+                        }
+
+                        // Validate Email
                         if (!emailPattern.test(email.value)) {
-                            email.setCustomValidity("Please enter a valid email address.");
+                            email.setCustomValidity("Vui lòng nhập địa chỉ email hợp lệ.");
                             isValid = false;
-                        } else {
-                            email.setCustomValidity("");
                         }
 
                         if (!isValid) {

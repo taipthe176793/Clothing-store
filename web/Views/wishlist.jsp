@@ -37,6 +37,23 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wishlist.css">
+        <style>
+            .in-stock-box {
+                color: white;
+                background-color: black;
+                padding: 5px 10px;
+                border-radius: 3px; 
+            }
+            .table-wishlist th, .table-wishlist td {
+                text-align: center; 
+                vertical-align: middle; 
+            }
+            .display-flex {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="common/homepage/page-header.jsp"></jsp:include>
@@ -52,12 +69,12 @@
                         <table class="table table-bordered table-hover">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col" width="45%">Product Name</th>
+                                    <th scope="col" width="40%">Product Name</th>
                                     <th scope="col" width="15%">Unit Price</th>
                                     <th scope="col" width="15%">Total Quantity</th>
-                                    <th scope="col" width="15%">Status1</th>
-                                    <th scope="col" width="15%">Status2</th>
-                                    <th scope="col" width="10%"></th>
+                                    <th scope="col" width="15%">Availability</th>
+                                    <th scope="col" width="15%">Status</th>
+                                    <th scope="col" width="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,7 +121,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <<td>
+                                        <td>
                                             ${product.isIsDelete() ? "Inactive" : "Active"}
                                         </td>
 
