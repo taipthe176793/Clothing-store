@@ -633,17 +633,18 @@ public class AccountDAO extends DBContext {
     }
 
     public boolean addToWishlist(int accountId, int productId) throws SQLException {
+        System.out.println("In add func");
+
         Connection con = null;
         PreparedStatement stm = null;
 
         try {
             con = connect;
             if (con != null) {
-                String sql = "INSERT INTO wishlist (account_id, product_id) VALUES (?, ?)";
+                String sql = "INSERT INTO wishlist (customer_id, product_id) VALUES (?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, accountId);
                 stm.setInt(2, productId);
-
                 int rowsInserted = stm.executeUpdate();
                 return rowsInserted > 0;
             }
@@ -662,7 +663,7 @@ public class AccountDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "DELETE FROM wishlist WHERE account_id = ? AND product_id = ?";
+                String sql = "DELETE FROM wishlist WHERE customer_id = ? AND product_id = ?";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, accountId);
                 stm.setInt(2, productId);
@@ -677,6 +678,36 @@ public class AccountDAO extends DBContext {
         }
         return false;
     }
+
+    public boolean isProductInWishlist(int accountId, int productId) throws SQLException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            String sql = "SELECT COUNT(*) FROM Wishlist WHERE customer_id = ? AND product_id = ?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId);
+            ps.setInt(2, productId);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            System.out.println("isProductInWishlist: "+e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        }
+        return false;
+    }
+       
 
     public boolean updateAccountRole(int accountId, int roleId) throws SQLException {
         Connection con = null;
