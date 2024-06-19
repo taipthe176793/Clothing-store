@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Coupon {
     private int couponId;
-    private int code;
+    private String code;
     private String description;
     private int discount;
     private Date expiresAt;
@@ -22,7 +22,7 @@ public class Coupon {
     public Coupon() {
     }
 
-    public Coupon(int code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
+    public Coupon(String code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
         this.code = code;
         this.description = description;
         this.discount = discount;
@@ -32,7 +32,7 @@ public class Coupon {
     }
     
     
-    public Coupon(int couponId, int code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
+    public Coupon(int couponId, String code, String description, int discount, Date expiresAt, Date startAt, int quantity) {
         this.couponId = couponId;
         this.code = code;
         this.description = description;
@@ -50,11 +50,11 @@ public class Coupon {
         this.couponId = couponId;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

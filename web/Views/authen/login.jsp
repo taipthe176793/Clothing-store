@@ -46,12 +46,12 @@
                     <h3>Sign In</h3>
                     <div class="form-wrapper">
                         <label name="user" type="text">Username or Email</label>
-                        <input name="user" type="text" class="form-control" value="${user != null ? user : ''}" required>
+                        <input name="user" type="text" class="form-control" placeholder="Username or Email" value="${user != null ? user : ''}" required>
                         <i class="zmdi zmdi-account"></i>
                     </div>
                     <div class="form-wrapper">
                         <label name="pass" type="text">Password</label>
-                        <input name="pass" type="password" class="form-control" required>
+                        <input name="pass" type="password" class="form-control" placeholder="Password" required>
                         <i class="zmdi zmdi-lock"></i>
                     </div>
                     <div> <a style="text-decoration: none" href="auth?action=resetPass">Forget password?</a></div>
