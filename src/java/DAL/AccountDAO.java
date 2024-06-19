@@ -215,19 +215,17 @@ public class AccountDAO extends DBContext {
         List<Account> accountList = new ArrayList<>();
 
         try {
-            //1. Connect DB
             con = connect;
             if (con != null) {
-                //2. Create SQL String
                 String sql = "SELECT [account_id]\n"
                         + "      ,[username]\n"
                         + "      ,[password]\n"
                         + "      ,[role_id]\n"
                         + "      ,[email]\n"
+                        + "      ,[fullname]\n"
                         + "      ,[phone]\n"
                         + "  FROM [dbo].[account]\n"
-                        + "  where role_id != 1";
-                //3. Create Statement
+                        + "  where role_id != 1 AND != 4";
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
                 while (rs.next()) {
@@ -236,6 +234,7 @@ public class AccountDAO extends DBContext {
                     account.setUsername(rs.getString("username"));
                     account.setPassword(rs.getString("password"));
                     account.setRoleId(rs.getInt("role_id"));
+                    account.setFullname(rs.getString("fullname"));
                     account.setEmail(rs.getString("email"));
                     account.setPhone(rs.getString("phone"));
                     accountList.add(account);
@@ -646,8 +645,6 @@ public class AccountDAO extends DBContext {
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, accountId);
                 stm.setInt(2, productId);
-                System.out.println("accountId: " + accountId);
-                System.out.println("productId: " + productId);
                 int rowsInserted = stm.executeUpdate();
                 return rowsInserted > 0;
             }
@@ -708,7 +705,32 @@ public class AccountDAO extends DBContext {
                 ps.close();
             }
         }
+        return false;
+    }
        
+
+    public boolean updateAccountRole(int accountId, int roleId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "UPDATE [dbo].[account]\n"
+                        + "   SET [role_id] = ?\n"
+                        + " WHERE [account_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, roleId);
+                stm.setInt(2, accountId);
+
+                int rowsDeleted = stm.executeUpdate();
+                return rowsDeleted > 0;
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
         return false;
     }
 

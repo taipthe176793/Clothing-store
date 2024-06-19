@@ -96,8 +96,8 @@
                                                     <td name="phone">${account.getPhone()}</td>
                                                     <c:forEach items="${roleList}" var="role"> 
                                                         <c:if test="${account.getRoleId() == role.getRoleId()}"> 
-                                                            <td>${role.getName()}</td> 
-                                                        </c:if> 
+                                                            <td name="role">${role.getName()}</td> 
+                                                        </c:if>
                                                     </c:forEach>
                                                     <td name="edit" class="d-flex justify-content-center">
                                                         <button type="button" class="btn btn-primary"
@@ -129,7 +129,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editModalForm" action="variants?action=update" method="POST" >
+                        <form id="editModalForm" action="accounts?action=update" method="POST" >
                             <div class="form-group" style="display: none">
                                 <input type="text" class="form-control" id="idEditInput" name="id">
                             </div>
@@ -141,24 +141,24 @@
                             
                             <div class="form-group">
                                 <label for="fullname">Full name:</label>
-                                <input type="text" class="form-control" id="fullnameEditInput" name="fullname">
+                                <input type="text" class="form-control" id="fullnameEditInput" name="fullname" readonly>
                             </div>
                             
                             <div class="form-group">
                                 <label for="phone">Phone:</label>
-                                <input type="text" class="form-control" id="phoneEditInput" name="phone">
+                                <input type="text" class="form-control" id="phoneEditInput" name="phone" readonly>
                             </div>
                             
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="text" class="form-control" id="emailEditInput" name="email">
+                                <input type="text" class="form-control" id="emailEditInput" name="email" readonly> 
                             </div>
                             
                             <div class="form-group">
                                 <label for="role">Role:</label>
                                 <br/>
-                                <input type="radio" id="" name="role" value="customer"> Customer
-                                <input type="radio" id="" name="role" value="staff" style="margin-left: 40px"> Staff
+                                <input type="radio" id="" name="role" value="3"> Customer
+                                <input type="radio" id="" name="role" value="2" style="margin-left: 40px"> Staff
                             </div>
                             
                             <div class="form-group" hidden="">
@@ -174,6 +174,26 @@
                 </div>
             </div>
         </div>
+        
+        <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="notiModal">Notification</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${notification}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
         </body>
 
         <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
@@ -210,64 +230,76 @@
 
     <script>
         function validateForm() {
-            let quantity = $('#quantity').val();
+        let quantity = $('#quantity').val();
 
-            //xoá thông báo lỗi hiện tại
-            $('.error').html('');
+        $('.error').html('');
 
-            if (quantity === '') {
-                $('#quantityError').html('Quantity cannot be empty!');
-            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                $('#quantityError').html('Quantity must greater than 0');
-            }
-
-            // Kiểm tra nếu không có lỗi thì submit form
-            let error = '';
-            $('.error').each(function () {
-                error += $(this).html();
-            });
-            if (error === '') {
-                $('#addProductForm').submit();
-            } else {
-                event.preventDefault();
-            }
+        if (quantity === '') {
+            $('#quantityError').html('Quantity cannot be empty!');
+        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+            $('#quantityError').html('Quantity must be greater than 0');
         }
+
+        let error = '';
+        $('.error').each(function () {
+            error += $(this).html();
+        });
+        if (error === '') {
+            $('#addProductForm').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
 
         function validateForm2() {
-            let quantity = $('#quantityEditInput').val();
+        let quantity = $('#quantityEditInput').val();
 
-            $('.error').html('');
+        $('.error').html('');
 
-            if (quantity === '') {
-                $('#quantityEditError').html('Quantity cannot be empty');
-            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                $('#quantityEditError').html('Quantity must greater than 0');
-            }
-
-            let error = '';
-            $('.error').each(function () {
-                error += $(this).html();
-            });
-            if (error === '') {
-                $('#editModalForm').submit();
-            } else {
-                event.preventDefault();
-            }
+        if (quantity === '') {
+            $('#quantityEditError').html('Quantity cannot be empty');
+        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+            $('#quantityEditError').html('Quantity must be greater than 0');
         }
+
+        let error = '';
+        $('.error').each(function () {
+            error += $(this).html();
+        });
+        if (error === '') {
+            $('#editModalForm').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
+
         function editUserModal(button) {
-            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
-            let username = $(button).closest('tr').find('td[name="username"]').text().trim();
-            let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
-            let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
-            let email = $(button).closest('tr').find('td[name="email"]').text().trim();
-            let role = $(button).closest('tr').find('td[name="role"]').text().trim();
+        let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+        let username = $(button).closest('tr').find('td[name="username"]').text().trim();
+        let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
+        let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
+        let email = $(button).closest('tr').find('td[name="email"]').text().trim();
+        let role = $(button).closest('tr').find('td[name="role"]').text().trim();
 
-            $('#idEditInput').val(id);
-            $('#usernameEditInput').val(username);
-            $('#fullnameEditInput').val(fullname);
-            $('#phoneEditInput').val(phone);
-            $('#emailEditInput').val(email);
-            $('#roleEditInput').val(role);
+        $('#idEditInput').val(id);
+        $('#usernameEditInput').val(username);
+        $('#fullnameEditInput').val(fullname);
+        $('#phoneEditInput').val(phone);
+        $('#emailEditInput').val(email);
+
+        if (role === 'customer') {
+            $('input[name="role"][value="3"]').prop('checked', true);
+        } else if (role === 'staff') {
+            $('input[name="role"][value="2"]').prop('checked', true);
+        } else {
+            $('input[name="role"]').prop('checked', false);
         }
+    }
+    
+        $(document).ready(function () {
+    <c:if test="${notification != null}">
+        $('#notiModal').modal('show');
+    </c:if>
+    });
     </script>
 </html>

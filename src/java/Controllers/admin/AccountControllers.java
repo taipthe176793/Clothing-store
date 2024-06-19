@@ -5,8 +5,10 @@
 package Controllers.admin;
 
 import DAL.AccountDAO;
+import DAL.CouponDAO;
 import DAL.RoleDAO;
 import Models.Account;
+import Models.Coupon;
 import Models.Role;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,7 +16,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -72,7 +77,12 @@ public class AccountControllers extends HttpServlet {
             RoleDAO rDAO = new RoleDAO();
             List<Role> roleList = new ArrayList<>();
             roleList = rDAO.getRoleList();
-
+            
+            HttpSession session = request.getSession();
+            if (session.getAttribute("notification") != null) {
+                request.setAttribute("notification", session.getAttribute("notification"));
+                session.invalidate();
+            }
             request.setAttribute("roleList", roleList);
             request.setAttribute("accountList", accountList);
             request.getRequestDispatcher("/Views/admin/accounts-table.jsp").forward(request, response);
@@ -93,7 +103,19 @@ public class AccountControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+
+        switch (action) {
+            case "add":
+                addStaff(request);
+                break;
+            case "update":
+                updateRole(request);
+                break;
+            default:
+                throw new AssertionError();
+        }
+        response.sendRedirect("accounts");
     }
 
     /**
@@ -105,5 +127,29 @@ public class AccountControllers extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void updateRole(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+    try {
+        int accountId = Integer.parseInt(request.getParameter("id"));
+        int roleId = Integer.parseInt(request.getParameter("role"));
+        
+        AccountDAO aDAO = new AccountDAO();
+        if (aDAO.updateAccountRole(accountId, roleId)) {
+            session.setAttribute("notification", "Updated successfully");
+        } else {
+            session.setAttribute("notification", "Update failed");
+        }
+        
+
+    } catch (Exception ex) {
+        session.setAttribute("notification", "An error occurred while processing the coupon.");
+        Logger.getLogger(CouponControllers.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    }
+
+    private void addStaff(HttpServletRequest request) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }
