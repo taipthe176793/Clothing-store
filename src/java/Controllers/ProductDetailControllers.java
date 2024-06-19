@@ -14,6 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +67,9 @@ public class ProductDetailControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            
+            HttpSession session = request.getSession();
+            
             int productId = Integer.parseInt(request.getParameter("id"));
             String color = request.getParameter("color") == null ? "" : request.getParameter("color");
             String size = request.getParameter("size") == null ? "" : request.getParameter("size");
@@ -101,6 +105,13 @@ public class ProductDetailControllers extends HttpServlet {
                         + product.getFirstInStock().getColor() + "&size=" + product.getFirstInStock().getSize());
 
             } else {
+                
+                if(session.getAttribute("notification") != null) {
+                    request.setAttribute("notification", session.getAttribute("notification"));
+                    request.setAttribute("type", session.getAttribute("type"));
+                    session.invalidate();
+                }
+                
                 request.setAttribute("color", color);
                 request.setAttribute("size", size);
                 request.setAttribute("sizesOfColor", sizesOfColor);

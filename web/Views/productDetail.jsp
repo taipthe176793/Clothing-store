@@ -103,9 +103,11 @@
                                     </div>
                                 </div>
 
-
-
-
+                                <c:if test="${notification ne null}">
+                                    <div id="alert" class="alert-box ${type}">
+                                        ${notification}
+                                    </div>
+                                </c:if>
 
                             </div>
                         </div>
@@ -423,6 +425,22 @@
                                                                     }
                                                                 });
                                                             }
+
+                                                            const alert = document.querySelector('#alert');
+
+                                                            if (alert) {
+                                                                alert.style.display = 'block';
+                                                                alert.style.opacity = '1';
+
+                                                                setTimeout(function () {
+                                                                    alert.style.opacity = '0';
+
+                                                                    setTimeout(function () {
+                                                                        alert.classList.add('show');
+                                                                    }, 500);
+                                                                }, 3500);
+                                                            }
+
                                                         });
 
     </script>
