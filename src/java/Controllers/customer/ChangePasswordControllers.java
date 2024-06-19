@@ -132,8 +132,25 @@ public class ChangePasswordControllers extends HttpServlet {
             boolean isPasswordUpdated = accountDAO.updatePassword(new Account(account.getUsername(), newPassword));
 
             if (isPasswordUpdated) {
-                request.setAttribute("message", "Password changed successfully. Please log in with your new password.");
-                response.sendRedirect(request.getContextPath() + "/auth?action=logout");
+                HttpSession session = request.getSession();
+                session.setAttribute("notification", "Password changed successfully. Please log in with your new password.");
+                session.setAttribute("type", "alert-box-success");
+               
+                    if (arr != null) {
+                        for (Cookie o : arr) {
+                            if (o.getName().equals("cart")
+                                    || o.getName().equals("userId")
+                                    || o.getName().equals("username")
+                                    || o.getName().equals("role")) {
+                                o.setMaxAge(0);
+                                response.addCookie(o);
+                            }
+                        }
+                        Cookie cartCookie = new Cookie("cart", "");
+                        cartCookie.setMaxAge(60 * 60 * 24 * 7);
+                        response.addCookie(cartCookie);
+                    }
+                response.sendRedirect(request.getContextPath() + "/auth?action=login");
             } else {
                 request.setAttribute("message", "Failed to change password. Please try again.");
                 request.getRequestDispatcher("/Views/user/change-password.jsp").forward(request, response);

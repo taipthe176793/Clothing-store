@@ -63,6 +63,12 @@ public class AuthenticationControllers extends HttpServlet {
 
             switch (action) {
                 case "login":
+                    HttpSession session= request.getSession();
+                    if (session.getAttribute("notification") != null) {
+                        request.setAttribute("notification", session.getAttribute("notification"));
+                          request.setAttribute("type", session.getAttribute("type"));
+                          session.invalidate();   
+                    }
                     request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                     break;
                 case "signup":
