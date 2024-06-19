@@ -97,7 +97,7 @@
                                                     <c:forEach items="${roleList}" var="role"> 
                                                         <c:if test="${account.getRoleId() == role.getRoleId()}"> 
                                                             <td>${role.getName()}</td> 
-                                                        </c:if> 
+                                                        </c:if>
                                                     </c:forEach>
                                                     <td name="edit" class="d-flex justify-content-center">
                                                         <button type="button" class="btn btn-primary"
@@ -129,7 +129,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="editModalForm" action="variants?action=update" method="POST" >
+                        <form id="editModalForm" action="accounts?action=update" method="POST" >
                             <div class="form-group" style="display: none">
                                 <input type="text" class="form-control" id="idEditInput" name="id">
                             </div>
@@ -141,24 +141,24 @@
                             
                             <div class="form-group">
                                 <label for="fullname">Full name:</label>
-                                <input type="text" class="form-control" id="fullnameEditInput" name="fullname">
+                                <input type="text" class="form-control" id="fullnameEditInput" name="fullname" readonly>
                             </div>
                             
                             <div class="form-group">
                                 <label for="phone">Phone:</label>
-                                <input type="text" class="form-control" id="phoneEditInput" name="phone">
+                                <input type="text" class="form-control" id="phoneEditInput" name="phone" readonly>
                             </div>
                             
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="text" class="form-control" id="emailEditInput" name="email">
+                                <input type="text" class="form-control" id="emailEditInput" name="email" readonly> 
                             </div>
                             
                             <div class="form-group">
                                 <label for="role">Role:</label>
                                 <br/>
-                                <input type="radio" id="" name="role" value="customer"> Customer
-                                <input type="radio" id="" name="role" value="staff" style="margin-left: 40px"> Staff
+                                <input type="radio" id="" name="role" value="3"> Customer
+                                <input type="radio" id="" name="role" value="2" style="margin-left: 40px"> Staff
                             </div>
                             
                             <div class="form-group" hidden="">

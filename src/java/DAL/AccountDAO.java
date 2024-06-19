@@ -224,6 +224,7 @@ public class AccountDAO extends DBContext {
                         + "      ,[password]\n"
                         + "      ,[role_id]\n"
                         + "      ,[email]\n"
+                        + "      ,[fullname]\n"
                         + "      ,[phone]\n"
                         + "  FROM [dbo].[account]\n"
                         + "  where role_id != 1";
@@ -236,6 +237,7 @@ public class AccountDAO extends DBContext {
                     account.setUsername(rs.getString("username"));
                     account.setPassword(rs.getString("password"));
                     account.setRoleId(rs.getInt("role_id"));
+                    account.setFullname(rs.getString("fullname"));
                     account.setEmail(rs.getString("email"));
                     account.setPhone(rs.getString("phone"));
                     accountList.add(account);
@@ -667,6 +669,31 @@ public class AccountDAO extends DBContext {
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, accountId);
                 stm.setInt(2, productId);
+
+                int rowsDeleted = stm.executeUpdate();
+                return rowsDeleted > 0;
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return false;
+    }
+
+    public boolean updateAccountRole(int accountId, int roleId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "UPDATE [dbo].[account]\n"
+                        + "   SET [role_id] = ?\n"
+                        + " WHERE [account_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, roleId);
+                stm.setInt(2, accountId);
 
                 int rowsDeleted = stm.executeUpdate();
                 return rowsDeleted > 0;

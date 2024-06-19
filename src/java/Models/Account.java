@@ -28,7 +28,17 @@ public class Account {
     private List<CartItem> cartItems = new ArrayList<>();
     private Map<Integer, Integer> wishlist;
 
- 
+    public Account(int accountId, String username, String password, int roleId, String email, String fullname, String phone) {
+        this.accountId = accountId;
+        this.username = username;
+        this.password = password;
+        this.roleId = roleId;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+    }
+
+
 
     public Account(String username, String password, int roleId, String email, String fullname, String phone) {
         this.username = username;
