@@ -103,7 +103,7 @@
                                                 </c:forEach>
 
                                                 <form></form>
-                                                
+
                                                 <c:if test="${v.getQuantity() > 0 && !v.isIsDeleted()}">
                                                     <tr class="table_row">
 
@@ -122,7 +122,7 @@
                                                             <p style="font-weight: 700">${p.getName()}</p>
                                                             <p style="font-size: 10px">${v.getColor()}, ${v.getSize()}</p>
                                                         </td>
-                                                        <td class="column-3">$ ${p.getPrice()}</td>
+                                                        <td id="price" class="column-3">$ ${p.getPrice()}</td>
                                                         <td class="column-4">
                                                             <div class="wrap-num-product flex-w m-l-auto m-r-0">
                                                                 <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
@@ -133,6 +133,9 @@
                                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                                 </div>
                                                             </div>
+                                                            <c:if test="${v.getQuantity() < 10}">
+                                                                <p class="text-danger text-center">${v.getQuantity()} items left</p>
+                                                            </c:if>
                                                         </td>
                                                         <td id="itemTotal" class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
                                                     <form action="cart?action=delete" method="post">
@@ -355,6 +358,16 @@
                                             if (inputs.length > 0) {
                                                 inputs.forEach(function (input) {
 
+                                                    let tr = input.closest('tr');
+                                                    let priceTxt = tr.querySelector('td[id="price"]');
+                                                    let priceInput = parseFloat(priceTxt.textContent.trim().replace('$', '').trim());
+                                                    const maxValueInput = parseInt(input.max);
+                                                    let currentValueInput = parseInt(input.value);
+                                                    input.value = currentValueInput > maxValueInput ? maxValueInput : currentValueInput;
+                                                    let updateTotal = input.value * priceInput;
+                                                    let totalInput = tr.querySelector('td[id="itemTotal"]');
+                                                    totalInput.innerText = "$ " + updateTotal.toFixed(1);
+
                                                     input.addEventListener('input', function (e) {
                                                         const maxValue = parseInt(input.max);
                                                         let currentValue = parseInt(e.target.value);
@@ -446,7 +459,7 @@
                                                     let subTotalDisplay = document.querySelector('#subTotalTxt');
                                                     subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
                                                     let totalText = document.querySelector('#totalTxt');
-                                                    if (subTotal === 0 || subTotal - discount === 0) {
+                                                    if (subTotal === 0 || subTotal - discount < 0) {
                                                         totalText.innerText = "$ 0.0";
                                                     } else {
                                                         total = subTotal - discount;

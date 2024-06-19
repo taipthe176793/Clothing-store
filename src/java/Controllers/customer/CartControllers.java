@@ -162,7 +162,7 @@ public class CartControllers extends HttpServlet {
                 break;
             case "checkout":
                 //code checkout
-
+                
                 break;
             case "applyCoupon":
                 //code checkout
