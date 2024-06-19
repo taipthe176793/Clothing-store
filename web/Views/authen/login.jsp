@@ -39,11 +39,13 @@
                 <form id="loginForm" action="auth?action=login" method="post" onsubmit="return validateLoginForm()" novalidate>
                     <h3>Sign In</h3>
                     <div class="form-wrapper">
-                        <input name="user" type="text" placeholder="Username or Email" class="form-control" required>
+                        <label name="user" type="text">Username or Email</label>
+                        <input name="user" type="text" class="form-control" value="${user != null ? user : ''}" required>
                         <i class="zmdi zmdi-account"></i>
                     </div>
                     <div class="form-wrapper">
-                        <input name="pass" type="password" placeholder="Password" class="form-control" required>
+                        <label name="pass" type="text">Password</label>
+                        <input name="pass" type="password" class="form-control" required>
                         <i class="zmdi zmdi-lock"></i>
                     </div>
                     <div> <a style="text-decoration: none" href="auth?action=resetPass">Forget password?</a></div>
