@@ -96,7 +96,7 @@
                                                     <td name="phone">${account.getPhone()}</td>
                                                     <c:forEach items="${roleList}" var="role"> 
                                                         <c:if test="${account.getRoleId() == role.getRoleId()}"> 
-                                                            <td>${role.getName()}</td> 
+                                                            <td name="role">${role.getName()}</td> 
                                                         </c:if>
                                                     </c:forEach>
                                                     <td name="edit" class="d-flex justify-content-center">
@@ -210,64 +210,70 @@
 
     <script>
         function validateForm() {
-            let quantity = $('#quantity').val();
+        let quantity = $('#quantity').val();
 
-            //xoá thông báo lỗi hiện tại
-            $('.error').html('');
+        $('.error').html('');
 
-            if (quantity === '') {
-                $('#quantityError').html('Quantity cannot be empty!');
-            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                $('#quantityError').html('Quantity must greater than 0');
-            }
-
-            // Kiểm tra nếu không có lỗi thì submit form
-            let error = '';
-            $('.error').each(function () {
-                error += $(this).html();
-            });
-            if (error === '') {
-                $('#addProductForm').submit();
-            } else {
-                event.preventDefault();
-            }
+        if (quantity === '') {
+            $('#quantityError').html('Quantity cannot be empty!');
+        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+            $('#quantityError').html('Quantity must be greater than 0');
         }
+
+        let error = '';
+        $('.error').each(function () {
+            error += $(this).html();
+        });
+        if (error === '') {
+            $('#addProductForm').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
 
         function validateForm2() {
-            let quantity = $('#quantityEditInput').val();
+        let quantity = $('#quantityEditInput').val();
 
-            $('.error').html('');
+        $('.error').html('');
 
-            if (quantity === '') {
-                $('#quantityEditError').html('Quantity cannot be empty');
-            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-                $('#quantityEditError').html('Quantity must greater than 0');
-            }
-
-            let error = '';
-            $('.error').each(function () {
-                error += $(this).html();
-            });
-            if (error === '') {
-                $('#editModalForm').submit();
-            } else {
-                event.preventDefault();
-            }
+        if (quantity === '') {
+            $('#quantityEditError').html('Quantity cannot be empty');
+        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+            $('#quantityEditError').html('Quantity must be greater than 0');
         }
+
+        let error = '';
+        $('.error').each(function () {
+            error += $(this).html();
+        });
+        if (error === '') {
+            $('#editModalForm').submit();
+        } else {
+            event.preventDefault();
+        }
+    }
+
         function editUserModal(button) {
-            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
-            let username = $(button).closest('tr').find('td[name="username"]').text().trim();
-            let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
-            let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
-            let email = $(button).closest('tr').find('td[name="email"]').text().trim();
-            let role = $(button).closest('tr').find('td[name="role"]').text().trim();
+        let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+        let username = $(button).closest('tr').find('td[name="username"]').text().trim();
+        let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
+        let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
+        let email = $(button).closest('tr').find('td[name="email"]').text().trim();
+        let role = $(button).closest('tr').find('td[name="role"]').text().trim();
 
-            $('#idEditInput').val(id);
-            $('#usernameEditInput').val(username);
-            $('#fullnameEditInput').val(fullname);
-            $('#phoneEditInput').val(phone);
-            $('#emailEditInput').val(email);
-            $('#roleEditInput').val(role);
+        $('#idEditInput').val(id);
+        $('#usernameEditInput').val(username);
+        $('#fullnameEditInput').val(fullname);
+        $('#phoneEditInput').val(phone);
+        $('#emailEditInput').val(email);
+
+        if (role === 'customer') {
+            $('input[name="role"][value="3"]').prop('checked', true);
+        } else if (role === 'staff') {
+            $('input[name="role"][value="2"]').prop('checked', true);
+        } else {
+            $('input[name="role"]').prop('checked', false);
         }
+    }
     </script>
 </html>
