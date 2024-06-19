@@ -67,13 +67,18 @@
             </div>
         </c:if>
         <div class="bg0 p-t-75 p-b-85">
+
+            <div id="alert" class="alert-box alert-box-danger">
+                Please select at least one item before proceeding to checkout.
+            </div>
+
             <c:if test="${!cart.isEmpty()}">
                 <div class="container">
-                    <form action="cart?action=checkout" method="post">
+                    <form id="mainCartForm" action="cart?action=checkout" method="post" onsubmit="return validateCheckout()">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                                 <div class="m-l-25 m-r--38 m-lr-0-xl">
-                                    <h5 class="m-b-20 font-weight-bold">Active List</h5>
+                                    <h5 class="m-b-20 font-weight-bold">Available Products</h5>
                                     <div class="wrap-table-shopping-cart">
 
                                         <table class="table-shopping-cart">
@@ -88,13 +93,13 @@
                                             </tr>
                                             <c:forEach items="${cart}" var="item">
 
-                                                <c:forEach items="${sessionScope.variantsSession}" var="variant">
+                                                <c:forEach items="${allVariant}" var="variant">
                                                     <c:if test="${variant.getProductVariantId() == item.getProductVariantId()}">
                                                         <c:set var="v" value="${variant}" />
                                                     </c:if>
                                                 </c:forEach>
 
-                                                <c:forEach items="${sessionScope.productsSession}" var="product">
+                                                <c:forEach items="${allProduct}" var="product">
                                                     <c:forEach items="${product.getVariantList()}" var="pVari">
                                                         <c:if test="${pVari.getProductId() == v.getProductId()}">
                                                             <c:set var="p" value="${product}" />
@@ -108,7 +113,10 @@
                                                     <tr class="table_row">
 
                                                         <td class="column-5">
-                                                            <input type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItemId" value="${item.getCartItemId()}"/>
+                                                            <input id="itemSelected" type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItemId" value="${item.getCartItemId()}"/>
+                                                            <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
+                                                            <input name="cItemId" value="${item.getCartItemId()}" hidden=""/>
+                                                            <input name="cItemQuantity" value="${item.getQuantity()}" hidden=""/>
                                                         </td>
                                                         <td class="">
                                                             <div class="" style="padding: 0">
@@ -119,29 +127,31 @@
                                                             <p style="font-weight: 700">${p.getName()}</p>
                                                             <p style="font-size: 10px">${v.getColor()}, ${v.getSize()}</p>
                                                         </td>
-                                                        <td class="column-3">$ ${p.getPrice()}</td>
+                                                        <td id="price" class="column-3">$ ${p.getPrice()}</td>
                                                         <td class="column-4">
                                                             <div class="wrap-num-product flex-w m-l-auto m-r-0">
                                                                 <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                                                     <i class="fs-16 zmdi zmdi-minus"></i>
                                                                 </div>
-
-                                                                <input class="mtext-104 cl3 txt-center num-product" type="number" id="num-product" value="${item.getQuantity()}" max="${v.getQuantity()}">
-
+                                                                <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="num-product" value="${item.getQuantity()}" max="${v.getQuantity()}">
                                                                 <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                                 </div>
                                                             </div>
+                                                            <c:if test="${v.getQuantity() < 10}">
+                                                                <p class="text-danger text-center">${v.getQuantity()} items left</p>
+                                                            </c:if>
                                                         </td>
-                                                        <td class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
+                                                        <td id="itemTotal" class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
+                                                    <form action="cart?action=delete" method="post">
+                                                        <input name="itemIdDelete" value="${item.getProductVariantId()}" hidden=""/>
+                                                        <input name="cItemIdDelete" value="${item.getCartItemId()}" hidden=""/>
                                                         <td class="p-r-15 text-center">
-                                                            <form action="cart?action=delete" method="post">
-                                                                <input name="item" value="${item.getCartItemId()}" hidden=""/>
-                                                                <button class="btn btn-danger text-white">
-                                                                    <i onclick="this.closest('form').submit()" class="bi bi-trash"></i>
-                                                                </button>
-                                                            </form>
+                                                            <button onclick="this.closest('form').submit()" class="btn btn-danger text-white" />
+                                                            <i class="bi bi-trash"></i>
+                                                            </button>
                                                         </td>
+                                                    </form>
                                                     </tr>
                                                 </c:if>
                                             </c:forEach>
@@ -149,23 +159,22 @@
                                     </div>
 
 
-
                                     <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                                         <div class="flex-w flex-m m-r-20 m-tb-5">
                                             <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
 
-                                            <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+                                            <div onclick="applyCoupon(this)" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
                                                 Apply coupon
                                             </div>
                                         </div>
-
-
                                     </div>
+
                                     <br />
                                     <br />
-                                    <h5 class="m-b-20 font-weight-bold">Inactive List</h5>
+                                    <!-- Inactive items -->
+                                    <h5 class="m-b-20 font-weight-bold" id="inactiveTitle" style="display: none">Unavailable Products</h5>
                                     <div class="wrap-table-shopping-cart">
-                                        <table class="table-shopping-cart" id="inactiveTable">
+                                        <table class="table-shopping-cart" id="inactiveTable" style="display: none">
                                             <tr class="table_head">
                                                 <th class="column-5">Product</th>
                                                 <th class="column-5"></th>
@@ -176,13 +185,13 @@
                                             </tr>
                                             <c:forEach items="${cart}" var="item">
 
-                                                <c:forEach items="${sessionScope.variantsSession}" var="variant">
+                                                <c:forEach items="${allVariant}" var="variant">
                                                     <c:if test="${variant.getProductVariantId() == item.getProductVariantId()}">
                                                         <c:set var="v" value="${variant}" />
                                                     </c:if>
                                                 </c:forEach>
 
-                                                <c:forEach items="${sessionScope.productsSession}" var="product">
+                                                <c:forEach items="${allProduct}" var="product">
                                                     <c:forEach items="${product.getVariantList()}" var="pVari">
                                                         <c:if test="${pVari.getProductId() == v.getProductId()}">
                                                             <c:set var="p" value="${product}" />
@@ -194,7 +203,7 @@
                                                     <tr class="table_row">
 
                                                         <td class="column-5 text-center">
-                                                            <p class="text-white bg-secondary" style="border: solid 1px gray; margin-left: 10px; border-radius: 100px;">Inactive</p>
+                                                            <p class="text-white bg-secondary" style="border: solid 1px gray; margin-left: 10px; border-radius: 100px;">${v.getQuantity() == 0 ? "Sold out" : "Inactive"}</p>
                                                         </td>
                                                         <td class="">
                                                             <div class="">
@@ -209,14 +218,15 @@
                                                         <td class="column-4">
                                                             <input class=" txt-center " type="number" value="0" readonly />
                                                         </td>
+                                                    <form action="cart?action=delete" method="post">
+                                                        <input name="itemIdDelete" value="${item.getProductVariantId()}" hidden=""/>
+                                                        <input name="cItemIdDelete" value="${item.getCartItemId()}" hidden=""/>
                                                         <td class="p-r-15 text-center">
-                                                            <form action="cart?action=delete" method="post">
-                                                                <input name="item" value="${item.getCartItemId()}" hidden=""/>
-                                                                <button class="btn btn-danger text-white" />
-                                                                <i onclick="this.closest('form').submit()" class="bi bi-trash"></i>
-                                                                </button>
-                                                            </form>
+                                                            <button onclick="this.closest('form').submit()" class="btn btn-danger text-white" />
+                                                            <i class="bi bi-trash"></i>
+                                                            </button>
                                                         </td>
+                                                    </form>
                                                     </tr>
                                                 </c:if>
 
@@ -240,23 +250,8 @@
                                             </span>
                                         </div>
 
-                                        <div class="size-209">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex-w flex-t bor12 p-t-15 p-b-30">
-                                        <div class="size-208 w-full-ssm">
-                                            <span class="stext-110 cl2">
-                                                Shipping:
-                                            </span>
-                                        </div>
-
-                                        <div class="size-209">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
+                                        <div class="size-209 text-center">
+                                            <span class="mtext-110 cl2" id="subTotalTxt">
                                             </span>
                                         </div>
                                     </div>
@@ -268,12 +263,11 @@
                                             </span>
                                         </div>
 
-                                        <div class="size-209">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
-                                            </span>
+                                        <div class="size-209 text-center">
+                                            <span class="mtext-110 cl2" id="discountTxt"></span>
                                         </div>
                                     </div>
+                                    <input name="discount" id="discount" hidden="" type="number" value="${discount}"/>
 
                                     <div class="flex-w flex-t p-t-27 p-b-33">
                                         <div class="size-208">
@@ -282,16 +276,13 @@
                                             </span>
                                         </div>
 
-                                        <div class="size-209 p-t-1">
-                                            <span class="mtext-110 cl2">
-                                                $79.65
-                                            </span>
+                                        <div class="size-209 text-center p-t-1">
+                                            <span class="mtext-110 cl2" id="totalTxt"></span>
                                         </div>
                                     </div>
+                                    <input name="totalAmount" id="totalAmount" hidden="" type="number" value="0"/>
 
-                                    <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                                        Proceed to Checkout
-                                    </button>
+                                    <input type="submit" value="Proceed to Checkout" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
 
                                     <div onclick="location.href = 'shop'" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
                                         Continue Shopping
@@ -334,7 +325,7 @@
                                                 minimumResultsForSearch: 20,
                                                 dropdownParent: $(this).next('.dropDownSelect2')
                                             });
-                                        })
+                                        });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
@@ -348,15 +339,222 @@
                                                 wheelSpeed: 1,
                                                 scrollingThreshold: 1000,
                                                 wheelPropagation: false,
-                                            });
+                                            })
 
                                             $(window).on('resize', function () {
                                                 ps.update();
-                                            })
+                                            });
                                         });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+        <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+
+                                            document.querySelector('#subTotalTxt').innerText = "$ 0.0";
+                                            document.querySelector('#discountTxt').innerText = "$ "
+                                                    + (document.querySelector('#discount').value.trim() === '' ? "0.0"
+                                                            : parseFloat(document.querySelector('#discount').value.trim()).toFixed(1));
+                                            document.querySelector('#totalTxt').innerText = "$ 0.0";
+
+                                            const inputs = document.querySelectorAll('input[id="num-product"]');
+
+                                            if (inputs.length > 0) {
+                                                inputs.forEach(function (input) {
+
+                                                    let tr = input.closest('tr');
+                                                    let priceTxt = tr.querySelector('td[id="price"]');
+                                                    let priceInput = parseFloat(priceTxt.textContent.trim().replace('$', '').trim());
+                                                    const maxValueInput = parseInt(input.max);
+                                                    let currentValueInput = parseInt(input.value);
+                                                    input.value = currentValueInput > maxValueInput ? maxValueInput : currentValueInput;
+                                                    let updateTotal = input.value * priceInput;
+                                                    let totalInput = tr.querySelector('td[id="itemTotal"]');
+                                                    totalInput.innerText = "$ " + updateTotal.toFixed(1);
+
+                                                    input.addEventListener('input', function (e) {
+                                                        const maxValue = parseInt(input.max);
+                                                        let currentValue = parseInt(e.target.value);
+
+                                                        if (isNaN(currentValue) || e.target.value.trim() === "") {
+                                                            e.target.value = 1;
+                                                        } else {
+                                                            if (currentValue < 1) {
+                                                                e.target.value = 1;
+                                                            } else if (currentValue > maxValue) {
+                                                                e.target.value = maxValue;
+                                                            }
+                                                        }
+                                                    });
+
+                                                    // Add 'focusout' event listener
+                                                    input.addEventListener('focusout', function (e) {
+                                                        changeQuantity(e);
+                                                    });
+
+                                                    // Add 'keypress' event listener
+                                                    input.addEventListener('keypress', function (e) {
+                                                        if (e.key === "Enter") {
+                                                            e.preventDefault();
+                                                            changeQuantity(e);
+                                                        }
+                                                    });
+                                                });
+
+                                                // Add click event listener for 'btn-num-product-up'
+                                                document.querySelectorAll('.btn-num-product-up').forEach(function (button) {
+                                                    button.addEventListener('click', function (e) {
+                                                        const inputContainer = button.closest('.wrap-num-product');
+                                                        if (inputContainer) {
+                                                            const input = inputContainer.querySelector('input[id="num-product"]');
+                                                            if (input) {
+                                                                const maxValue = parseInt(input.max);
+                                                                let currentValue = parseInt(input.value);
+
+                                                                if (currentValue < maxValue) {
+                                                                    input.value = currentValue + 1;
+                                                                }
+                                                                changeQuantity(e);
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                                // Add click event listener for 'btn-num-product-down'
+                                                document.querySelectorAll('.btn-num-product-down').forEach(function (button) {
+                                                    button.addEventListener('click', function (e) {
+                                                        const inputContainer = button.closest('.wrap-num-product');
+                                                        if (inputContainer) {
+                                                            const input = inputContainer.querySelector('input[id="num-product"]');
+                                                            if (input) {
+                                                                const maxValue = parseInt(input.max);
+                                                                let currentValue = parseInt(input.value);
+
+                                                                if (currentValue > 1) {
+                                                                    input.value = currentValue - 1;
+                                                                }
+                                                                changeQuantity(e);
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            }
+
+                                            const checkboxs = document.querySelectorAll('input[id="itemSelected"]');
+
+                                            let subTotal = 0;
+                                            const discountTxt = document.querySelector('#discountTxt').textContent.trim();
+                                            const discount = parseFloat(discountTxt.replace('$', '').trim());
+                                            let total = 0;
+
+                                            checkboxs.forEach(function (checkbox) {
+                                                const itemTotalText = checkbox.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
+                                                const itemTotal = parseFloat(itemTotalText.replace('$', '').trim());
+                                                if (checkbox.checked) {
+                                                    subTotal += itemTotal;
+                                                }
+
+                                                checkbox.addEventListener('change', function () {
+                                                    if (checkbox.checked) {
+                                                        subTotal += itemTotal;
+                                                    } else {
+                                                        subTotal -= itemTotal;
+                                                    }
+                                                    let subTotalDisplay = document.querySelector('#subTotalTxt');
+                                                    subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
+                                                    let totalText = document.querySelector('#totalTxt');
+                                                    if (subTotal === 0 || subTotal - discount < 0) {
+                                                        totalText.innerText = "$ 0.0";
+                                                    } else {
+                                                        total = subTotal - discount;
+                                                        totalText.innerText = "$ " + total.toFixed(1);
+                                                        document.querySelector('#totalAmount').value = total;
+                                                    }
+                                                });
+                                            });
+
+                                            let subTotalDisplay = document.querySelector('#subTotalTxt');
+                                            subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
+                                            let totalText = document.querySelector('#totalTxt');
+                                            if (subTotal === 0 || subTotal - discount === 0) {
+                                                totalText.innerText = "$ 0.0";
+                                            } else {
+                                                total = subTotal - discount;
+                                                totalText.innerText = "$ " + total.toFixed(1);
+                                                document.querySelector('#totalAmount').value = total;
+                                            }
+
+                                            let tableTitle = document.querySelector('#inactiveTitle');
+                                            let table = document.querySelector('#inactiveTable');
+                                            if (table) {
+                                                let rows = table.querySelectorAll('td');
+                                                if (rows.length > 0) {
+                                                    tableTitle.style.display = 'block';
+                                                    table.style.display = 'block';
+                                                }
+                                            }
+
+                                        });
+
+                                        function changeQuantity(e) {
+
+                                            let tr = e.target.closest('tr');
+
+                                            let itemId = tr.querySelector('input[name="itemId"]');
+                                            let cItemId = tr.querySelector('input[name="cItemId"]');
+                                            let quantity = tr.querySelector('input[name="quantity"]');
+                                            let submitQuantity = document.querySelector('input[name="cItemQuantity"]');
+
+
+                                            let form = document.createElement('form');
+                                            submitQuantity.value = quantity.value;
+                                            form.appendChild(itemId);
+                                            form.appendChild(cItemId);
+                                            form.appendChild(submitQuantity);
+                                            form.action = "cart?action=updateQuantity";
+                                            form.method = "post";
+                                            document.body.appendChild(form);
+                                            form.submit();
+
+                                        }
+
+                                        function applyCoupon(e) {
+
+                                        }
+
+                                        function validateCheckout() {
+                                            const checkboxes = document.querySelectorAll('input[id="itemSelected"]');
+                                            let checked = false;
+
+                                            checkboxes.forEach(function (checkbox) {
+                                                if (checkbox.checked) {
+                                                    checked = true;
+                                                }
+                                            });
+
+                                            let alertBox = document.getElementById('alert');
+
+                                            if (!checked) {
+                                                alertBox.style.display = 'block';
+                                                alertBox.style.opacity = '1';
+                                                setTimeout(function () {
+                                                    alertBox.style.opacity = '0';
+                                                    setTimeout(function () {
+                                                        alertBox.classList.add('show');
+                                                    }, 500);
+                                                }, 3500);
+                                                return false;
+                                            } else {
+                                                alertBox.classList.remove('show');
+                                            }
+
+                                            return true;
+                                        }
+
+
+
+        </script>
 
     </body>
 </html>

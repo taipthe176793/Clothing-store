@@ -215,41 +215,7 @@
         $('.js-sidebar').removeClass('show-sidebar');
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the input element
-        const input = document.querySelector('input[id="num-product"]');
-        const maxValue = parseInt(input.max);
-
-        if (input) {
-            input.addEventListener('input', function () {
-                let currentValue = parseInt(input.value);
-
-                if (isNaN(currentValue) || input.value.trim() === "") {
-                    input.value = 1;
-                } else {
-                    if (currentValue < 1) {
-                        input.value = 1;
-                    } else if (currentValue > maxValue) {
-                        input.value = maxValue;
-                    }
-                }
-            });
-
-            document.querySelector('.btn-num-product-up').addEventListener('click', function () {
-                let currentValue = parseInt(input.value);
-                if (currentValue < maxValue) {
-                    input.value = currentValue + 1;
-                }
-            });
-
-            document.querySelector('.btn-num-product-down').addEventListener('click', function () {
-                let currentValue = parseInt(input.value);
-                if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                }
-            });
-        }
-    });
+    
 
     /*==================================================================
      [ Rating ]*/

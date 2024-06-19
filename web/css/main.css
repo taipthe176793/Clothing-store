@@ -3654,3 +3654,46 @@ input.num-product::-webkit-inner-spin-button {
         padding: 20px;
     }
 }
+
+.alert-box {
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    position: fixed;
+    border: 1px solid transparent;
+    top: 12%;
+    right: 5%;
+    width: 40rem;
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out;
+    border-radius: .25rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    display: none;
+}
+.alert-box.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+.alert-box-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color:  #f5c2c7;
+}
+
+.alert-box-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color:  #badbcc;
+}
+.alert-box-info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color:  #b6effb;
+}
+.alert-box-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color:  #ffecb5;
+}

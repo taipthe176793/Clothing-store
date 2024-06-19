@@ -175,4 +175,63 @@ public class CartItemDAO extends DBContext {
         }
     }
 
+    public void deleteCustomerCartItem(int accountId, int cartItemId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "DELETE FROM [dbo].[cart_item]\n"
+                        + "      WHERE [customer_id] = ?\n"
+                        + "	  AND [cart_item_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, accountId);
+                stm.setInt(2, cartItemId);
+
+                stm.executeUpdate();
+
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+    }
+
+    public void updateCustomerCartItem(int accountId, int cartItemId, int updateQuantity) throws SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "UPDATE [dbo].[cart_item]\n"
+                        + "   SET [quantity] = ?\n"
+                        + " WHERE [customer_id] = ? AND [cart_item_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, updateQuantity);
+                stm.setInt(2, accountId);
+                stm.setInt(3, cartItemId);
+
+                stm.executeUpdate();
+
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+
+    }
+
 }

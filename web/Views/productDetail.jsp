@@ -103,9 +103,11 @@
                                     </div>
                                 </div>
 
-
-
-
+                                <c:if test="${notification ne null}">
+                                    <div id="alert" class="alert-box ${type}">
+                                        ${notification}
+                                    </div>
+                                </c:if>
 
                             </div>
                         </div>
@@ -210,7 +212,7 @@
 
                         <!--  -->
                         <div class="flex-w flex-m p-l-100 p-t-40 respon7">
-                            
+
 
                             <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
                                 <i class="fa fa-facebook"></i>
@@ -386,6 +388,62 @@
     </script>
     <!--===============================================================================================-->
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+    <script>
+
+                                                        document.addEventListener('DOMContentLoaded', function () {
+                                                            // Get the input element
+                                                            const input = document.querySelector('input[id="num-product"]');
+                                                            const maxValue = parseInt(input.max);
+
+                                                            if (input) {
+                                                                input.addEventListener('input', function () {
+                                                                    let currentValue = parseInt(input.value);
+
+                                                                    if (isNaN(currentValue) || input.value.trim() === "") {
+                                                                        input.value = 1;
+                                                                    } else {
+                                                                        if (currentValue < 1) {
+                                                                            input.value = 1;
+                                                                        } else if (currentValue > maxValue) {
+                                                                            input.value = maxValue;
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                                document.querySelector('.btn-num-product-up').addEventListener('click', function () {
+                                                                    let currentValue = parseInt(input.value);
+                                                                    if (currentValue < maxValue) {
+                                                                        input.value = currentValue + 1;
+                                                                    }
+                                                                });
+
+                                                                document.querySelector('.btn-num-product-down').addEventListener('click', function () {
+                                                                    let currentValue = parseInt(input.value);
+                                                                    if (currentValue > 1) {
+                                                                        input.value = currentValue - 1;
+                                                                    }
+                                                                });
+                                                            }
+
+                                                            const alert = document.querySelector('#alert');
+
+                                                            if (alert) {
+                                                                alert.style.display = 'block';
+                                                                alert.style.opacity = '1';
+
+                                                                setTimeout(function () {
+                                                                    alert.style.opacity = '0';
+
+                                                                    setTimeout(function () {
+                                                                        alert.classList.add('show');
+                                                                    }, 500);
+                                                                }, 3500);
+                                                            }
+
+                                                        });
+
+    </script>
 
 </body>
 </html>

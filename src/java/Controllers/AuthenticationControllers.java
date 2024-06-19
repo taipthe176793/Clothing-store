@@ -72,25 +72,16 @@ public class AuthenticationControllers extends HttpServlet {
                     Cookie[] arr = request.getCookies();
                     if (arr != null) {
                         for (Cookie o : arr) {
-                            if (o.getName().equals("cart")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                            if (o.getName().equals("userId")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                            if (o.getName().equals("username")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                            if (o.getName().equals("role")) {
+                            if (o.getName().equals("cart")
+                                    || o.getName().equals("userId")
+                                    || o.getName().equals("username")
+                                    || o.getName().equals("role")) {
                                 o.setMaxAge(0);
                                 response.addCookie(o);
                             }
                         }
                         Cookie cartCookie = new Cookie("cart", "");
-                        cartCookie.setMaxAge(60*60*24*7);
+                        cartCookie.setMaxAge(60 * 60 * 24 * 7);
                         response.addCookie(cartCookie);
                     }
                     response.sendRedirect("home");
@@ -159,43 +150,53 @@ public class AuthenticationControllers extends HttpServlet {
                     }
                     break;
                 case "login":
-                    Account account = login(request, response);
-                    if (account == null) {
-                        request.setAttribute("error", "Username or password is wrong.");
-                        request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
-                    } else {
+                    String userInput = request.getParameter("user");
+                    String password = request.getParameter("pass");
 
-                        Cookie[] arr = request.getCookies();
-                        String cartCookie = "";
-                        if (arr != null) {
-                            for (Cookie o : arr) {
-                                if (o.getName().equals("cart")) {
-                                    CartControllers.mergeAndSyncCart(response, account, o);
-                                    break;
+                    if (validateInput(userInput, password)) {
+                        Account account = login(request, response);
+                        if (account == null) {
+                            request.setAttribute("error", "Username or password is wrong.");
+                            request.setAttribute("user", userInput);
+                            request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
+                        } else {
+
+                            Cookie[] arr = request.getCookies();
+                            String cartCookie = "";
+                            if (arr != null) {
+                                for (Cookie o : arr) {
+                                    if (o.getName().equals("cart")) {
+                                        CartControllers.mergeAndSyncCart(response, account, o);
+                                        break;
+                                    }
                                 }
+
                             }
 
+                            Cookie userId = new Cookie("userId", account.getAccountId() + "");
+                            userId.setMaxAge(60 * 60 * 24 * 7);
+                            response.addCookie(userId);
+
+                            Cookie username = new Cookie("username", account.getUsername());
+                            username.setMaxAge(60 * 60 * 24 * 7);
+                            response.addCookie(username);
+
+                            Cookie role = new Cookie("role", account.getRoleId() + "");
+                            role.setMaxAge(60 * 60 * 24 * 7);
+                            response.addCookie(role);
+
+                            if (Integer.parseInt(role.getValue()) == ADMIN_ROLE) {
+                                response.sendRedirect("admin/dashboard");
+                            } else if (Integer.parseInt(role.getValue()) == STAFF_ROLE) {
+                                response.sendRedirect("staff/dashboard");
+                            } else {
+                                response.sendRedirect("home");
+                            }
                         }
-
-                        Cookie userId = new Cookie("userId", account.getAccountId() + "");
-                        userId.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(userId);
-
-                        Cookie username = new Cookie("username", account.getUsername());
-                        username.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(username);
-
-                        Cookie role = new Cookie("role", account.getRoleId() + "");
-                        role.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(role);
-
-                        if (Integer.parseInt(role.getValue()) == ADMIN_ROLE) {
-                            response.sendRedirect("admin/dashboard");
-                        } else if (Integer.parseInt(role.getValue()) == STAFF_ROLE) {
-                            response.sendRedirect("staff/dashboard");
-                        } else {
-                            response.sendRedirect("home");
-                        }
+                    } else {
+                        request.setAttribute("error", "Username and Password must not contain spaces.");
+                        request.setAttribute("user", userInput);
+                        request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                     }
                     break;
                 default:
@@ -302,5 +303,10 @@ public class AuthenticationControllers extends HttpServlet {
         }
         return null;
 
+    }
+
+    private boolean validateInput(String username, String password) {
+        return username != null && !username.contains(" ") &&
+                password != null && !password.contains(" ");
     }
 }

@@ -72,7 +72,6 @@ public class HomeControllers extends HttpServlet {
             ProductDAO pDAO = new ProductDAO();
             List<Product> products = pDAO.getAllProducts();
             ProductVariantDAO pvDAO = new ProductVariantDAO();
-            List<ProductVariant> variants = pvDAO.getAllVariantsOfAllProducts();
 
             for (int i = 0; i < products.size(); i++) {
                 Product p = products.get(i);
@@ -82,10 +81,6 @@ public class HomeControllers extends HttpServlet {
 
             List<Product> lastestProducts = pDAO.getLastestProducts();
             List<Product> randomProducts = pDAO.getRandomProducts();
-
-            HttpSession session = request.getSession();
-            session.setAttribute("productsSession", products);
-            session.setAttribute("variantsSession", variants);
 
             request.setAttribute("lastestProducts", lastestProducts);
             request.setAttribute("randomProducts", randomProducts);
