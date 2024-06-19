@@ -409,8 +409,9 @@
                                         <div class="flex-m p-r-10 m-r-11">
                                             <form action="${pageContext.request.contextPath}/customer/wishlist" method="post">
                                                 <input type="hidden" name="productId" value="${product.getProductId()}">
-                                                <button type="submit" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
-                                                    <i class="zmdi zmdi-favorite"></i> 
+                                                <input type="hidden" name="action" value="add">
+                                                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                                    <i class="zmdi zmdi-favorite"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -447,39 +448,39 @@
 
 
 
-            
 
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
-<script>
+
+            <!--===============================================================================================-->
+            <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
+        <script>
                                 $(".js-select2").each(function () {
                                     $(this).select2({
                                         minimumResultsForSearch: 20,
                                         dropdownParent: $(this).next('.dropDownSelect2')
                                     });
                                 })
-</script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
-<script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
-<script>
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
+        <script>
                                 $('.parallax100').parallax100();
-</script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-<script>
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+        <script>
                                 $('.gallery-lb').each(function () { // the containers for all your galleries
                                     $(this).magnificPopup({
                                         delegate: 'a', // the selector for gallery item
@@ -490,12 +491,12 @@
                                         mainClass: 'mfp-fade'
                                     });
                                 });
-</script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
-<script>
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
+        <script>
                                 $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
                                     e.preventDefault();
                                 });
@@ -529,10 +530,10 @@
                                         swal(nameProduct, "is added to cart !", "success");
                                     });
                                 });
-</script>
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-<script>
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script>
                                 $('.js-pscroll').each(function () {
                                     $(this).css('position', 'relative');
                                     $(this).css('overflow', 'hidden');
@@ -546,16 +547,16 @@
                                         ps.update();
                                     })
                                 });
-</script>
+        </script>
 
-<!--===============================================================================================-->
-<script src="${pageContext.request.contextPath}/js/main.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
 
-<script>
+        <script>
 
 
 
-</script>
+        </script>
 
-</body>
+    </body>
 </html>
