@@ -215,10 +215,8 @@ public class AccountDAO extends DBContext {
         List<Account> accountList = new ArrayList<>();
 
         try {
-            //1. Connect DB
             con = connect;
             if (con != null) {
-                //2. Create SQL String
                 String sql = "SELECT [account_id]\n"
                         + "      ,[username]\n"
                         + "      ,[password]\n"
@@ -227,8 +225,7 @@ public class AccountDAO extends DBContext {
                         + "      ,[fullname]\n"
                         + "      ,[phone]\n"
                         + "  FROM [dbo].[account]\n"
-                        + "  where role_id != 1";
-                //3. Create Statement
+                        + "  where role_id != 1 AND != 4";
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
                 while (rs.next()) {
