@@ -174,6 +174,26 @@
                 </div>
             </div>
         </div>
+        
+        <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="notiModal">Notification</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>${notification}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
         </body>
 
         <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
@@ -275,5 +295,11 @@
             $('input[name="role"]').prop('checked', false);
         }
     }
+    
+        $(document).ready(function () {
+    <c:if test="${notification != null}">
+        $('#notiModal').modal('show');
+    </c:if>
+    });
     </script>
 </html>

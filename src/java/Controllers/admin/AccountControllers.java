@@ -77,7 +77,12 @@ public class AccountControllers extends HttpServlet {
             RoleDAO rDAO = new RoleDAO();
             List<Role> roleList = new ArrayList<>();
             roleList = rDAO.getRoleList();
-
+            
+            HttpSession session = request.getSession();
+            if (session.getAttribute("notification") != null) {
+                request.setAttribute("notification", session.getAttribute("notification"));
+                session.invalidate();
+            }
             request.setAttribute("roleList", roleList);
             request.setAttribute("accountList", accountList);
             request.getRequestDispatcher("/Views/admin/accounts-table.jsp").forward(request, response);
