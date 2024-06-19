@@ -7,6 +7,7 @@ package Models;
 import DAL.ProductVariantDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,7 @@ public class Account {
     private List<CartItem> cartItems = new ArrayList<>();
     private Map<Integer, Integer> wishlist;
 
-    public Account() {
-    }
+ 
 
     public Account(String username, String password, int roleId, String email, String fullname, String phone) {
         this.username = username;
@@ -202,6 +202,11 @@ public class Account {
         }
     }
 
+       public Account() {
+        wishlist = new HashMap<>();
+    }
+       
+
     public Map<Integer, Integer> getWishlist() {
         return wishlist;
     }
@@ -210,20 +215,16 @@ public class Account {
         this.wishlist = wishlist;
     }
 
-    public void addToWishlist(int wishlistId, int productId) {
-        wishlist.put(wishlistId, productId);
+    public void addToWishlist(int productId) {
+        wishlist.put(productId, productId);
     }
 
-    public void removeFromWishlist(int wishlistId) {
-        wishlist.remove(wishlistId);
+    public void removeFromWishlist(int productId) {
+        wishlist.remove(productId);
     }
 
     public boolean isInWishlist(int productId) {
-        return wishlist.containsValue(productId);
-    }
-
-    public void addToWishlist(int productId) {
-        wishlist.put(productId, productId);
+        return wishlist.containsKey(productId);
     }
 
 }

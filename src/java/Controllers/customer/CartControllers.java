@@ -162,7 +162,7 @@ public class CartControllers extends HttpServlet {
                 break;
             case "checkout":
                 //code checkout
-                
+
                 break;
             case "applyCoupon":
                 //code checkout
@@ -190,6 +190,9 @@ public class CartControllers extends HttpServlet {
 
     private void addToCart(HttpServletRequest request, HttpServletResponse response) {
         try {
+
+            HttpSession session = request.getSession();
+
             int id = Integer.parseInt(request.getParameter("id"));
             String color = request.getParameter("color");
             String size = request.getParameter("size");
@@ -216,12 +219,16 @@ public class CartControllers extends HttpServlet {
 
             if (txt.isBlank()) {
                 txt = variant.getProductVariantId() + ":" + quantity;
+                session.setAttribute("notification", "Add to cart successfully");
+                session.setAttribute("type", "alert-box-success");
             } else {
                 //check if this item already existed in cart
                 if (txt.contains(variant.getProductVariantId() + ":")) {
-                    txt = updateToCartCookie(txt, variant, quantity, "Add");
+                    txt = updateToCartCookie(txt, variant, quantity, "Add", session);
                 } else {
                     txt += "/" + variant.getProductVariantId() + ":" + quantity;
+                    session.setAttribute("notification", "Add to cart successfully");
+                    session.setAttribute("type", "alert-box-success");
                 }
             }
 
@@ -244,7 +251,7 @@ public class CartControllers extends HttpServlet {
 
     }
 
-    private String updateToCartCookie(String txt, ProductVariant variant, int quantity, String action) {
+    private String updateToCartCookie(String txt, ProductVariant variant, int quantity, String action, HttpSession session) {
 
         String updateCartCookie = "";
         String[] items = txt.split("/");
@@ -257,6 +264,13 @@ public class CartControllers extends HttpServlet {
                     case "Add":
                         itemDetail[1] = (quantity + quantityToChange) > variant.getQuantity()
                                 ? variant.getQuantity() + "" : (quantity + quantityToChange) + "";
+                        if (Integer.parseInt(itemDetail[1].trim()) == variant.getQuantity()) {
+                            session.setAttribute("notification", "This item in your cart has reached its maximum quantity limit.");
+                            session.setAttribute("type", "alert-box-warning");
+                        } else {
+                            session.setAttribute("notification", "Add to cart successfully");
+                            session.setAttribute("type", "alert-box-success");
+                        }
                         break;
                     case "Change":
                         itemDetail[1] = quantity + "";
@@ -383,6 +397,8 @@ public class CartControllers extends HttpServlet {
 
         try {
 
+            HttpSession session = request.getSession();
+
             int cartItemId = Integer.parseInt(request.getParameter("cItemId"));
             int variantId = Integer.parseInt(request.getParameter("itemId"));
             int updateQuantity = Integer.parseInt(request.getParameter("cItemQuantity"));
@@ -420,7 +436,7 @@ public class CartControllers extends HttpServlet {
                 cartTxt = account.cartToCookieValue();
             } else {
                 cartTxt = updateToCartCookie(cartTxt, pvDAO.findProductVariantById(variantId),
-                        updateQuantity, "Change");
+                        updateQuantity, "Change", session);
             }
             Cookie cartCookie = new Cookie("cart", cartTxt);
             cartCookie.setMaxAge(60 * 60 * 24 * 7);

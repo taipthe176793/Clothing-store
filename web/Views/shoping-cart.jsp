@@ -67,9 +67,14 @@
             </div>
         </c:if>
         <div class="bg0 p-t-75 p-b-85">
+
+            <div id="alert" class="alert-box alert-box-danger">
+                Please select at least one item before proceeding to checkout.
+            </div>
+
             <c:if test="${!cart.isEmpty()}">
                 <div class="container">
-                    <form action="cart?action=checkout" method="post">
+                    <form id="mainCartForm" action="cart?action=checkout" method="post" onsubmit="return validateCheckout()">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                                 <div class="m-l-25 m-r--38 m-lr-0-xl">
@@ -506,7 +511,7 @@
                                             submitQuantity.value = quantity.value;
                                             form.appendChild(itemId);
                                             form.appendChild(cItemId);
-                                            form.appendChild(submitQuantity)
+                                            form.appendChild(submitQuantity);
                                             form.action = "cart?action=updateQuantity";
                                             form.method = "post";
                                             document.body.appendChild(form);
@@ -517,6 +522,37 @@
                                         function applyCoupon(e) {
 
                                         }
+
+                                        function validateCheckout() {
+                                            const checkboxes = document.querySelectorAll('input[id="itemSelected"]');
+                                            let checked = false;
+
+                                            checkboxes.forEach(function (checkbox) {
+                                                if (checkbox.checked) {
+                                                    checked = true;
+                                                }
+                                            });
+
+                                            let alertBox = document.getElementById('alert');
+
+                                            if (!checked) {
+                                                alertBox.style.display = 'block';
+                                                alertBox.style.opacity = '1';
+                                                setTimeout(function () {
+                                                    alertBox.style.opacity = '0';
+                                                    setTimeout(function () {
+                                                        alertBox.classList.add('show');
+                                                    }, 500);
+                                                }, 3500);
+                                                return false;
+                                            } else {
+                                                alertBox.classList.remove('show');
+                                            }
+
+                                            return true;
+                                        }
+
+
 
         </script>
 

@@ -14,34 +14,23 @@
         <title>Profile Template</title>
         <link rel="stylesheet" href="profile.css">
         <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/icons/favicon.png" />
-        <!--===============================================================================================-->
+        <!-- CSS Links -->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/iconic/css/material-design-iconic-font.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/linearicons-v1.0.0/icon-font.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/css-hamburgers/hamburgers.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animsition/css/animsition.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/select2/select2.min.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/slick/slick.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/MagnificPopup/magnific-popup.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.css">
-        <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
+
     </head>
 
     <body>
@@ -53,7 +42,7 @@
                         <h2>My Addresses</h2>
                     </div>
                     <div class="col-2">
-                        <div class="card">                   
+                        <div class="card">
                             <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addAddressModal">
                                 Add New Address
                             </button>
@@ -71,15 +60,17 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form id="addAddressForm" action="${pageContext.request.contextPath}/customer/address" method="post">
+                            <form id="addAddressForm" action="${pageContext.request.contextPath}/customer/address" method="post" onsubmit="return validateForm()">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="addPhone">Phone</label>
                                     <input type="text" id="addPhone" name="phone" class="form-control" required>
+                                    <div class="invalid-feedback">Phone number must be 10 digits and start with 0 without spaces.</div>
                                 </div>
                                 <div class="form-group">
                                     <label for="addAddress">Address</label>
                                     <textarea id="addAddress" name="address" class="form-control" rows="3" required></textarea>
+                                    <div class="invalid-feedback">Address must not be empty.</div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -91,9 +82,7 @@
                 </div>
             </div>
 
-
             <div class="card">
-             
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
@@ -136,9 +125,9 @@
                         </tbody>
                     </table>
                 </div>
-                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-link" style="color: black; font-weight: bold;">Cancel</a>
-
+                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-black">Cancel</a>
             </div>
+
             <div id="updateAddressModal" class="modal fade" role="dialog">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -153,10 +142,12 @@
                                 <div class="form-group">
                                     <label for="updatePhone">Phone</label>
                                     <input type="text" id="updatePhone" name="phone" class="form-control" required>
+                                    <div class="invalid-feedback">Phone number must be 10 digits and start with 0 without spaces.</div>
                                 </div>
                                 <div class="form-group">
                                     <label for="updateAddress">Address</label>
                                     <textarea id="updateAddress" name="address" class="form-control" rows="3" required></textarea>
+                                    <div class="invalid-feedback">Address must not be empty.</div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -169,8 +160,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
         <jsp:include page="../common/homepage/page-footer.jsp"></jsp:include>
             <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -178,47 +169,91 @@
         <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
         <script>
-            $(document).ready(function () {
-                // Xử lý khi nhấn nút Update trong bảng
-                $('.btn-update').click(function (e) {
-                    e.preventDefault();
-                    var addressId = $(this).closest('tr').find('td:first').text();
-                    var phone = $(this).closest('tr').find('td:eq(1)').text();
-                    var address = $(this).closest('tr').find('td:eq(2)').text();
+                                $(document).ready(function () {
+                                    // Xử lý khi nhấn nút Update trong bảng
+                                    $('.btn-update').click(function (e) {
+                                        e.preventDefault();
+                                        var addressId = $(this).closest('tr').find('td:first').text();
+                                        var phone = $(this).closest('tr').find('td:eq(1)').text();
+                                        var address = $(this).closest('tr').find('td:eq(2)').text();
 
-                    // Đổ dữ liệu vào modal
-                    $('#updateAddressId').val(addressId);
-                    $('#updatePhone').val(phone);
-                    $('#updateAddress').val(address);
+                                        // Đổ dữ liệu vào modal
+                                        $('#updateAddressId').val(addressId);
+                                        $('#updatePhone').val(phone);
+                                        $('#updateAddress').val(address);
 
-                    // Hiển thị modal
-                    $('#updateAddressModal').modal('show');
-                });
-            });
+                                        // Hiển thị modal
+                                        $('#updateAddressModal').modal('show');
+                                    });
+                                });
+
+// Xử lý khi nhấn nút "Add Address"
+                                $('#addAddressForm').submit(function (e) {
+                                    e.preventDefault();
+                                    if (validateForm('addAddressForm')) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: $(this).attr('action'),
+                                            data: $(this).serialize(),
+                                            success: function (data) {
+                                                // Đóng modal khi thêm mới thành công
+                                                $('#addAddressModal').modal('hide');
+                                                // Cập nhật lại nội dung trang hoặc reload trang
+                                                location.reload(); // Có thể sử dụng location.reload() để reload trang
+                                            },
+                                            error: function () {
+                                                alert('Failed to add new address.');
+                                            }
+                                        });
+                                    }
+                                });
+
+// Xử lý khi nhấn nút "Update Address"
+                                $('#updateAddressForm').submit(function (e) {
+                                    e.preventDefault();
+                                    if (validateForm('updateAddressForm')) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: $(this).attr('action'),
+                                            data: $(this).serialize(),
+                                            success: function (data) {
+                                                // Đóng modal khi cập nhật thành công
+                                                $('#updateAddressModal').modal('hide');
+                                                // Cập nhật lại nội dung trang hoặc reload trang
+                                                location.reload(); // Có thể sử dụng location.reload() để reload trang
+                                            },
+                                            error: function () {
+                                                alert('Failed to update address.');
+                                            }
+                                        });
+                                    }
+                                });
+
+                                function validateForm(formId) {
+                                    let phonePattern = /^(?!.*\s)0\d{9}$/;
+
+                                    let form = document.forms[formId];
+                                    let address = form["address"];
+                                    let phone = form["phone"];
+
+                                    let isValid = true;
+
+                                    if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
+                                        phone.classList.add("is-invalid");
+                                        isValid = false;
+                                    } else {
+                                        phone.classList.remove("is-invalid");
+                                    }
+
+                                    if (address.value.trim() === "") {
+                                        address.classList.add("is-invalid");
+                                        isValid = false;
+                                    } else {
+                                        address.classList.remove("is-invalid");
+                                    }
+
+                                    return isValid;
+                                }
         </script>
-        <script>
-            $(document).ready(function () {
-                // Xử lý khi nhấn nút "Add Address"
-                $('#addAddressForm').submit(function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        type: 'POST',
-                        url: $(this).attr('action'),
-                        data: $(this).serialize(),
-                        success: function (data) {
-                            // Đóng modal khi thêm mới thành công
-                            $('#addAddressModal').modal('hide');
-                            // Cập nhật lại nội dung trang hoặc reload trang
-                            location.reload(); // Có thể sử dụng location.reload() để reload trang
-                        },
-                        error: function () {
-                            alert('Failed to add new address.');
-                        }
-                    });
-                });
-            });
-        </script>
-
     </body>
 </html>
-

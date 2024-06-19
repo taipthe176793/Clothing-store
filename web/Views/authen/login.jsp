@@ -15,6 +15,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/authentication.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <style>
             body {
                 font-family: 'Play', sans-serif;
@@ -31,6 +32,11 @@
         </style>
     </head>
     <body>
+        <c:if test="${notification ne null}">
+            <div id="alert" class="alert-box ${type}">
+                ${notification}
+            </div>
+        </c:if>
         <div class="wrapper" style="background-image: url('${pageContext.request.contextPath}/images/login/bg-registration-form.jpg');">
             <div class="inner">
                 <div class="image-holder">
@@ -55,7 +61,7 @@
                     </button>
                     <!-- or login by google -->
                     <div style="text-align: center; margin: 10px 0;">Or</div>
-                    <button onclick="location.href='https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWP391_SE1817/auth?action=loginWithGoogle&response_type=code&client_id=927392698257-i0te23e7qorb6jr5upat4d8ae26ih03f.apps.googleusercontent.com&approval_prompt=force'" class="gsi-material-button">
+                    <button onclick="location.href = 'https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWP391_SE1817/auth?action=loginWithGoogle&response_type=code&client_id=927392698257-i0te23e7qorb6jr5upat4d8ae26ih03f.apps.googleusercontent.com&approval_prompt=force'" class="gsi-material-button">
                         <div class="gsi-material-button-state"></div>
                         <div class="gsi-material-button-content-wrapper">
                             <div class="gsi-material-button-icon">
@@ -79,49 +85,70 @@
 
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
         <script>
-                    window.dataLayer = window.dataLayer || [];
-                    
-                    function gtag() {
-                        dataLayer.push(arguments);
-                    }
-                    gtag('js', new Date());
-                    
-                    gtag('config', 'UA-23581568-13');
+                        window.dataLayer = window.dataLayer || [];
+
+                        function gtag() {
+                            dataLayer.push(arguments);
+                        }
+                        gtag('js', new Date());
+
+                        gtag('config', 'UA-23581568-13');
         </script>
         <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vedd3670a3b1c4e178fdfb0cc912d969e1713874337387" integrity="sha512-EzCudv2gYygrCcVhu65FkAxclf3mYM6BCwiGUm6BEuLzSb5ulVhgokzCZED7yMIkzYVg65mxfIBNdNra5ZFNyQ==" data-cf-beacon='{"rayId":"88761a3dfc270ebd","version":"2024.4.1","token":"cd0b4b3a733644fc843ef0b185f98241"}'
         crossorigin="anonymous"></script>
 
         <script>
-                    function validateLoginForm() {
-                        var usernameOrEmailPattern = /^(?!.*\s).+$/;
-                        var passwordPattern = /^(?!.*\s).{8,}$/;
-                        
-                        var form = document.forms["loginForm"];
-                        var usernameOrEmail = form["user"];
-                        var password = form["pass"];
-                        
-                        var isValid = true;
-                        
-                        if (!usernameOrEmailPattern.test(usernameOrEmail.value) || usernameOrEmail.value.trim() === "") {
-                            usernameOrEmail.setCustomValidity("Username or Email must not contain spaces.");
-                            isValid = false;
-                        } else {
-                            usernameOrEmail.setCustomValidity("");
+                        function validateLoginForm() {
+                            var usernameOrEmailPattern = /^(?!.*\s).+$/;
+                            var passwordPattern = /^(?!.*\s).{8,}$/;
+
+                            var form = document.forms["loginForm"];
+                            var usernameOrEmail = form["user"];
+                            var password = form["pass"];
+
+                            var isValid = true;
+
+                            if (!usernameOrEmailPattern.test(usernameOrEmail.value) || usernameOrEmail.value.trim() === "") {
+                                usernameOrEmail.setCustomValidity("Username or Email must not contain spaces.");
+                                isValid = false;
+                            } else {
+                                usernameOrEmail.setCustomValidity("");
+                            }
+
+                            if (!passwordPattern.test(password.value) || password.value.trim() === "") {
+                                password.setCustomValidity("Password must be at least 8 characters without spaces.");
+                                isValid = false;
+                            } else {
+                                password.setCustomValidity("");
+                            }
+
+                            if (!isValid) {
+                                form.reportValidity();
+                            }
+
+                            return isValid;
                         }
-                        
-                        if (!passwordPattern.test(password.value) || password.value.trim() === "") {
-                            password.setCustomValidity("Password must be at least 8 characters without spaces.");
-                            isValid = false;
-                        } else {
-                            password.setCustomValidity("");
-                        }
-                        
-                        if (!isValid) {
-                            form.reportValidity();
-                        }
-                        
-                        return isValid;
-                    }
+
+                        document.addEventListener('DOMContentLoaded', function () {                            
+
+                            const alert = document.querySelector('#alert');
+
+                            if (alert) {
+                                alert.style.display = 'block';
+                                alert.style.opacity = '1';
+
+                                setTimeout(function () {
+                                    alert.style.opacity = '0';
+
+                                    setTimeout(function () {
+                                        alert.classList.add('show');
+                                    }, 500);
+                                }, 3500);
+                            }
+
+                        });
         </script>
+
+
     </body>
 </html>

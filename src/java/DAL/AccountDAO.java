@@ -380,6 +380,7 @@ public class AccountDAO extends DBContext {
                 address.setCustomerId(rs.getInt("customer_id"));
                 address.setPhone(rs.getString("phone"));
                 address.setAddress(rs.getString("address"));
+                address.setIsDefault(rs.getBoolean("is_default"));
                 addresses.add(address);
             }
         } finally {
@@ -459,12 +460,12 @@ public class AccountDAO extends DBContext {
         PreparedStatement stm = null;
         try {
             con = connect;
-            String resetSql = "UPDATE customer_address SET isDefault = 0 WHERE customer_id = ?";
+            String resetSql = "UPDATE customer_address SET is_default = 0 WHERE customer_id = ?";
             stm = con.prepareStatement(resetSql);
             stm.setInt(1, customerId);
             stm.executeUpdate();
 
-            String sql = "UPDATE customer_address SET isDefault = 1 WHERE address_id = ?";
+            String sql = "UPDATE customer_address SET is_default = 1 WHERE address_id = ?";
             stm = con.prepareStatement(sql);
             stm.setInt(1, addressId);
             stm.executeUpdate();

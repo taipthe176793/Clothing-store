@@ -15,6 +15,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,17 +65,17 @@ public class WishlistControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            Cookie[] arr = request.getCookies();
+            Cookie[] cookies = request.getCookies();
             int accountId = 0;
             Account account = null;
 
-            if (arr != null) {
-                for (Cookie o : arr) {
-                    if (o.getName().equals("userId")) {
-                        accountId = Integer.parseInt(o.getValue());
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("userId")) {
+                        accountId = Integer.parseInt(cookie.getValue());
                         AccountDAO aDAO = new AccountDAO();
-
                         account = aDAO.getAccountById(accountId);
+                        request.getSession().setAttribute("account", account);
                     }
                 }
             }
@@ -104,8 +105,7 @@ public class WishlistControllers extends HttpServlet {
             throws ServletException, IOException {
         Account account = (Account) request.getSession().getAttribute("account");
         if (account == null) {
-            request.setAttribute("error", "User session not found.");
-            request.getRequestDispatcher("/Views/publicProducts.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/auth?action=login");
             return;
         }
         String productIdStr = request.getParameter("productId");
@@ -117,20 +117,21 @@ public class WishlistControllers extends HttpServlet {
 
         int productId = Integer.parseInt(productIdStr);
         AccountDAO accountDAO = new AccountDAO();
-        int wishlistId = 1;
-        boolean success;
         try {
-            success = accountDAO.addToWishlist(account.getAccountId(), productId);
-            if (success) {
-                account.addToWishlist(wishlistId, productId);
-                response.sendRedirect(request.getContextPath() + "/Views/publicProducts.jsp");
+            if (accountDAO.addToWishlist(account.getAccountId(), productId)) {
+                account.addToWishlist(productId);
+                response.sendRedirect(request.getHeader("Referer")); 
                 return;
             } else {
                 request.setAttribute("error", "Failed to add product to wishlist.");
+                request.getRequestDispatcher("/Views/publicProducts.jsp").forward(request, response);
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("error", "Database error: " + e.getMessage());
+            request.getRequestDispatcher("/Views/publicProducts.jsp").forward(request, response);
+            return;
         }
     }
 
