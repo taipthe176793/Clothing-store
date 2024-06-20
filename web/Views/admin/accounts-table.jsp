@@ -118,6 +118,56 @@
                 </div>
             </div>
                 
+                
+        <!-- Add Modal -->
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Add New Staff</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addStaffForm" action="accounts?action=add" method="post" enctype="multipart/form-data">
+                                <!--Username-->
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" class="form-control" id="usernameInput" name="username">
+                                </div>
+                                <!--Password-->
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="password" class="form-control" id="passwordInput" name="password">
+                                </div>
+                                <!--Full Name-->
+                                <div class="form-group">
+                                    <label for="fullname">Full Name:</label>
+                                    <input type="text" class="form-control" id="fullnameInput" name="fullname">
+                                </div>
+                                <!--Email-->
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="text" class="form-control" id="emailInput" name="email">
+                                </div>
+                                <!--Phone-->
+                                <div class="form-group">
+                                    <label for="phone">Phone:</label>
+                                    <input type="text" class="form-control" id="phoneInput" name="phone">
+                                </div>
+                                <!-- Role -->
+                                <input type="hidden" name="role" value="2">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" form="addStaffForm" onclick="validateForm()">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+                
         <!-- Update Modal -->
         <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -230,26 +280,92 @@
 
     <script>
         function validateForm() {
-        let quantity = $('#quantity').val();
+    // Define validation patterns
+    let usernamePattern = /^(?!.*\s).{6,}$/;
+    let phonePattern = /^0\d{9}$/;
+    let passwordPattern = /^(?!.*\s).{8,}$/;
+    let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
-        $('.error').html('');
+    let form = document.forms["addStaffForm"];
+    let username = form["username"];
+    let phone = form["phone"];
+    let password = form["password"];
+    let fullname = form["fullname"];
+    let email = form["email"];
+    let role = form["role"];
 
-        if (quantity === '') {
-            $('#quantityError').html('Quantity cannot be empty!');
-        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-            $('#quantityError').html('Quantity must be greater than 0');
-        }
+    let isValid = true;
 
-        let error = '';
-        $('.error').each(function () {
-            error += $(this).html();
-        });
-        if (error === '') {
-            $('#addProductForm').submit();
-        } else {
-            event.preventDefault();
-        }
+    // Reset custom validity messages
+    fullname.setCustomValidity("");
+    username.setCustomValidity("");
+    phone.setCustomValidity("");
+    password.setCustomValidity("");
+    email.setCustomValidity("");
+
+    // Validate Fullname
+    if (fullname.value.trim() === "") {
+        fullname.setCustomValidity("Fullname cannot be empty.");
+        isValid = false;
+    } else {
+        fullname.setCustomValidity("");
     }
+
+    // Validate Username
+    if (!usernamePattern.test(username.value)) {
+        username.setCustomValidity("Username must be at least 6 characters and contain no spaces.");
+        isValid = false;
+    } else {
+        username.setCustomValidity("");
+    }
+
+    // Validate Phone
+    if (!phonePattern.test(phone.value)) {
+        phone.setCustomValidity("Phone must be 10 digits, start with 0 and contain no spaces.");
+        isValid = false;
+    } else {
+        phone.setCustomValidity("");
+    }
+
+    // Validate Password
+    if (!passwordPattern.test(password.value)) {
+        password.setCustomValidity("Password must be at least 8 characters and contain no spaces.");
+        isValid = false;
+    } else {
+        password.setCustomValidity("");
+    }
+
+    // Validate Email
+    if (!emailPattern.test(email.value)) {
+        email.setCustomValidity("Please enter a valid email address.");
+        isValid = false;
+    } else {
+        email.setCustomValidity("");
+    }
+
+    if (!role.value) {
+        role.value = '2';
+    }
+
+    if (!isValid) {
+        form.reportValidity();
+        return false;
+    }
+
+    return true;
+}
+
+
+$(document).ready(function () {
+    $('#addStaffForm').submit(function(event) {
+        if (!validateForm()) {
+            event.preventDefault();
+        } else {
+            $('#notiModal').modal('show');
+        }
+    });
+});
+
 
         function validateForm2() {
         let quantity = $('#quantityEditInput').val();

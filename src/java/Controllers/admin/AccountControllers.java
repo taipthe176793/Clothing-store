@@ -5,10 +5,8 @@
 package Controllers.admin;
 
 import DAL.AccountDAO;
-import DAL.CouponDAO;
 import DAL.RoleDAO;
 import Models.Account;
-import Models.Coupon;
 import Models.Role;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,8 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -73,11 +69,11 @@ public class AccountControllers extends HttpServlet {
             AccountDAO aDAO = new AccountDAO();
             List<Account> accountList = new ArrayList<>();
             accountList = aDAO.getAccountList();
-            
+
             RoleDAO rDAO = new RoleDAO();
             List<Role> roleList = new ArrayList<>();
             roleList = rDAO.getRoleList();
-            
+
             HttpSession session = request.getSession();
             if (session.getAttribute("notification") != null) {
                 request.setAttribute("notification", session.getAttribute("notification"));
@@ -89,7 +85,7 @@ public class AccountControllers extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(AccountControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     /**
@@ -130,26 +126,66 @@ public class AccountControllers extends HttpServlet {
 
     private void updateRole(HttpServletRequest request) {
         HttpSession session = request.getSession();
-    try {
-        int accountId = Integer.parseInt(request.getParameter("id"));
-        int roleId = Integer.parseInt(request.getParameter("role"));
-        
-        AccountDAO aDAO = new AccountDAO();
-        if (aDAO.updateAccountRole(accountId, roleId)) {
-            session.setAttribute("notification", "Updated successfully");
-        } else {
-            session.setAttribute("notification", "Update failed");
-        }
-        
+        try {
+            int accountId = Integer.parseInt(request.getParameter("id"));
+            int roleId = Integer.parseInt(request.getParameter("role"));
 
-    } catch (Exception ex) {
-        session.setAttribute("notification", "An error occurred while processing the coupon.");
-        Logger.getLogger(CouponControllers.class.getName()).log(Level.SEVERE, null, ex);
-    }
+            AccountDAO aDAO = new AccountDAO();
+            if (aDAO.updateAccountRole(accountId, roleId)) {
+                session.setAttribute("notification", "Updated successfully");
+            } else {
+                session.setAttribute("notification", "Update failed");
+            }
+
+        } catch (Exception ex) {
+            session.setAttribute("notification", "An error occurred while updating the role.");
+            Logger.getLogger(CouponControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void addStaff(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        HttpSession session = request.getSession();
+        try {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            int roleId = 2;
+            String email = request.getParameter("email");
+            String fullname = request.getParameter("fullname");
+            String phone = request.getParameter("phone");
+            
 
+            if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()
+                    || fullname == null || fullname.trim().isEmpty() || email == null || email.trim().isEmpty()
+                    || phone == null || phone.trim().isEmpty()) {
+                session.setAttribute("notification", "All fields are required.");
+                return;
+            }
+
+            AccountDAO aDAO = new AccountDAO();
+            if (aDAO.checkUsernameExist(username)) {
+                session.setAttribute("notification", "Username already exists.");
+                return;
+            }
+            if (aDAO.checkEmailExist(email)) {
+                session.setAttribute("notification", "Email already exists.");
+                return;
+            }
+
+            Account newAccount = new Account();
+            newAccount.setUsername(username);
+            newAccount.setPassword(password);
+            newAccount.setRoleId(roleId);
+            newAccount.setFullname(fullname);
+            newAccount.setEmail(email);
+            newAccount.setPhone(phone);
+
+            aDAO.addAccount(newAccount);
+            session.setAttribute("notification", "Staff added successfully.");
+        } catch (SQLException | ClassNotFoundException ex) {
+            session.setAttribute("notification", "An error occurred while adding the staff.");
+            Logger.getLogger(AccountControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
+
+    
