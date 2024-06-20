@@ -83,11 +83,11 @@
 
                                         <table class="table-shopping-cart">
                                             <tr class="table_head">
-                                                <th class="column-5">Product</th>
-                                                <th class="column-5"></th>
+                                                <th class=" d-flex justify-content-center"><input type="checkbox" id="selectAll" /></th>
+                                                <th class=""></th>
                                                 <th class="column-2">Name</th>
-                                                <th class="column-3">Price</th>
-                                                <th class="column-1">Quantity</th>
+                                                <th class="column-3 text-center">Price</th>
+                                                <th class="column-3 text-center">Quantity</th>
                                                 <th class="column-5">Total</th>
                                                 <th class="p-r-15">Action</th>
                                             </tr>
@@ -112,11 +112,8 @@
                                                 <c:if test="${v.getQuantity() > 0 && !v.isIsDeleted()}">
                                                     <tr class="table_row">
 
-                                                        <td class="column-5">
-                                                            <input id="itemSelected" type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItem" value="${item.getCartItemId()}-${item.getProductVariantId()}-${item.getQuantity()}"/>
-                                                            <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
-                                                            <input name="cItemId" value="${item.getCartItemId()}" hidden=""/>
-                                                            <input name="cItemQuantity" value="${item.getQuantity()}" hidden=""/>
+                                                        <td style="padding: 0 10px;" class="">
+                                                            <input id="itemSelected" type="checkbox" class="form-check" name="cartItem" value="${item.getCartItemId()}-${item.getProductVariantId()}-${item.getQuantity()}"/>
                                                         </td>
                                                         <td class="">
                                                             <div class="" style="padding: 0">
@@ -124,10 +121,10 @@
                                                             </div>
                                                         </td>
                                                         <td class="column-2">
-                                                            <p style="font-weight: 700">${p.getName()}</p>
+                                                            <p style="font-weight: 700; font-size: 15px;">${p.getName()}</p>
                                                             <p style="font-size: 10px">${v.getColor()}, ${v.getSize()}</p>
                                                         </td>
-                                                        <td id="price" class="column-3">$ ${p.getPrice()}</td>
+                                                        <td id="price" class="column-3 text-center">$ ${p.getPrice()}</td>
                                                         <td class="column-4">
                                                             <div class="wrap-num-product flex-w m-l-auto m-r-0">
                                                                 <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
@@ -138,9 +135,7 @@
                                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                                 </div>
                                                             </div>
-                                                            <c:if test="${v.getQuantity() < 10}">
-                                                                <p class="text-danger text-center">${v.getQuantity()} items left</p>
-                                                            </c:if>
+                                                            <p class="${v.getQuantity() < 10 ? "text-danger" : "text-success"} text-center">${v.getQuantity()} items left</p>
                                                         </td>
                                                         <td id="itemTotal" class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
                                                     <form action="cart?action=delete" method="post">
@@ -471,6 +466,24 @@
                                                         document.querySelector('#totalAmount').value = total;
                                                     }
                                                 });
+                                            });
+
+                                            const checkBoxAll = document.querySelector('#selectAll');
+
+                                            checkBoxAll.addEventListener('change', function () {
+                                                if (checkBoxAll.checked) {
+                                                    checkboxs.forEach(function (checkbox) {
+                                                        if (!checkbox.checked) {
+                                                            checkbox.checked = true;
+                                                        }
+                                                    });
+                                                } else {
+                                                    checkboxs.forEach(function (checkbox) {
+                                                        if (checkbox.checked) {
+                                                            checkbox.checked = false;
+                                                        }
+                                                    });
+                                                }
                                             });
 
                                             let subTotalDisplay = document.querySelector('#subTotalTxt');
