@@ -23,5 +23,12 @@ public class CommonConst {
     public static final int ROLE_GUEST = 4;
     
     public static final String NOTIFICATION = "notification";
+    public static final String NOTI_TYPE = "type";
+    
+    public static final String NOTI_SUCCESS = "alert-box-success";
+    public static final String NOTI_WARNING = "alert-box-warning";
+    public static final String NOTI_ERROR = "alert-box-danger";
+    public static final String NOTI_INFO = "alert-box-info";
+    
     
 }

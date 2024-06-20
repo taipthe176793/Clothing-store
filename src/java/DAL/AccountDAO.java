@@ -696,7 +696,7 @@ public class AccountDAO extends DBContext {
                 return rs.getInt(1) > 0;
             }
         } catch (Exception e) {
-            System.out.println("isProductInWishlist: "+e.getMessage());
+            System.out.println("isProductInWishlist: " + e.getMessage());
         } finally {
             if (rs != null) {
                 rs.close();
@@ -707,7 +707,6 @@ public class AccountDAO extends DBContext {
         }
         return false;
     }
-       
 
     public boolean updateAccountRole(int accountId, int roleId) throws SQLException {
         Connection con = null;

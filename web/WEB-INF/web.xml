@@ -45,6 +45,10 @@
         <servlet-class>Controllers.admin.AdminDashboardServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AccountControllers</servlet-name>
+        <servlet-class>Controllers.admin.AccountControllers</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ContentControllers</servlet-name>
         <servlet-class>Controllers.staff.ContentControllers</servlet-class>
     </servlet>
@@ -93,8 +97,8 @@
         <servlet-class>Controllers.customer.WishlistControllers</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AccountControllers</servlet-name>
-        <servlet-class>Controllers.admin.AccountControllers</servlet-class>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <servlet-class>Controllers.customer.CheckoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
@@ -123,6 +127,10 @@
     <servlet-mapping>
         <servlet-name>DashboardServlet</servlet-name>
         <url-pattern>/admin/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountControllers</servlet-name>
+        <url-pattern>/admin/accounts</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ContentControllers</servlet-name>
@@ -173,8 +181,8 @@
         <url-pattern>/customer/wishlist</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AccountControllers</servlet-name>
-        <url-pattern>/admin/accounts</url-pattern>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
