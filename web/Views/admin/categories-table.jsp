@@ -81,6 +81,7 @@
                                                     <th>Id</th>
                                                     <th>Image</th>
                                                     <th>Name</th>
+                                                    <th>Description</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -89,6 +90,7 @@
                                                 <td name="id">${c.getCategoryId()}</td>
                                                 <td name="image" style="width: 200px"><img style="height: 200px; width: 200px; padding: 0" src="${c.getImg()}" alt="img" /></td>
                                                 <td name="name">${c.getName()}</td>  
+                                                <td name="description">${c.getDescription()}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary"
                                                             data-toggle="modal" data-target="#editCategoryModal"
@@ -143,6 +145,12 @@
                                          style="display: none; max-width: 300px; max-height: 300px;">
 
                                 </div>
+                                
+                                <!--Description-->
+                                <div class="form-group">
+                                    <label for="description">Description:</label>
+                                    <textarea class="form-control" name="description"></textarea>
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -189,6 +197,11 @@
                                     <img id="previewImage2" src="#" alt="Preview"
                                          style="display: none; max-width: 300px; max-height: 300px;">
                                     <input type="hidden" id="currentImage" name="currentImage2" value="">
+                                </div>
+                                <!-- Description -->
+                                <div class="form-group">
+                                    <label for="descriptionEditInput">Description:</label>
+                                    <textarea class="form-control" id="descriptionEdit" name="description"></textarea>
                                 </div>
                             </form>
                         </div>
@@ -330,9 +343,11 @@
         let id = $(button).closest('tr').find('td[name="id"]').text().trim();
         let name = $(button).closest('tr').find('td[name="name"]').text().trim();
         let image = $(button).closest('tr').find('td[name="image"]').find('img').attr('src');
+        let description = $(button).closest('tr').find('td[name="description"]').text().trim();
 
         $('#idEditInput').val(id);
         $('#nameEditInput').val(name);
+        $('#descriptionEdit').val(description);
         $('#previewImage2').attr('src', image);
         $('#previewImage2').css('display', 'block');
         $('#currentImage2').val(image);

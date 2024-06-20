@@ -44,6 +44,7 @@ public class CategoryDAO extends DBContext {
 
                     c.setCategoryId(rs.getInt("category_id"));
                     c.setName(rs.getString("name"));
+                    c.setDescription(rs.getString("description"));
                     c.setImg(rs.getString("img"));
 
                     categoryList.add(c);
@@ -107,13 +108,14 @@ public class CategoryDAO extends DBContext {
             if (con != null) {
                 //2. Create SQL String
                 String sql = "INSERT INTO [dbo].[category]\n"
-                        + "([name] , [img])\n"
+                        + "([name] , [description], [img])\n"
                         + "VALUES\n"
                         + "(?,?)";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setString(1, category.getName());
-                stm.setString(2, category.getImg());
+                stm.setString(2, category.getDescription());
+                stm.setString(3, category.getImg());
 
                 stm.executeUpdate();
             }
@@ -136,13 +138,15 @@ public class CategoryDAO extends DBContext {
                 //2. Create SQL String
                 String sql = "UPDATE [dbo].[category]\n"
                         + "   SET [name] = ? \n"
+                        + "      ,[description] = ? \n"
                         + "      ,[img] = ? \n"
                         + " WHERE [category_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setString(1, category.getName());
-                stm.setString(2, category.getImg());
-                stm.setInt(3, category.getCategoryId());
+                stm.setString(2, category.getDescription());
+                stm.setString(3, category.getImg());
+                stm.setInt(4, category.getCategoryId());
 
                 stm.executeUpdate();
             }
@@ -178,6 +182,7 @@ public class CategoryDAO extends DBContext {
                     category = new Category();
                     category.setCategoryId(rs.getInt("category_id"));
                     category.setName(rs.getString("name"));
+                    category.setDescription(rs.getString("description"));
                     category.setImg(rs.getString("img"));
                 }
             }

@@ -127,6 +127,7 @@ public class CategoryControllers extends HttpServlet {
         try {
             String id = request.getParameter("id");
             String name = request.getParameter("name");
+            String description = request.getParameter("description");
             String currentImage = request.getParameter("currentImage2");
 
             Part part = request.getPart("image");
@@ -161,7 +162,7 @@ public class CategoryControllers extends HttpServlet {
                 }
             }
 
-            Category category = new Category(Integer.parseInt(id), name, imagePath);
+            Category category = new Category(Integer.parseInt(id), name, description, imagePath);
             cDAO.updateCategory(category);
             session.setAttribute("notification", "Updated successfully.");
 
@@ -177,6 +178,8 @@ public class CategoryControllers extends HttpServlet {
         try {
 
             String name = request.getParameter("name");
+            
+            String description = request.getParameter("description");
 
             Part part = request.getPart("image");
 
@@ -198,7 +201,7 @@ public class CategoryControllers extends HttpServlet {
                 imagePath = request.getContextPath() + "/images/category/" + image.getName();
             }
 
-            Category category = new Category(name, imagePath);
+            Category category = new Category(name, description, imagePath);
 
             CategoryDAO cDAO = new CategoryDAO();
             HttpSession session = request.getSession();
