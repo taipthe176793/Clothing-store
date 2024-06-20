@@ -113,7 +113,7 @@
                                                     <tr class="table_row">
 
                                                         <td class="column-5">
-                                                            <input id="itemSelected" type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItemId" value="${item.getCartItemId()}"/>
+                                                            <input id="itemSelected" type="checkbox" class="form-check" style="margin: 0 0 0 50px" name="cartItem" value="${item.getCartItemId()}-${item.getProductVariantId()}-${item.getQuantity()}"/>
                                                             <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
                                                             <input name="cItemId" value="${item.getCartItemId()}" hidden=""/>
                                                             <input name="cItemQuantity" value="${item.getQuantity()}" hidden=""/>

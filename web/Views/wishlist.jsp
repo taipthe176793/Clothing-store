@@ -37,6 +37,23 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wishlist.css">
+        <style>
+            .in-stock-box {
+                color: white;
+                background-color: black;
+                padding: 5px 10px;
+                border-radius: 3px; 
+            }
+            .table-wishlist th, .table-wishlist td {
+                text-align: center; 
+                vertical-align: middle; 
+            }
+            .display-flex {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="common/homepage/page-header.jsp"></jsp:include>
@@ -52,11 +69,12 @@
                         <table class="table table-bordered table-hover">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col" width="45%">Product Name</th>
+                                    <th scope="col" width="40%">Product Name</th>
                                     <th scope="col" width="15%">Unit Price</th>
-                                    <th scope="col" width="15%">Stock Status</th>
+                                    <th scope="col" width="15%">Total Quantity</th>
+                                    <th scope="col" width="15%">Availability</th>
+                                    <th scope="col" width="15%">Status</th>
                                     <th scope="col" width="15%"></th>
-                                    <th scope="col" width="10%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,20 +91,49 @@
                                             </div>
                                         </td>
                                         <td class="price">$${product.getPrice()}</td>
-                                        <td><span class="in-stock-box">In Stock</span></td>
                                         <td>
-                                            <form action="${pageContext.request.contextPath}/addToCart" method="post">
-                                                <input type="hidden" name="productId" value="${product.getProductId()}">
-                                                <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
-                                            </form>
+                                            <c:set var="totalQuantity" value="0"/>
+                                            <c:forEach items="${product.variantList}" var="variant">
+                                                <c:set var="totalQuantity" value="${totalQuantity + variant.quantity}"/>
+                                            </c:forEach>
+                                            ${totalQuantity}
+                                        </td>                                      
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty product.variantList}">
+                                                    <c:set var="inStock" value="false" />
+                                                    <c:forEach items="${product.variantList}" var="variant">
+                                                        <c:if test="${variant.quantity > 0}">
+                                                            <c:set var="inStock" value="true" />
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <c:choose>
+                                                        <c:when test="${inStock}">
+                                                            <span class="in-stock-box">In Stock</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="in-stock-box">Sold out</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="in-stock-box">Sold out</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
-                                            <form action="${pageContext.request.contextPath}/removeFromWishlist" method="post">
+                                            ${product.isIsDelete() ? "Inactive" : "Active"}
+                                        </td>
+
+                                        <td>
+                                            <form action="${pageContext.request.contextPath}/customer/wishlist" method="post">
                                                 <input type="hidden" name="productId" value="${product.getProductId()}">
+                                                <input type="hidden" name="action" value="remove">
                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                     <i class="far fa-trash-alt"></i> Remove
                                                 </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                 </c:forEach>

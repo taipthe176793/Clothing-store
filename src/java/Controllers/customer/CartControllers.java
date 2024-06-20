@@ -13,13 +13,13 @@ import Models.CartItem;
 import Models.Product;
 import Models.ProductVariant;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,13 +161,15 @@ public class CartControllers extends HttpServlet {
                 url = request.getServletContext().getContextPath() + "/cart";
                 break;
             case "checkout":
-                //code checkout
-
+                HttpSession session = request.getSession();
+                session.invalidate();
+                storeItemsToSession(request);
+                url = request.getServletContext().getContextPath() + "/checkout";
                 break;
             case "applyCoupon":
                 //code checkout
                 int discount = applyCoupon(request, response);
-                HttpSession session = request.getSession();
+                session = request.getSession();
                 session.setAttribute("discount", discount);
                 break;
 
@@ -451,6 +453,60 @@ public class CartControllers extends HttpServlet {
 
     private int applyCoupon(HttpServletRequest request, HttpServletResponse response) {
         return 0;
+    }
+
+    private void storeItemsToSession(HttpServletRequest request) {
+
+        try {
+
+            ProductDAO pDAO = new ProductDAO();
+            ProductVariantDAO pvDAO = new ProductVariantDAO();
+            AccountDAO aDAO = new AccountDAO();
+            Account account = null;
+
+            List<Product> products = new ArrayList<>();
+            List<ProductVariant> variants = new ArrayList<>();
+
+            Cookie[] arr = request.getCookies();
+            if (arr != null) {
+                for (Cookie o : arr) {
+                    if (o.getName().equals("userId")) {
+                        account = aDAO.getAccountById(Integer.parseInt(o.getValue()));
+                        break;
+                    }
+                }
+            }
+
+            String[] itemIdTxt = request.getParameterValues("cartItem");
+            for (int i = 0; i < itemIdTxt.length; i++) {
+                String pvId = itemIdTxt[i].split("-")[1];
+                ProductVariant pv = pvDAO.findProductVariantById(Integer.parseInt(pvId));
+                pv.setQuantity(Integer.parseInt(itemIdTxt[i].split("-")[2]));
+                variants.add(pv);
+                Product p = pDAO.findProductById(pv.getProductId());
+                if (!products.contains(p)) {
+                    products.add(p);
+                }
+            }
+            double discount = Double.parseDouble(request.getParameter("discount").isBlank() ? "0" : request.getParameter("discount"));
+            double totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
+
+            HttpSession session = request.getSession();
+            session.setAttribute("products", products);
+            session.setAttribute("variants", variants);
+            session.setAttribute("discount", discount);
+            session.setAttribute("totalAmount", totalAmount);
+            if (account != null) {
+                session.setAttribute("account", account);
+                session.setAttribute("addressList", account.getAddresses());
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

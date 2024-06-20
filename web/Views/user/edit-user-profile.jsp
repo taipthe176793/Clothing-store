@@ -81,7 +81,7 @@
                                                 <label class="form-label">Phone</label>
                                                 <input name="phone" type="text" class="form-control" value="${account.phone}" required>
                                             </div>
-                                       
+
                                             <button type="submit" class="btn btn-dark">Save changes</button>&nbsp;
                                             <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-default">Cancel</a>
                                         </form>
@@ -105,51 +105,63 @@
         <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
-    
+
     <script>
-            function validateForm() {
-                let usernamePattern = /^(?!.*\s).{6,}$/;
-                let phonePattern = /^(?!.*\s)0\d{9}$/;
-                let passwordPattern = /^(?!.*\s).{8,}$/;
-                let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-                
-                let form = document.forms["signupForm"];
-                let username = form["user"];
-                let phone = form["phone"];
-                let fullname = form["fullname"];
-                let email = form["email"];
+                                            function validateForm() {
+                                                let phonePattern = /^(?!.*\s)0\d{9}$/;
+                                                let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
-                
-                let isValid = true;
-                if(fullname.value.trim() === ""){
-                    fullname.setCustomValidity("Fullname cannot be empty!!!");
-                    isValid = false;
-                }
-                if (!usernamePattern.test(username.value) || username.value.trim() === "") {
-                    username.setCustomValidity("Username must be at least 6 characters without spaces.");
-                    isValid = false;
-                } else {
-                    username.setCustomValidity("");
-                }
+                                                let form = document.forms["editForm"]; 
+                                                let phone = form["phone"];
+                                                let fullname = form["fullname"];
+                                                let email = form["email"];
 
-                if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
-                    phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
-                    isValid = false;
-                } else {
-                    phone.setCustomValidity("");
-                }
-                if (!emailPattern.test(email.value)) {
-                email.setCustomValidity("Please enter a valid email address.");
-                isValid = false;
-                } else {
-                email.setCustomValidity("");
-                }
+                                                let isValid = true;
 
-                if (!isValid) {
-                    form.reportValidity();
-                }
+                                                function isAllSpaces(value) {
+                                                    return !value.trim().length;
+                                                }
 
-                return isValid;
-            }
-        </script>
+                                                // Reset custom validity messages
+                                                fullname.setCustomValidity("");
+                                                phone.setCustomValidity("");
+                                                email.setCustomValidity("");
+
+                                                // Validate Fullname
+                                                if (isAllSpaces(fullname.value)) {
+                                                    fullname.setCustomValidity("Fullname cannot be empty!!!");
+                                                    isValid = false;
+                                                } else {
+                                                    fullname.setCustomValidity("");
+                                                }
+
+                                                // Validate Phone
+                                                if (isAllSpaces(phone.value)) {
+                                                    phone.setCustomValidity("Phone cannot be empty!!!");
+                                                    isValid = false;
+                                                } else if (!phonePattern.test(phone.value)) {
+                                                    phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces");
+                                                    isValid = false;
+                                                } else {
+                                                    phone.setCustomValidity("");
+                                                }
+
+                                                // Validate Email
+                                                if (isAllSpaces(email.value)) {
+                                                    email.setCustomValidity("Email cannot be empty!!!");
+                                                    isValid = false;
+                                                } else if (!emailPattern.test(email.value)) {
+                                                    email.setCustomValidity("Please enter a valid email address.");
+                                                    isValid = false;
+                                                } else {
+                                                    email.setCustomValidity("");
+                                                }
+
+                                                if (!isValid) {
+                                                    form.reportValidity();
+                                                }
+
+                                                return isValid;
+                                            }
+    </script>
 </html>

@@ -6,8 +6,10 @@ package Controllers.customer;
 
 import DAL.AccountDAO;
 import DAL.ProductDAO;
+import DAL.ProductVariantDAO;
 import Models.Account;
 import Models.Product;
+import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -81,8 +83,13 @@ public class WishlistControllers extends HttpServlet {
             }
 
             if (account != null) {
-                AccountDAO accountDAO = new AccountDAO();
+                ProductVariantDAO productvariantDAO = new ProductVariantDAO();
+                AccountDAO accountDAO = new AccountDAO();                
                 List<Product> favoriteProducts = accountDAO.getWishlistProducts(account.getAccountId());
+                for(int i = 0; i < favoriteProducts.size(); i++){
+                    List<ProductVariant> pvList = productvariantDAO.getAllVariantsOfAProduct(favoriteProducts.get(i).getProductId());
+                    favoriteProducts.get(i).setVariantList(pvList);
+                }
                 request.setAttribute("favoriteProducts", favoriteProducts);
                 request.getRequestDispatcher("/Views/wishlist.jsp").forward(request, response);
             } else {
@@ -103,11 +110,30 @@ public class WishlistControllers extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Account account = (Account) request.getSession().getAttribute("account");
+        AccountDAO accountDAO = new AccountDAO();
+        Account account = null;
+        Cookie[] arr = request.getCookies();
+
+        if (arr != null) {
+            for (Cookie o : arr) {
+                if (o.getName().equals("userId")) {
+                    try {
+                        account = accountDAO.getAccountById(Integer.parseInt(o.getValue()));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        request.setAttribute("error", "Database error: " + e.getMessage());
+                        request.getRequestDispatcher("/Views/publicProducts.jsp").forward(request, response);
+                        return;
+                    }
+                }
+            }
+        }
+
         if (account == null) {
             response.sendRedirect(request.getContextPath() + "/auth?action=login");
             return;
         }
+
         String productIdStr = request.getParameter("productId");
         if (productIdStr == null || productIdStr.isEmpty()) {
             request.setAttribute("error", "Product ID not specified.");
@@ -116,16 +142,25 @@ public class WishlistControllers extends HttpServlet {
         }
 
         int productId = Integer.parseInt(productIdStr);
-        AccountDAO accountDAO = new AccountDAO();
+        String action = request.getParameter("action");
+
         try {
-            if (accountDAO.addToWishlist(account.getAccountId(), productId)) {
-                account.addToWishlist(productId);
-                response.sendRedirect(request.getHeader("Referer")); 
-                return;
-            } else {
-                request.setAttribute("error", "Failed to add product to wishlist.");
-                request.getRequestDispatcher("/Views/publicProducts.jsp").forward(request, response);
-                return;
+            if ("add".equals(action)) {
+                if (!accountDAO.isProductInWishlist(account.getAccountId(), productId)) {
+                    if (accountDAO.addToWishlist(account.getAccountId(), productId)) {
+                        account.addToWishlist(productId);
+                    } else {
+                        request.setAttribute("error", "Failed to add product to wishlist.");
+                    }
+                } else {
+                    request.setAttribute("error", "Product is already in the wishlist.");
+                }
+            } else if ("remove".equals(action)) {
+                if (accountDAO.removeFromWishlist(account.getAccountId(), productId)) {
+                    account.removeFromWishlist(productId);
+                } else {
+                    request.setAttribute("error", "Failed to remove product from wishlist.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,6 +168,8 @@ public class WishlistControllers extends HttpServlet {
             request.getRequestDispatcher("/Views/publicProducts.jsp").forward(request, response);
             return;
         }
+
+        response.sendRedirect(request.getHeader("Referer"));
     }
 
     /**

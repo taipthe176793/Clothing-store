@@ -96,6 +96,10 @@
         <servlet-name>WishlistControllers</servlet-name>
         <servlet-class>Controllers.customer.WishlistControllers</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <servlet-class>Controllers.customer.CheckoutServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -175,6 +179,10 @@
     <servlet-mapping>
         <servlet-name>WishlistControllers</servlet-name>
         <url-pattern>/customer/wishlist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
