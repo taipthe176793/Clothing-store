@@ -11,19 +11,22 @@ package Models;
 public class Category {
     private int categoryId;
     private String name;
+    private String description;
     private String img;
 
     public Category() {
     }
 
-    public Category(String name, String img) {
+    public Category(String name, String description, String img) {
         this.name = name;
+        this.description = description;
         this.img = img;
     }
     
-    public Category(int categoryId, String name, String img) {
+    public Category(int categoryId, String name, String description, String img) {
         this.categoryId = categoryId;
         this.name = name;
+        this.description = description;
         this.img = img;
     }
 
@@ -35,8 +38,6 @@ public class Category {
         this.img = img;
     }
     
-    
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -51,6 +52,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

@@ -309,7 +309,7 @@
         if (discount.trim() === '') {
             $('#discountError').html('Discount cannot be empty!');
             isValid = false;
-        } else if (!$.isNumeric(discount) || parseFloat(discount) < 0) {
+        } else if (!$.isNumeric(discount) || parseInt(discount) < 0 || parseInt(discount) > 100) {
             $('#discountError').html('Invalid Discount');
             isValid = false;
         }
@@ -317,7 +317,7 @@
         if (quantity.trim() === '') {
             $('#quantityError').html('Quantity cannot be empty!');
             isValid = false;
-        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+        } else if (!$.isNumeric(quantity) || parseInt(quantity) < 0) {
             $('#quantityError').html('Invalid Quantity');
             isValid = false;
         }
