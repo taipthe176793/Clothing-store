@@ -225,7 +225,7 @@ public class AccountDAO extends DBContext {
                         + "      ,[fullname]\n"
                         + "      ,[phone]\n"
                         + "  FROM [dbo].[account]\n"
-                        + "  where role_id != 1";
+                        + "  where role_id != 1 AND role_id !=4";
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
                 while (rs.next()) {
