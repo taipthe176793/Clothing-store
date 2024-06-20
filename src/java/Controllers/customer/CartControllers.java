@@ -543,7 +543,7 @@ public class CartControllers extends HttpServlet {
             session.setAttribute("type", "alert-box-danger");
         } else {
 
-            if (cDAO.checkCouponExpiration(coupon)) {
+            if (!cDAO.checkCouponExpiration(coupon)) {
                 session.setAttribute("notification", "Expired Coupon");
                 session.setAttribute("type", "alert-box-warning");
             } else if (cDAO.checkUsedCoupon(userId, coupon.getCouponId())) {

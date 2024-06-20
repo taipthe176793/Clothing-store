@@ -249,7 +249,7 @@ public class CouponDAO extends DBContext {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-        boolean valid = true;
+        boolean valid = false;
 
         try {
             //1. Connect DB
@@ -268,7 +268,7 @@ public class CouponDAO extends DBContext {
                 rs = stm.executeQuery();
                 //5. Process Result
                 if (rs.next()) {
-                    valid = false;
+                    valid = true;
                 }
             }
         } finally {
