@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,7 +67,7 @@ public class CouponDAO extends DBContext {
         }
         return couponList;
     }
-    
+
     public void addCoupon(Coupon coupon) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -153,5 +155,132 @@ public class CouponDAO extends DBContext {
         }
 
     }
-    
+
+    public Coupon getCouponByCode(String couponCode) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        Coupon coupon = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[coupon]";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+
+                    coupon = new Coupon();
+
+                    coupon.setCouponId(rs.getInt("coupon_id"));
+                    coupon.setCode(rs.getString("code"));
+                    coupon.setDescription(rs.getString("description"));
+                    coupon.setDiscount(rs.getInt("discount"));
+                    coupon.setExpiresAt(rs.getDate("expires_at"));
+                    coupon.setStartAt(rs.getDate("starts_at"));
+                    coupon.setQuantity(rs.getInt("quantity"));
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return coupon;
+    }
+
+    public boolean checkCouponExpiration(Coupon coupon) throws SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        boolean valid = false;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[coupon] WHERE [coupon_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, coupon.getCouponId());
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+
+                    coupon = new Coupon();
+                    Date today = new Date();
+
+                    coupon.setExpiresAt(rs.getDate("expires_at"));
+                    if (coupon.getExpiresAt().after(today)) {
+                        valid = true;
+                    }
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return valid;
+
+    }
+
+    public boolean checkUsedCoupon(int userId, int couponId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        boolean valid = true;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT *\n"
+                        + "  FROM [dbo].[coupon_history]\n"
+                        + "  WHERE [customer_id] = ? AND [coupon_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, userId);
+                stm.setInt(2, couponId);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+                    valid = false;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return valid;
+    }
+
 }

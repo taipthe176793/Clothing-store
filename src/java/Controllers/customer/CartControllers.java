@@ -6,10 +6,12 @@ package Controllers.customer;
 
 import DAL.AccountDAO;
 import DAL.CartItemDAO;
+import DAL.CouponDAO;
 import DAL.ProductDAO;
 import DAL.ProductVariantDAO;
 import Models.Account;
 import Models.CartItem;
+import Models.Coupon;
 import Models.Product;
 import Models.ProductVariant;
 import java.io.IOException;
@@ -71,6 +73,10 @@ public class CartControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            if (request.getSession().getAttribute("discount") != null) {
+                request.setAttribute("discount", (int) request.getSession().getAttribute("discount"));
+                request.getSession().invalidate();
+            }
             ProductDAO pDAO = new ProductDAO();
             List<Product> products = pDAO.getAllProducts();
             ProductVariantDAO pvDAO = new ProductVariantDAO();
@@ -168,9 +174,8 @@ public class CartControllers extends HttpServlet {
                 break;
             case "applyCoupon":
                 //code checkout
-                int discount = applyCoupon(request, response);
-                session = request.getSession();
-                session.setAttribute("discount", discount);
+                applyCoupon(request, response);
+                url = request.getServletContext().getContextPath() + "/cart";
                 break;
 
             default:
@@ -451,8 +456,27 @@ public class CartControllers extends HttpServlet {
 
     }
 
-    private int applyCoupon(HttpServletRequest request, HttpServletResponse response) {
-        return 0;
+    private void applyCoupon(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String couponCode = request.getParameter("coupon");
+            int userId = 0;
+            Cookie[] arr = request.getCookies();
+            for (Cookie o : arr) {
+                if (o.getName().equals("userId")) {
+                    userId = Integer.parseInt(o.getValue());
+                }
+                break;
+            }
+
+            CouponDAO couponDAO = new CouponDAO();
+            Coupon coupon = couponDAO.getCouponByCode(couponCode);
+
+            checkCouponValidation(request, userId, coupon);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CartControllers.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void storeItemsToSession(HttpServletRequest request) {
@@ -505,6 +529,33 @@ public class CartControllers extends HttpServlet {
             Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void checkCouponValidation(HttpServletRequest request, int userId, Coupon coupon) throws SQLException {
+
+        HttpSession session = request.getSession();
+        CouponDAO cDAO = new CouponDAO();
+
+        if (coupon == null) {
+            session.setAttribute("notification", "Invalid Coupon");
+            session.setAttribute("type", "alert-box-danger");
+        } else {
+
+            if (cDAO.checkCouponExpiration(coupon)) {
+                session.setAttribute("notification", "Expired Coupon");
+                session.setAttribute("type", "alert-box-warning");
+            } else if (cDAO.checkUsedCoupon(userId, coupon.getCouponId())) {
+                session.setAttribute("notification", "You have used this Coupon");
+                session.setAttribute("type", "alert-box-warning");
+            } else if (coupon.getQuantity() == 0) {
+                session.setAttribute("notification", "Coupon has run out of uses");
+                session.setAttribute("type", "alert-box-warning");
+            } else {
+                session.setAttribute("discount", coupon.getDiscount());
+            }
+
         }
 
     }

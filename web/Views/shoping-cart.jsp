@@ -158,17 +158,17 @@
                                         </table>
                                     </div>
 
+                                    <c:if test="${not empty cookie.userId}">
+                                        <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+                                            <div class="flex-w flex-m m-r-20 m-tb-5">
+                                                <input id="coupon" class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
 
-                                    <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-                                        <div class="flex-w flex-m m-r-20 m-tb-5">
-                                            <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
-
-                                            <div onclick="applyCoupon(this)" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-                                                Apply coupon
+                                                <div onclick="applyCoupon(this)" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+                                                    Apply coupon
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-
+                                    </c:if>
                                     <br />
                                     <br />
                                     <!-- Inactive items -->
@@ -464,10 +464,10 @@
                                                     let subTotalDisplay = document.querySelector('#subTotalTxt');
                                                     subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
                                                     let totalText = document.querySelector('#totalTxt');
-                                                    if (subTotal === 0 || subTotal - discount < 0) {
+                                                    if (subTotal === 0) {
                                                         totalText.innerText = "$ 0.0";
                                                     } else {
-                                                        total = subTotal - discount;
+                                                        total = subTotal - (subTotal * discount / 100);
                                                         totalText.innerText = "$ " + total.toFixed(1);
                                                         document.querySelector('#totalAmount').value = total;
                                                     }
@@ -520,6 +520,24 @@
                                         }
 
                                         function applyCoupon(e) {
+
+                                            const input = document.querySelector('#coupon');
+
+                                            if (input !== null || input.value !== '') {
+
+                                                let form = document.createElement('form');
+                                                let inputCoupon = document.createElement('input');
+                                                inputCoupon.name = "coupon";
+                                                inputCoupon.value = input.value;
+                                                form.appendChild(inputCoupon);
+                                                form.action = "cart?action=applyCoupon";
+                                                form.method = "post";
+                                                document.body.appendChild(form);
+                                                form.submit();
+
+                                            }
+
+
 
                                         }
 
