@@ -85,6 +85,59 @@
                         let password = form["pass"];
                         let fullname = form["fullname"];
                         let email = form["email"];
+
+                        let isValid = true;
+                        if (fullname.value.trim() === "") {
+                            fullname.setCustomValidity("Fullname cannot be empty!!!");
+                            isValid = false;
+                        }
+                        if (!usernamePattern.test(username.value) || username.value.trim() === "") {
+                            username.setCustomValidity("Username must be at least 6 characters without spaces.");
+                            isValid = false;
+                        } else {
+                            username.setCustomValidity("");
+                        }
+
+                        if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
+                            phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
+                            isValid = false;
+                        } else {
+                            phone.setCustomValidity("");
+                        }
+
+                        if (!passwordPattern.test(password.value) || password.value.trim() === "") {
+                            password.setCustomValidity("Password must be at least 8 characters without spaces.");
+                            isValid = false;
+                        } else {
+                            password.setCustomValidity("");
+                        }
+                        if (!emailPattern.test(email.value)) {
+                            email.setCustomValidity("Please enter a valid email address.");
+                            isValid = false;
+                        } else {
+                            email.setCustomValidity("");
+                        }
+
+                        if (!isValid) {
+                            form.reportValidity();
+                        }
+
+                        return isValid;
+                    }
+        </script>
+         <script>
+                    function validateForm() {
+                        let usernamePattern = /^(?!.*\s).{6,}$/;
+                        let phonePattern = /^(?!.*\s)0\d{9}$/;
+                        let passwordPattern = /^(?!.*\s).{8,}$/;
+                        let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+
+                        let form = document.forms["signupForm"];
+                        let username = form["user"];
+                        let phone = form["phone"];
+                        let password = form["pass"];
+                        let fullname = form["fullname"];
+                        let email = form["email"];
                         let confirmPassword = form["confirm-pass"];
 
                         let isValid = true;
@@ -99,37 +152,37 @@
 
                         // Validate Fullname
                         if (fullname.value.trim() === "") {
-                            fullname.setCustomValidity("Fullname không được để trống hoặc chỉ chứa dấu cách.");
+                            fullname.setCustomValidity("Fullname cannot be empty!!!");
                             isValid = false;
                         }
 
                         // Validate Username
                         if (!usernamePattern.test(username.value)) {
-                            username.setCustomValidity("Username phải có ít nhất 6 ký tự và không có dấu cách.");
+                            username.setCustomValidity("Username must be at least 6 characters without spaces.");
                             isValid = false;
                         }
 
                         // Validate Phone
                         if (!phonePattern.test(phone.value)) {
-                            phone.setCustomValidity("Số điện thoại phải có 10 chữ số và bắt đầu bằng 0, không có dấu cách.");
+                            phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
                             isValid = false;
                         }
 
                         // Validate Password
                         if (!passwordPattern.test(password.value)) {
-                            password.setCustomValidity("Password phải có ít nhất 8 ký tự và không có dấu cách.");
+                            password.setCustomValidity("Password must be at least 8 characters without spaces.");
                             isValid = false;
                         }
 
                         // Validate Confirm Password
                         if (password.value !== confirmPassword.value) {
-                            confirmPassword.setCustomValidity("Password xác nhận không khớp.");
+                            confirmPassword.setCustomValidity("Confirm Password not match.");
                             isValid = false;
                         }
 
                         // Validate Email
                         if (!emailPattern.test(email.value)) {
-                            email.setCustomValidity("Vui lòng nhập địa chỉ email hợp lệ.");
+                            email.setCustomValidity("Please enter a valid email address.");
                             isValid = false;
                         }
 

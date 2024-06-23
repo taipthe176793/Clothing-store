@@ -37,16 +37,18 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wishlist.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.1/font/bootstrap-icons.min.css">
+
         <style>
             .in-stock-box {
                 color: white;
                 background-color: black;
                 padding: 5px 10px;
-                border-radius: 3px; 
+                border-radius: 3px;
             }
             .table-wishlist th, .table-wishlist td {
-                text-align: center; 
-                vertical-align: middle; 
+                text-align: center;
+                vertical-align: middle;
             }
             .display-flex {
                 display: flex;
@@ -125,16 +127,16 @@
                                             ${product.isIsDelete() ? "Inactive" : "Active"}
                                         </td>
 
-                                        <td>
+                                        <td class="p-r-15 text-center">
                                             <form action="${pageContext.request.contextPath}/customer/wishlist" method="post">
                                                 <input type="hidden" name="productId" value="${product.getProductId()}">
                                                 <input type="hidden" name="action" value="remove">
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="far fa-trash-alt"></i> Remove
+                                                <button type="button" onclick="this.closest('form').submit()" class="btn btn-danger text-white">
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
-
                                         </td>
+
                                     </tr>
                                 </c:forEach>
                             </tbody>
