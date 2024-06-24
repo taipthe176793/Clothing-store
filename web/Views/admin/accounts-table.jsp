@@ -69,8 +69,8 @@
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <form action="#">
-                                            <label for="roles">Filter:</label>
-                                            <select onchange="filterByRole(this)" name="role" id="role">
+                                            <label for="role">Filter:</label>
+                                            <select onchange="filterByRole(this)" name="roleFilter" id="roleFilter" >
                                                 <option value="all">All</option>
                                                 <option value="customer">Customer</option>
                                                 <option value="staff">Staff</option>
@@ -137,27 +137,32 @@
                                 <!--Username-->
                                 <div class="form-group">
                                     <label for="username">Username:</label>
-                                    <input type="text" class="form-control" id="usernameInput" name="username">
+                                    <input type="text" class="form-control" id="usernameInput" name="username" required>
                                 </div>
                                 <!--Password-->
                                 <div class="form-group">
                                     <label for="password">Password:</label>
-                                    <input type="password" class="form-control" id="passwordInput" name="password">
+                                    <input type="password" class="form-control" id="passwordInput" name="password" required>
+                                </div>
+                                <!--Confirm Password-->
+                                <div class="form-group">
+                                    <label for="confirm-pass">Confirm Password:</label>
+                                    <input type="password" class="form-control" id="confirm-passInput" name="confirm-pass" required>
                                 </div>
                                 <!--Full Name-->
                                 <div class="form-group">
                                     <label for="fullname">Full Name:</label>
-                                    <input type="text" class="form-control" id="fullnameInput" name="fullname">
+                                    <input type="text" class="form-control" id="fullnameInput" name="fullname" required>
                                 </div>
                                 <!--Email-->
                                 <div class="form-group">
                                     <label for="email">Email:</label>
-                                    <input type="text" class="form-control" id="emailInput" name="email">
+                                    <input type="text" class="form-control" id="emailInput" name="email" required>
                                 </div>
                                 <!--Phone-->
                                 <div class="form-group">
                                     <label for="phone">Phone:</label>
-                                    <input type="text" class="form-control" id="phoneInput" name="phone">
+                                    <input type="text" class="form-control" id="phoneInput" name="phone" required>
                                 </div>
                                 <!-- Role -->
                                 <input type="hidden" name="role" value="2">
@@ -169,7 +174,7 @@
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>         
 
             <!-- Update Modal -->
             <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -210,8 +215,8 @@
                                 <div class="form-group">
                                     <label for="role">Role:</label>
                                     <br/>
-                                    <input type="radio" id="" name="role" value="3"> Customer
-                                    <input type="radio" id="" name="role" value="2" style="margin-left: 40px"> Staff
+                                    <input type="radio" name="role" value="3"> Customer
+                                    <input type="radio" name="role" value="2" style="margin-left: 40px"> Staff
                                 </div>
 
                                 <div class="form-group" hidden="">
@@ -293,6 +298,7 @@
                                             let username = form["username"];
                                             let phone = form["phone"];
                                             let password = form["password"];
+                                            let confirmPassword = form["confirm-pass"];
                                             let fullname = form["fullname"];
                                             let email = form["email"];
                                             let role = form["role"];
@@ -305,45 +311,42 @@
                                             phone.setCustomValidity("");
                                             password.setCustomValidity("");
                                             email.setCustomValidity("");
+                                            confirmPassword.setCustomValidity("");
 
                                             // Validate Fullname
                                             if (fullname.value.trim() === "") {
                                                 fullname.setCustomValidity("Fullname cannot be empty.");
                                                 isValid = false;
-                                            } else {
-                                                fullname.setCustomValidity("");
                                             }
 
                                             // Validate Username
                                             if (!usernamePattern.test(username.value)) {
                                                 username.setCustomValidity("Username must be at least 6 characters and contain no spaces.");
                                                 isValid = false;
-                                            } else {
-                                                username.setCustomValidity("");
                                             }
 
                                             // Validate Phone
                                             if (!phonePattern.test(phone.value)) {
                                                 phone.setCustomValidity("Phone must be 10 digits, start with 0 and contain no spaces.");
                                                 isValid = false;
-                                            } else {
-                                                phone.setCustomValidity("");
                                             }
 
                                             // Validate Password
                                             if (!passwordPattern.test(password.value)) {
                                                 password.setCustomValidity("Password must be at least 8 characters and contain no spaces.");
                                                 isValid = false;
-                                            } else {
-                                                password.setCustomValidity("");
+                                            }
+
+                                            // Validate Confirm Password
+                                            if (password.value !== confirmPassword.value) {
+                                                confirmPassword.setCustomValidity("Confirm Password is different from Password.");
+                                                isValid = false;
                                             }
 
                                             // Validate Email
                                             if (!emailPattern.test(email.value)) {
                                                 email.setCustomValidity("Please enter a valid email address.");
                                                 isValid = false;
-                                            } else {
-                                                email.setCustomValidity("");
                                             }
 
                                             if (!role.value) {
@@ -357,8 +360,6 @@
 
                                             return true;
                                         }
-
-
                                         $(document).ready(function () {
                                             $('#addStaffForm').submit(function (event) {
                                                 if (!validateForm()) {
@@ -368,6 +369,9 @@
                                                 }
                                             });
                                         });
+
+
+
 
 
                                         function validateForm2() {
@@ -418,18 +422,16 @@
                                         function filterByRole(selectedOption) {
                                             let form = selectedOption.closest('form');
                                             const selected = selectedOption.value;
-                                            console.log(selected)
+                                            console.log(selected);
                                             form.action = "accounts?role=" + selected;
                                             form.method = "get";
                                             form.submit();
                                         }
+                                        ;
 
-                                        document.addEventListener('DOMContentLoaded', fuction(){
+                                        document.addEventListener('DOMContentLoaded', function () {
                                             let selectFilter = document.querySelector('#role');
-                                            
-                                        };
-
-
+                                        });
                                         $(document).ready(function () {
         <c:if test="${notification != null}">
                                             $('#notiModal').modal('show');

@@ -74,7 +74,7 @@ public class AccountControllers extends HttpServlet {
             List<Role> roleList = new ArrayList<>();
             roleList = rDAO.getRoleList();
 
-            String action = request.getParameter("role") == null ? "" : request.getParameter("role");
+            String action = request.getParameter("roleFilter") == null ? "" : request.getParameter("roleFilter");
             if (!action.isBlank()) {
                 switch (action) {
                     case "customer":
@@ -85,7 +85,7 @@ public class AccountControllers extends HttpServlet {
                         break;
                     default:
                 }
-                request.setAttribute("role", action);
+                request.setAttribute("roleFilter", action);
             }
 
             HttpSession session = request.getSession();
