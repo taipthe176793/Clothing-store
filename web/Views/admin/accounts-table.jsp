@@ -143,8 +143,8 @@
                                 </div>
                                 <!--Confirm Password-->
                                 <div class="form-group">
-                                    <label for="confirmPassword">Confirm Password:</label>
-                                    <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" required>
+                                    <label for="confirm-pass">Confirm Password:</label>
+                                    <input type="password" class="form-control" id="confirm-passInput" name="confirm-pass" required>
                                 </div>
                                 <!--Full Name-->
                                 <div class="form-group">
@@ -295,7 +295,7 @@
     let username = form["username"];
     let phone = form["phone"];
     let password = form["password"];
-    let confirmPassword = form["confirmPassword"];
+    let confirmPassword = form["confirm-pass"];
     let fullname = form["fullname"];
     let email = form["email"];
     let role = form["role"];
@@ -336,7 +336,7 @@
     
     // Validate Confirm Password
     if (password.value !== confirmPassword.value) {
-        cpassword.setCustomValidity("Confirm Password is different from Password.");
+        confirmPassword.setCustomValidity("Confirm Password is different from Password.");
         isValid = false;
     }
 
