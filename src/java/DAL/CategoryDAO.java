@@ -110,7 +110,7 @@ public class CategoryDAO extends DBContext {
                 String sql = "INSERT INTO [dbo].[category]\n"
                         + "([name] , [description], [img])\n"
                         + "VALUES\n"
-                        + "(?,?)";
+                        + "(?,?,?)";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setString(1, category.getName());
