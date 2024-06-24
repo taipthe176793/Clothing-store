@@ -130,36 +130,36 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="addStaffForm" action="accounts?action=add" method="post" enctype="multipart/form-data">
+                            <form id="addStaffForm" action="accounts?action=add" method="post">
                                 <!--Username-->
                                 <div class="form-group">
                                     <label for="username">Username:</label>
-                                    <input type="text" class="form-control" id="usernameInput" name="username">
+                                    <input type="text" class="form-control" id="usernameInput" name="username" required>
                                 </div>
                                 <!--Password-->
                                 <div class="form-group">
                                     <label for="password">Password:</label>
-                                    <input type="password" class="form-control" id="passwordInput" name="password">
+                                    <input type="password" class="form-control" id="passwordInput" name="password" required>
                                 </div>
                                 <!--Confirm Password-->
                                 <div class="form-group">
-                                    <label for="cpassword">Confirm Password:</label>
-                                    <input type="password" class="form-control" id="cpasswordInput" name="cpassword">
+                                    <label for="confirmPassword">Confirm Password:</label>
+                                    <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" required>
                                 </div>
                                 <!--Full Name-->
                                 <div class="form-group">
                                     <label for="fullname">Full Name:</label>
-                                    <input type="text" class="form-control" id="fullnameInput" name="fullname">
+                                    <input type="text" class="form-control" id="fullnameInput" name="fullname" required>
                                 </div>
                                 <!--Email-->
                                 <div class="form-group">
                                     <label for="email">Email:</label>
-                                    <input type="text" class="form-control" id="emailInput" name="email">
+                                    <input type="text" class="form-control" id="emailInput" name="email" required>
                                 </div>
                                 <!--Phone-->
                                 <div class="form-group">
                                     <label for="phone">Phone:</label>
-                                    <input type="text" class="form-control" id="phoneInput" name="phone">
+                                    <input type="text" class="form-control" id="phoneInput" name="phone" required>
                                 </div>
                                 <!-- Role -->
                                 <input type="hidden" name="role" value="2">
@@ -289,13 +289,13 @@
     let usernamePattern = /^(?!.*\s).{6,}$/;
     let phonePattern = /^0\d{9}$/;
     let passwordPattern = /^(?!.*\s).{8,}$/;
-    let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-    let cPassword = form["cpassword"];
+    let emailPattern = /^[^@]+@[^@]+\.[^@]+$/; 
 
     let form = document.forms["addStaffForm"];
     let username = form["username"];
     let phone = form["phone"];
     let password = form["password"];
+    let confirmPassword = form["confirmPassword"];
     let fullname = form["fullname"];
     let email = form["email"];
     let role = form["role"];
@@ -308,42 +308,34 @@
     phone.setCustomValidity("");
     password.setCustomValidity("");
     email.setCustomValidity("");
-    cpassword.setCustomValidity("");
+    confirmPassword.setCustomValidity("");
 
     // Validate Fullname
     if (fullname.value.trim() === "") {
         fullname.setCustomValidity("Fullname cannot be empty.");
         isValid = false;
-    } else {
-        fullname.setCustomValidity("");
     }
 
     // Validate Username
     if (!usernamePattern.test(username.value)) {
         username.setCustomValidity("Username must be at least 6 characters and contain no spaces.");
         isValid = false;
-    } else {
-        username.setCustomValidity("");
     }
 
     // Validate Phone
     if (!phonePattern.test(phone.value)) {
         phone.setCustomValidity("Phone must be 10 digits, start with 0 and contain no spaces.");
         isValid = false;
-    } else {
-        phone.setCustomValidity("");
     }
 
     // Validate Password
     if (!passwordPattern.test(password.value)) {
         password.setCustomValidity("Password must be at least 8 characters and contain no spaces.");
         isValid = false;
-    } else {
-        password.setCustomValidity("");
     }
     
     // Validate Confirm Password
-    if (password.value !== cpassword.value) {
+    if (password.value !== confirmPassword.value) {
         cpassword.setCustomValidity("Confirm Password is different from Password.");
         isValid = false;
     }
@@ -352,8 +344,6 @@
     if (!emailPattern.test(email.value)) {
         email.setCustomValidity("Please enter a valid email address.");
         isValid = false;
-    } else {
-        email.setCustomValidity("");
     }
 
     if (!role.value) {
@@ -366,20 +356,8 @@
     }
 
     return true;
-    
-    let error = '';
-            $('.error').each(function () {
-                error += $(this).html();
-            });
-            if (error === '') {
-                $('#addStaffForm').submit();
-            } else {
-                event.preventDefault();
-            }
 }
-
-
-$(document).ready(function () {
+    $(document).ready(function () {
     $('#addStaffForm').submit(function(event) {
         if (!validateForm()) {
             event.preventDefault();
@@ -388,6 +366,9 @@ $(document).ready(function () {
         }
     });
 });
+
+
+
 
 
         function validateForm2() {
