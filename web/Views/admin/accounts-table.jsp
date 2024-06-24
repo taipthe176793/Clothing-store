@@ -141,6 +141,11 @@
                                     <label for="password">Password:</label>
                                     <input type="password" class="form-control" id="passwordInput" name="password">
                                 </div>
+                                <!--Confirm Password-->
+                                <div class="form-group">
+                                    <label for="cpassword">Confirm Password:</label>
+                                    <input type="password" class="form-control" id="cpasswordInput" name="cpassword">
+                                </div>
                                 <!--Full Name-->
                                 <div class="form-group">
                                     <label for="fullname">Full Name:</label>
@@ -285,6 +290,7 @@
     let phonePattern = /^0\d{9}$/;
     let passwordPattern = /^(?!.*\s).{8,}$/;
     let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+    let cPassword = form["cpassword"];
 
     let form = document.forms["addStaffForm"];
     let username = form["username"];
@@ -302,6 +308,7 @@
     phone.setCustomValidity("");
     password.setCustomValidity("");
     email.setCustomValidity("");
+    cpassword.setCustomValidity("");
 
     // Validate Fullname
     if (fullname.value.trim() === "") {
@@ -334,6 +341,12 @@
     } else {
         password.setCustomValidity("");
     }
+    
+    // Validate Confirm Password
+    if (password.value !== cpassword.value) {
+        cpassword.setCustomValidity("Confirm Password is different from Password.");
+        isValid = false;
+    }
 
     // Validate Email
     if (!emailPattern.test(email.value)) {
@@ -353,6 +366,16 @@
     }
 
     return true;
+    
+    let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#addStaffForm').submit();
+            } else {
+                event.preventDefault();
+            }
 }
 
 
