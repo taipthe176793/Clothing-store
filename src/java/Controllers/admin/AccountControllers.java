@@ -74,6 +74,20 @@ public class AccountControllers extends HttpServlet {
             List<Role> roleList = new ArrayList<>();
             roleList = rDAO.getRoleList();
 
+            String action = request.getParameter("role") == null ? "" : request.getParameter("role");
+            if (!action.isBlank()) {
+                switch (action) {
+                    case "customer":
+                        accountList = aDAO.getAllCustomer();
+                        break;
+                    case "staff":
+                        accountList = aDAO.getAllStaff();
+                        break;
+                    default:
+                }
+                request.setAttribute("role", action);
+            }
+
             HttpSession session = request.getSession();
             if (session.getAttribute("notification") != null) {
                 request.setAttribute("notification", session.getAttribute("notification"));
@@ -152,7 +166,6 @@ public class AccountControllers extends HttpServlet {
             String email = request.getParameter("email");
             String fullname = request.getParameter("fullname");
             String phone = request.getParameter("phone");
-            
 
             if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()
                     || fullname == null || fullname.trim().isEmpty() || email == null || email.trim().isEmpty()
@@ -187,5 +200,3 @@ public class AccountControllers extends HttpServlet {
         }
     }
 }
-
-    

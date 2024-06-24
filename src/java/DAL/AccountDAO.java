@@ -733,4 +733,90 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
+    public List<Account> getAllCustomer() throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Account> accountList = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT [account_id]\n"
+                        + "      ,[username]\n"
+                        + "      ,[password]\n"
+                        + "      ,[role_id]\n"
+                        + "      ,[email]\n"
+                        + "      ,[fullname]\n"
+                        + "      ,[phone]\n"
+                        + "  FROM [dbo].[account]\n"
+                        + "  where role_id = 3";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setFullname(rs.getString("fullname"));
+                    account.setEmail(rs.getString("email"));
+                    account.setPhone(rs.getString("phone"));
+                    accountList.add(account);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return accountList;
+    }
+
+    public List<Account> getAllStaff() throws SQLException {
+         Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Account> accountList = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT [account_id]\n"
+                        + "      ,[username]\n"
+                        + "      ,[password]\n"
+                        + "      ,[role_id]\n"
+                        + "      ,[email]\n"
+                        + "      ,[fullname]\n"
+                        + "      ,[phone]\n"
+                        + "  FROM [dbo].[account]\n"
+                        + "  where role_id = 2";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    account.setRoleId(rs.getInt("role_id"));
+                    account.setFullname(rs.getString("fullname"));
+                    account.setEmail(rs.getString("email"));
+                    account.setPhone(rs.getString("phone"));
+                    accountList.add(account);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return accountList;
+    }
+
 }
