@@ -69,26 +69,27 @@
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <form action="#">
-                                            <label for="role">Filter:</label>
-                                            <select onchange="filterByRole(this)" name="roleFilter" id="roleFilter" >
-                                                <option value="all">All</option>
-                                                <option value="customer">Customer</option>
-                                                <option value="staff">Staff</option>
-                                            </select>
-                                        </form>
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Username</th>
-                                                    <th>Full name</th>
-                                                    <th>Email</th>
-                                                    <th>Phone</th>
-                                                    <th>Role</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                            <input hidden value="${roleFilter}" id="selectedRole" />
+                                        <label for="role">Filter:</label>
+                                        <select onchange="filterByRole(this)" name="roleFilter" id="roleFilter" >
+                                            <option value="all">All</option>
+                                            <option value="customer">Customer</option>
+                                            <option value="staff">Staff</option>
+                                        </select>
+                                    </form>
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Username</th>
+                                                <th>Full name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Role</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
                                             <c:forEach items="${accountList}" var="account"> 
                                                 <tr>
@@ -430,7 +431,14 @@
                                         ;
 
                                         document.addEventListener('DOMContentLoaded', function () {
-                                            let selectFilter = document.querySelector('#role');
+                                            const roleFilterValue = document.getElementById('selectedRole').value;
+                                            const selectFilter = document.getElementById('roleFilter');
+
+                                            Array.from(selectFilter.options).forEach(option => {
+                                                if (option.value === roleFilterValue) {
+                                                    option.selected = true;
+                                                }
+                                            });
                                         });
                                         $(document).ready(function () {
         <c:if test="${notification != null}">
