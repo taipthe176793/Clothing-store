@@ -1958,7 +1958,7 @@ input.num-product::-webkit-inner-spin-button {
 }
 
 .table-shopping-cart .column-2 {
-    width: 220px;
+    width: 100px;
     font-size: 15px;
 }
 
@@ -1980,11 +1980,12 @@ input.num-product::-webkit-inner-spin-button {
 }
 
 .table-shopping-cart .table_row {
-    height: 185px;
+    height: 40px;
 }
 
 .table-shopping-cart .table_row td {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+    padding-top: 20px;
 }
 
 .table-shopping-cart .table_row td.column-1 {
