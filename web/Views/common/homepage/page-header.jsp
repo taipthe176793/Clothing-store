@@ -23,7 +23,7 @@
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         Help & FAQs
                     </a>
-                    
+
                     <c:set var="cookie" value="${pageContext.request.cookies}"></c:set>
 
                     <c:if test="${cookie.userId.value eq null}">
@@ -84,8 +84,9 @@
                         <i class="zmdi zmdi-search"></i>
                     </div>
 
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart">
-                        <i onclick="location.href='${pageContext.request.contextPath}/cart'" class="zmdi zmdi-shopping-cart"></i>
+                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-cart <c:if test="${not empty cookie.cart.value.trim()}"> icon-header-noti</c:if>" 
+                         data-notify="${cookie.cin.value.trim() eq "" ? "" : cookie.cin.value}">
+                        <i onclick="location.href = '${pageContext.request.contextPath}/cart'" class="zmdi zmdi-shopping-cart"></i>
                     </div>
 
                     <a href="${pageContext.request.contextPath}/customer/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti-wishlist" >

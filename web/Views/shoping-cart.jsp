@@ -66,7 +66,7 @@
                 <buttton class="btn text-white mt-3 font-weight-bold pointer" style=" background-color: orange; font-size: 20px" onclick="location.href = 'shop'">Go Shopping now</buttton>
             </div>
         </c:if>
-        <div class="bg0 p-t-75 p-b-85">
+        <div class="bg0 p-t-40 p-b-85">
 
             <div id="alert" class="alert-box alert-box-danger">
                 Please select at least one item before proceeding to checkout.
@@ -76,9 +76,11 @@
                 <div class="container">
                     <form id="mainCartForm" action="cart?action=checkout" method="post" onsubmit="return validateCheckout()">
                         <div class="row">
+                            <h5 class="col-lg-10 col-xl-7 m-l-28 m-b-20 font-weight-bold">Available Products</h5>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                                 <div class="m-l-25 m-r--38 m-lr-0-xl">
-                                    <h5 class="m-b-20 font-weight-bold">Available Products</h5>
                                     <div class="wrap-table-shopping-cart">
 
                                         <table class="table-shopping-cart">
@@ -179,7 +181,7 @@
                                                 <th class="column-1">Price</th>
                                                 <th class="column-1" style="padding-left: 60px;">Quantity</th>
                                                 <th class="column-5" style="text-align: start;">Total</th>
-                                                <th class="p-r-45">Action</th>
+                                                <th class="" style="padding-right: 25px;">Action</th>
                                             </tr>
                                             <c:forEach items="${cart}" var="item">
 
@@ -220,7 +222,7 @@
                                                     <form action="cart?action=delete" method="post">
                                                         <input name="itemIdDelete" value="${item.getProductVariantId()}" hidden=""/>
                                                         <input name="cItemIdDelete" value="${item.getCartItemId()}" hidden=""/>
-                                                        <td class="p-r-15">
+                                                        <td class="">
                                                             <button onclick="this.closest('form').submit()" class="btn btn-danger text-white" />
                                                             <i class="bi bi-trash"></i>
                                                             </button>
@@ -351,9 +353,16 @@
         <script>
                                         document.addEventListener('DOMContentLoaded', function () {
 
-                                            document.querySelector('#subTotalTxt').innerText = "$ 0.0";
-                                            document.querySelector('#discountTxt').innerText = "$ 0.0";
-                                            document.querySelector('#totalTxt').innerText = "$ 0.0";
+                                            let subTotalTxt = document.querySelector('#subTotalTxt');
+                                            subTotalTxt.innerText = "$ 0.0";
+                                            let discountTxt = document.querySelector('#discountTxt');
+                                            discountTxt.innerText = "$ 0.0";
+                                            let totalTxt = document.querySelector('#totalTxt');
+                                            totalTxt.innerText = "$ 0.0";
+
+                                            let subTotal = parseFloat(subTotalTxt.textContent.trim().replace('$', '').trim());
+                                            let total = parseFloat(totalTxt.textContent.trim().replace('$', '').trim());
+                                            const discount = parseFloat(document.querySelector('#discount').value);
 
                                             const inputs = document.querySelectorAll('input[id="num-product"]');
 
@@ -440,10 +449,8 @@
 
                                             const checkboxs = document.querySelectorAll('input[id="itemSelected"]');
 
-                                            let subTotal = 0;
-                                            const discountTxt = document.querySelector('#discountTxt').textContent.trim();
-                                            const discount = parseFloat(document.querySelector('#discount').value);
-                                            let total = 0;
+                                            subTotal = 0;
+                                            total = 0;
 
                                             checkboxs.forEach(function (checkbox) {
                                                 const itemTotalText = checkbox.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
@@ -458,15 +465,14 @@
                                                     } else {
                                                         subTotal -= itemTotal;
                                                     }
-                                                    let subTotalDisplay = document.querySelector('#subTotalTxt');
-                                                    subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
-                                                    let totalText = document.querySelector('#totalTxt');
+                                                    document.querySelector('#selectAll').checked = false;
+                                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
                                                     if (subTotal === 0) {
-                                                        totalText.innerText = "$ 0.0";
+                                                        totalTxt.innerText = "$ 0.0";
                                                     } else {
-                                                        document.querySelector('#discountTxt').innerText = (subTotal * discount / 100);
+                                                        discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
                                                         total = subTotal - (subTotal * discount / 100);
-                                                        totalText.innerText = "$ " + total.toFixed(1);
+                                                        totalTxt.innerText = "$ " + total.toFixed(1);
                                                         document.querySelector('#totalAmount').value = total;
                                                     }
                                                 });
@@ -475,45 +481,32 @@
                                             const checkBoxAll = document.querySelector('#selectAll');
 
                                             checkBoxAll.addEventListener('change', function () {
-                                                let totalText = document.querySelector('#totalTxt');
+                                                subTotal = 0;
                                                 if (checkBoxAll.checked) {
-                                                    subTotal = 0;
-                                                    total = 0;
                                                     checkboxs.forEach(function (checkbox) {
                                                         const itemTotalText = checkbox.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
                                                         const itemTotal = parseFloat(itemTotalText.replace('$', '').trim());
                                                         if (!checkbox.checked) {
                                                             checkbox.checked = true;
-                                                            subTotal += itemTotal;
                                                         }
+                                                        subTotal += itemTotal;
                                                     });
-
+                                                    discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
+                                                    total = subTotal - (subTotal * discount / 100);
+                                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
+                                                    totalTxt.innerText = "$ " + total.toFixed(1);
                                                 } else {
                                                     checkboxs.forEach(function (checkbox) {
-                                                        const itemTotalText = checkbox.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
-                                                        const itemTotal = parseFloat(itemTotalText.replace('$', '').trim());
                                                         if (checkbox.checked) {
                                                             checkbox.checked = false;
-                                                            subTotal -= itemTotal;
                                                         }
-
                                                     });
-
+                                                    discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
+                                                    total = subTotal;
+                                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
+                                                    totalTxt.innerText = "$ " + total.toFixed(1);
                                                 }
-
-                                                totalText.innerText = "$ " + total.toFixed(1);
                                             });
-
-                                            let subTotalDisplay = document.querySelector('#subTotalTxt');
-                                            subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
-                                            let totalText = document.querySelector('#totalTxt');
-                                            if (subTotal === 0) {
-                                                totalText.innerText = "$ 0.0";
-                                            } else {
-                                                total = subTotal - discount;
-                                                totalText.innerText = "$ " + total.toFixed(1);
-                                                document.querySelector('#totalAmount').value = total;
-                                            }
 
                                             let tableTitle = document.querySelector('#inactiveTitle');
                                             let table = document.querySelector('#inactiveTable');

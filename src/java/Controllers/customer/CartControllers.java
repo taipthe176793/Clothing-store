@@ -242,6 +242,11 @@ public class CartControllers extends HttpServlet {
             Cookie cart = new Cookie("cart", txt);
             cart.setMaxAge(60 * 60 * 24 * 7);
             response.addCookie(cart);
+            
+            Cookie cartItemNum = new Cookie("cin", txt.split("/").length + "");
+            cartItemNum.setMaxAge(60 * 60 * 24 * 7);
+            response.addCookie(cartItemNum);
+            
             //check if user is logged in
             if (!userId.isBlank()) {
                 AccountDAO accountDAO = new AccountDAO();
@@ -317,6 +322,9 @@ public class CartControllers extends HttpServlet {
         Cookie cartCookie = new Cookie("cart", account.cartToCookieValue());
         cartCookie.setMaxAge(60 * 60 * 24 * 7);
         response.addCookie(cartCookie);
+        Cookie cartItemNum = new Cookie("cin", cartCookie.getValue().split("/").length + "");
+            cartItemNum.setMaxAge(60 * 60 * 24 * 7);
+            response.addCookie(cartItemNum);
     }
 
     private void updateCartItemId(int customerId, List<CartItem> cartItems) {
@@ -378,6 +386,9 @@ public class CartControllers extends HttpServlet {
             Cookie cartCookie = new Cookie("cart", cartTxt);
             cartCookie.setMaxAge(60 * 60 * 24 * 7);
             response.addCookie(cartCookie);
+            Cookie cartItemNum = new Cookie("cin", cartTxt.split("/").length + "");
+            cartItemNum.setMaxAge(60 * 60 * 24 * 7);
+            response.addCookie(cartItemNum);
 
         } catch (SQLException ex) {
             Logger.getLogger(CartControllers.class
