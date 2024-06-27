@@ -30,6 +30,9 @@
                         <a href="${pageContext.request.contextPath}/auth?action=login" class="flex-c-m trans-04 p-lr-25">
                             Login
                         </a>
+                            <a href="${pageContext.request.contextPath}/auth?action=signup" class="flex-c-m trans-04 p-lr-25">
+                            Register
+                        </a>
                     </c:if>
 
                     <c:if test="${cookie.userId.value ne null}">

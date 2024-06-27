@@ -74,7 +74,7 @@ public class CartControllers extends HttpServlet {
             throws ServletException, IOException {
         try {
             if (request.getSession().getAttribute("discount") != null) {
-                request.setAttribute("discount", (int) request.getSession().getAttribute("discount"));
+                request.setAttribute("discount", (double) request.getSession().getAttribute("discount"));
                 request.getSession().invalidate();
             }
             ProductDAO pDAO = new ProductDAO();
