@@ -495,6 +495,7 @@
                                                     total = subTotal - (subTotal * discount / 100);
                                                     subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
                                                     totalTxt.innerText = "$ " + total.toFixed(1);
+                                                    document.querySelector('#totalAmount').value = total;
                                                 } else {
                                                     checkboxs.forEach(function (checkbox) {
                                                         if (checkbox.checked) {
@@ -505,6 +506,7 @@
                                                     total = subTotal;
                                                     subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
                                                     totalTxt.innerText = "$ " + total.toFixed(1);
+                                                    document.querySelector('#totalAmount').value = total;
                                                 }
                                             });
 

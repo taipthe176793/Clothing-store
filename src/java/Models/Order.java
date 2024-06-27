@@ -13,6 +13,7 @@ import java.util.List;
  * @author admin
  */
 public class Order {
+
     private int orderId;
     private int customerId;
     private int totalAmount;
@@ -21,12 +22,16 @@ public class Order {
     private Timestamp createdAt;
     private String status;
     private String trackingCode;
+    private int addressId;
+    private String email;
+    private String fullname;
+    private String phone;
     List<OrderDetails> listOrderDetails = new ArrayList<>();
 
     public Order() {
     }
 
-    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode) {
+    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, int addressId, String email, String fullname, String phone) {
         this.customerId = customerId;
         this.totalAmount = totalAmount;
         this.discount = discount;
@@ -34,9 +39,13 @@ public class Order {
         this.createdAt = createdAt;
         this.status = status;
         this.trackingCode = trackingCode;
+        this.addressId = addressId;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
     }
 
-    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode) {
+    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, int addressId, String email, String fullname, String phone) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.totalAmount = totalAmount;
@@ -45,6 +54,10 @@ public class Order {
         this.createdAt = createdAt;
         this.status = status;
         this.trackingCode = trackingCode;
+        this.addressId = addressId;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
     }
 
     public int getOrderId() {
@@ -119,11 +132,41 @@ public class Order {
         this.trackingCode = trackingCode;
     }
 
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
-        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", discount=" + discount + ", isPaid=" + isPaid + ", createdAt=" + createdAt + ", status=" + status + ", trackingCode=" + trackingCode + '}';
+        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", discount=" + discount + ", isPaid=" + isPaid + ", createdAt=" + createdAt + ", status=" + status + ", trackingCode=" + trackingCode + ", addressId=" + addressId + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", listOrderDetails=" + listOrderDetails + '}';
     }
-    
-    
-    
+
 }
