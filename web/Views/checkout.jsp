@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Check out</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -83,7 +83,7 @@
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <img style="width: 50px; height: 50px; margin-right: 10px " src="${product.getImg1()}" alt="product IMG" />
-                                            <h6 class="my-0">${product.getName()}<br /><small class="text-muted">${v.getColor()}, ${v.getSize()}: 2</small></h6>
+                                            <h6 class="my-0">${product.getName()}<br /><small class="text-muted">${v.getColor()}, ${v.getSize()} x ${v.getQuantity()}</small></h6>
                                         </div>
 
                                     </div>
@@ -117,46 +117,123 @@
                         <h4 class="mb-3">Shipping information</h4>
 
                         <div class="row">
-                            <div class="col-md-12">
-                                <label for="fullname">Fullname</label>
-                                <input type="text" class="form-control" name="fullname" id="fullname"
-                                       value="${account.getFullname()}" ${account ne null ? "readonly" : ""}>
+                            <div class="col-md-6">
+                                <label for="fullname">Fullname <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control mb-3" name="fullname" id="fullname"
+                                       value="${account.getFullname()}" ${account ne null ? "readonly" : ""} required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email">Email <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control mb-3" name="email" id="email"
+                                       value="${account.getEmail()}" ${account ne null ? "readonly" : ""} required>
                             </div>
                             <c:if test="${account eq null}">
-                                <div class="col-md-12">
-                                    <label for="address">Address</label>
-                                    <input type="text" class="form-control" name="address" id="address"
-                                           value="">
+                                <div class="col-md-6">
+                                    <label for="city">City <span class="text-danger">*</span></label>
+                                    <select class="form-select mb-3" id="city" aria-label=".form-select-sm" required>
+                                        <option value="" selected>Choose city</option>           
+                                    </select>
                                 </div>
-                                <div class="col-md-12">
-                                    <label for="phone">Phone number</label>
+                                <div class="col-md-6">
+                                    <label for="district">District <span class="text-danger">*</span></label>
+                                    <select class="form-select mb-3" id="district" aria-label=".form-select-sm" required>
+                                        <option value="" selected>Choose district</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ward">Ward <span class="text-danger">*</span></label>
+                                    <select class="form-select mb-3" id="ward" aria-label=".form-select-sm" required>
+                                        <option value="" selected>Choose ward</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="stAddress">Street Address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="stAddress" id="stAddress"
+                                           value="" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone">Phone number <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="phone" id="phone"
-                                           value="" >
+                                           value="" required>
                                 </div>
                             </c:if>
                             <c:if test="${account ne null}">
                                 <c:if test="${account.getAddresses().size() == 0}">
-
+                                    <div class="col-md-6">
+                                        <label for="city">City <span class="text-danger">*</span></label>
+                                        <select class="form-select mb-3" id="city" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose city</option>           
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="district">District <span class="text-danger">*</span></label>
+                                        <select class="form-select mb-3" id="district" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose district</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="ward">Ward <span class="text-danger">*</span></label>
+                                        <select class="form-select mb-3" id="ward" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose ward</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="stAddress">Street Address <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="stAddress" id="stAddress"
+                                               value="" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone">Phone number <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="phone" id="phone"
+                                               value="" required>
+                                    </div>
                                 </c:if>
                                 <c:if test="${account.getAddresses().size() > 0}">
-                                    <div class="col-md-12 mb-2">
+                                    <div class="col-md-12 mb-3" id="cusAddress">
                                         <label for="address">Address</label>
                                         <select name="address" class="form-select" id="addressDropdown">
                                             <c:forEach items="${account.getAddresses()}" var="address">
                                                 <option value="${address.getAddressId()}" 
-                                                        ${address.isIsDefault() ? "selected" : ""}> Address: ${address.getAddress()} 
-                                                    - Phone: ${address.getPhone()} ${address.isIsDefault() 
-                                                               ? " - Default" : ""}</option>
+                                                        ${address.isIsDefault() ? "selected" : ""}> ${address.getAddress()} 
+                                                    - ${address.getPhone()} ${address.isIsDefault() 
+                                                        ? " - Default" : ""}</option>
                                                 </c:forEach>
                                         </select> 
+                                        <button type="button" class="btn btn-secondary btn-sm mt-3" onclick="handleAddNewAddress()">Use another address</button>
                                     </div>
+                                    <div class="col-md-6 d-none" name="cusNewAddress">
+                                        <label for="city">City <span class="text-danger">*</span></label>
+                                        <select class="form-select mb-3" id="city" aria-label=".form-select-sm">
+                                            <option value="" selected>Choose city</option>           
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 d-none" name="cusNewAddress">
+                                        <label for="district">District <span class="text-danger">*</span></label>
+                                        <select class="form-select mb-3" id="district" aria-label=".form-select-sm">
+                                            <option value="" selected>Choose district</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 d-none" name="cusNewAddress">
+                                        <label for="ward">Ward <span class="text-danger">*</span></label>
+                                        <select class="form-select mb-3" id="ward" aria-label=".form-select-sm">
+                                            <option value="" selected>Choose ward</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 d-none" name="cusNewAddress">
+                                        <label for="stAddress">Street Address <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="stAddress" id="stAddress"
+                                               value="">
+                                    </div>
+                                    <div class="col-md-6 d-none" name="cusNewAddress">
+                                        <label for="phone">Phone number <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="phone" id="phone"
+                                               value="">
+                                    </div>
+                                    <span>
+                                        <button type="button" class="btn btn-secondary btn-sm mt-3 d-none" id="selectAddressBtn" onclick="handleSelectAddress()">Select from Address List</button>
+                                    </span>
                                 </c:if>
                             </c:if>
-                            <div class="col-md-12">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" name="email" id="email"
-                                       value="${account.getEmail()}" ${account ne null ? "readonly" : ""}>
-                            </div>
                         </div>
 
                         <h4 class="mt-3 mb-3">Payment method</h4>
@@ -178,7 +255,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
 
         <div id="alert" class="alert-box alert-box-danger">
@@ -207,21 +283,21 @@
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
         <script>
-                                $('.parallax100').parallax100();
+                                            $('.parallax100').parallax100();
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
         <script>
-                                $('.gallery-lb').each(function () { // the containers for all your galleries
-                                    $(this).magnificPopup({
-                                        delegate: 'a', // the selector for gallery item
-                                        type: 'image',
-                                        gallery: {
-                                            enabled: true
-                                        },
-                                        mainClass: 'mfp-fade'
-                                    });
-                                });
+                                            $('.gallery-lb').each(function () { // the containers for all your galleries
+                                                $(this).magnificPopup({
+                                                    delegate: 'a', // the selector for gallery item
+                                                    type: 'image',
+                                                    gallery: {
+                                                        enabled: true
+                                                    },
+                                                    mainClass: 'mfp-fade'
+                                                });
+                                            });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
@@ -230,18 +306,18 @@
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
         <script>
-                                $('.js-pscroll').each(function () {
-                                    $(this).css('position', 'relative');
-                                    $(this).css('overflow', 'hidden');
-                                    var ps = new PerfectScrollbar(this, {
-                                        wheelSpeed: 1,
-                                        scrollingThreshold: 1000,
-                                        wheelPropagation: false,
-                                    });
-                                    $(window).on('resize', function () {
-                                        ps.update();
-                                    })
-                                });
+                                            $('.js-pscroll').each(function () {
+                                                $(this).css('position', 'relative');
+                                                $(this).css('overflow', 'hidden');
+                                                var ps = new PerfectScrollbar(this, {
+                                                    wheelSpeed: 1,
+                                                    scrollingThreshold: 1000,
+                                                    wheelPropagation: false,
+                                                });
+                                                $(window).on('resize', function () {
+                                                    ps.update();
+                                                })
+                                            });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
@@ -249,75 +325,146 @@
         <script>
 
 
-                                function validateCheckout() {
-                                    const radio = document.querySelector('input[id="pmethod"]:checked');
-                                    let alertBox = document.getElementById('alert');
-                                    if (!radio) {
-                                        alertBox.style.display = 'block';
-                                        alertBox.style.opacity = '1';
-                                        setTimeout(function () {
-                                            alertBox.style.opacity = '0';
-                                            setTimeout(function () {
-                                                alertBox.classList.add('show');
-                                            }, 500);
-                                        }, 3500);
-                                        return false;
-                                    } else {
-                                        alertBox.classList.remove('show');
-                                    }
+                                            function validateCheckout() {
+                                                const radio = document.querySelector('input[id="pmethod"]:checked');
+                                                let alertBox = document.getElementById('alert');
+                                                if (!radio) {
+                                                    alertBox.style.display = 'block';
+                                                    alertBox.style.opacity = '1';
+                                                    setTimeout(function () {
+                                                        alertBox.style.opacity = '0';
+                                                        setTimeout(function () {
+                                                            alertBox.classList.add('show');
+                                                        }, 500);
+                                                    }, 3500);
+                                                    return false;
+                                                } else {
+                                                    alertBox.classList.remove('show');
+                                                }
 
-                                    return true;
-                                }
-                                function backToCart() {
-                                    let form = document.createElement('form');
-                                    form.action = "cart";
-                                    form.method = "get";
-                                    document.appendChild(form);
-                                    form.submit();
-                                }
+                                                return true;
+                                            }
+                                            function backToCart() {
+                                                let form = document.createElement('form');
+                                                form.action = "cart";
+                                                form.method = "get";
+                                                document.appendChild(form);
+                                                form.submit();
+                                            }
 
-                                document.addEventListener('DOMContentLoaded', function () {
+                                            function handleAddNewAddress() {
+                                                let addNewAddressInputs = document.querySelectorAll('div[name="cusNewAddress"]');
+                                                addNewAddressInputs.forEach((input) => {
+                                                    input.classList.remove("d-none");
+                                                    input.setAttribute('required', '');
+                                                })
+                                                let selectAddressBtn = document.querySelector('#selectAddressBtn');
+                                                selectAddressBtn.classList.remove("d-none");
+                                                let selectAddress = document.querySelector('#cusAddress');
+                                                selectAddress.classList.add("d-none");
+                                                let selectTag = selectAddress.querySelector('select[id="addressDropdown"]');
+                                                selectTag.removeAttribute("name");
+                                            }
 
-                                    let subTotalTxt = document.querySelector('#subTotal');
+                                            function handleSelectAddress() {
+                                                let addNewAddressInputs = document.querySelectorAll('div[name="cusNewAddress"]');
+                                                addNewAddressInputs.forEach((input) => {
+                                                    input.classList.add("d-none");
+                                                    input.removeAttribute('required');
+                                                })
+                                                let selectAddressBtn = document.querySelector('#selectAddressBtn');
+                                                selectAddressBtn.classList.add("d-none");
+                                                let selectAddress = document.querySelector('#cusAddress');
+                                                selectAddress.classList.remove("d-none");
+                                                let selectTag = selectAddress.querySelector('select[id="addressDropdown"]');
+                                                selectTag.setAttribute("name", "address");
+                                            }
 
-                                    const itemPricesTxt = document.querySelectorAll('#itemPrice');
+                                            document.addEventListener('DOMContentLoaded', function () {
 
-                                    let subTotal = 0;
+                                                let subTotalTxt = document.querySelector('#subTotal');
 
-                                    if (itemPricesTxt.length > 0) {
+                                                const itemPricesTxt = document.querySelectorAll('#itemPrice');
 
-                                        itemPricesTxt.forEach(function (priceTxt) {
+                                                let subTotal = 0;
 
-                                            subTotal += parseFloat(priceTxt.textContent.trim().replace('$', '').trim());
+                                                if (itemPricesTxt.length > 0) {
 
-                                        });
+                                                    itemPricesTxt.forEach(function (priceTxt) {
 
-                                    }
+                                                        subTotal += parseFloat(priceTxt.textContent.trim().replace('$', '').trim());
 
-                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
+                                                    });
 
-                                });
+                                                }
 
-                                $(document).ready(function () {
-                                    $('#addressDropdown').select2({
+                                                subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
 
-                                        templateResult: formatOption
-                                    });
+                                            });
 
-                                    function formatOption(data) {
-                                        if (!data.id) {
-                                            return data.text;
-                                        }
+                                            $(document).ready(function () {
+                                                $('#addressDropdown').select2({
 
-                                        var parts = data.text.split('-');
-                                        var $result = $(
-                                                '<span>' + parts[0] + '<br>' + parts[1] + (parts[2] === undefined ? '</small></span>' : '<br><small>' + parts[2] + '</small></span>')
-                                                );
-                                        return $result;
-                                    }
+                                                    templateResult: formatOption
+                                                });
 
-                                });
+                                                function formatOption(data) {
+                                                    if (!data.id) {
+                                                        return data.text;
+                                                    }
 
+                                                    var parts = data.text.split('-');
+                                                    var $result = $('<span>' + parts[0] + '<br>' + parts[1] +
+                                                            (parts[2] === undefined ? '</small></span>' : '<br><small>' + parts[2] + '</small></span>'));
+                                                    return $result;
+                                                }
+
+                                            });
+
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+        <script>
+                                            var citis = document.getElementById("city");
+                                            var districts = document.getElementById("district");
+                                            var wards = document.getElementById("ward");
+                                            var Parameter = {
+                                                url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+                                                method: "GET",
+                                                responseType: "application/json",
+                                            };
+                                            var promise = axios(Parameter);
+                                            promise.then(function (result) {
+                                                renderCity(result.data);
+                                            });
+
+                                            function renderCity(data) {
+                                                for (const x of data) {
+                                                    citis.options[citis.options.length] = new Option(x.Name, x.Id);
+                                                }
+                                                citis.onchange = function () {
+                                                    district.length = 1;
+                                                    ward.length = 1;
+                                                    if (this.value != "") {
+                                                        const result = data.filter(n => n.Id === this.value);
+
+                                                        for (const k of result[0].Districts) {
+                                                            district.options[district.options.length] = new Option(k.Name, k.Id);
+                                                        }
+                                                    }
+                                                };
+                                                district.onchange = function () {
+                                                    ward.length = 1;
+                                                    const dataCity = data.filter((n) => n.Id === citis.value);
+                                                    if (this.value != "") {
+                                                        const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                                                        for (const w of dataWards) {
+                                                            wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                                                        }
+                                                    }
+                                                };
+                                            }
         </script>
 
     </body>

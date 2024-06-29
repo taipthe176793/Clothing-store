@@ -309,7 +309,7 @@
         if (discount.trim() === '') {
             $('#discountError').html('Discount cannot be empty!');
             isValid = false;
-        } else if (!$.isNumeric(discount) || parseInt(discount) < 0 || parseInt(discount) > 100) {
+        } else if (!$.isNumeric(discount) || parseInt(discount) < 1 || parseInt(discount) > 60) {
             $('#discountError').html('Invalid Discount');
             isValid = false;
         }
@@ -317,7 +317,7 @@
         if (quantity.trim() === '') {
             $('#quantityError').html('Quantity cannot be empty!');
             isValid = false;
-        } else if (!$.isNumeric(quantity) || parseInt(quantity) < 0) {
+        } else if (!$.isNumeric(quantity) || parseInt(quantity) < 1) {
             $('#quantityError').html('Invalid Quantity');
             isValid = false;
         }
@@ -341,7 +341,7 @@
 
         let today = new Date().setHours(0, 0, 0, 0);
         if (startAt !== '' && new Date(startAt).setHours(0, 0, 0, 0) < today) {
-            $('#startDateError').html('Start date must be today or later!');
+            $('#startDateError').html('Start date must be tomorrow or later!');
             isValid = false;
         }
 

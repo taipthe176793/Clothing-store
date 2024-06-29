@@ -66,7 +66,7 @@
                 <buttton class="btn text-white mt-3 font-weight-bold pointer" style=" background-color: orange; font-size: 20px" onclick="location.href = 'shop'">Go Shopping now</buttton>
             </div>
         </c:if>
-        <div class="bg0 p-t-75 p-b-85">
+        <div class="bg0 p-t-40 p-b-85">
 
             <div id="alert" class="alert-box alert-box-danger">
                 Please select at least one item before proceeding to checkout.
@@ -76,9 +76,11 @@
                 <div class="container">
                     <form id="mainCartForm" action="cart?action=checkout" method="post" onsubmit="return validateCheckout()">
                         <div class="row">
+                            <h5 class="col-lg-10 col-xl-7 m-l-28 m-b-20 font-weight-bold">Available Products</h5>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                                 <div class="m-l-25 m-r--38 m-lr-0-xl">
-                                    <h5 class="m-b-20 font-weight-bold">Available Products</h5>
                                     <div class="wrap-table-shopping-cart">
 
                                         <table class="table-shopping-cart">
@@ -111,13 +113,15 @@
 
                                                 <c:if test="${v.getQuantity() > 0 && !v.isIsDeleted()}">
                                                     <tr class="table_row">
-
                                                         <td style="padding: 0 10px;" class="">
                                                             <input id="itemSelected" type="checkbox" class="form-check" name="cartItem" value="${item.getCartItemId()}-${item.getProductVariantId()}-${item.getQuantity()}"/>
+                                                            <input name="itemId" value="${item.getProductVariantId()}" hidden=""/>
+                                                            <input name="cItemId" value="${item.getCartItemId()}" hidden=""/>
+                                                            <input name="cItemQuantity" value="${item.getQuantity()}" hidden=""/>
                                                         </td>
                                                         <td class="">
                                                             <div class="" style="padding: 0">
-                                                                <img src="${p.getImg1()}" style="margin: 0; height: 60px; width: 60px" alt="IMG">
+                                                                <img src="${p.getImg1()}" style="margin: 0 10px 0 0; height: 60px; width: 60px" alt="IMG">
                                                             </div>
                                                         </td>
                                                         <td class="column-2">
@@ -135,13 +139,13 @@
                                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                                 </div>
                                                             </div>
-                                                            <p class="${v.getQuantity() < 10 ? "text-danger" : "text-success"} text-center">${v.getQuantity()} items left</p>
+                                                            <p class="${v.getQuantity() < 10 ? "text-danger" : "text-success"} text-center" style="font-size: 12px;">${v.getQuantity()} items left</p>
                                                         </td>
                                                         <td id="itemTotal" class="column-5">$ ${item.getQuantity() * p.getPrice()}</td>
                                                     <form action="cart?action=delete" method="post">
                                                         <input name="itemIdDelete" value="${item.getProductVariantId()}" hidden=""/>
                                                         <input name="cItemIdDelete" value="${item.getCartItemId()}" hidden=""/>
-                                                        <td class="p-r-15 text-center">
+                                                        <td class="p-r-15 ">
                                                             <button onclick="this.closest('form').submit()" class="btn btn-danger text-white" />
                                                             <i class="bi bi-trash"></i>
                                                             </button>
@@ -171,12 +175,13 @@
                                     <div class="wrap-table-shopping-cart">
                                         <table class="table-shopping-cart" id="inactiveTable" style="display: none">
                                             <tr class="table_head">
-                                                <th class="column-5">Product</th>
-                                                <th class="column-5"></th>
+                                                <th class=" d-flex justify-content-center">Status</th>
+                                                <th ></th>
                                                 <th class="column-2">Name</th>
-                                                <th class="column-3">Price</th>
-                                                <th class="column-1">Quantity</th>
-                                                <th class="p-r-15">Action</th>
+                                                <th class="column-1">Price</th>
+                                                <th class="column-1" style="padding-left: 60px;">Quantity</th>
+                                                <th class="column-5" style="text-align: start;">Total</th>
+                                                <th class="" style="padding-right: 25px;">Action</th>
                                             </tr>
                                             <c:forEach items="${cart}" var="item">
 
@@ -197,26 +202,27 @@
                                                 <c:if test="${v.getQuantity() == 0 || v.isIsDeleted()}">
                                                     <tr class="table_row">
 
-                                                        <td class="column-5 text-center">
+                                                        <td class="column-2 text-center">
                                                             <p class="text-white bg-secondary" style="border: solid 1px gray; margin-left: 10px; border-radius: 100px;">${v.getQuantity() == 0 ? "Sold out" : "Inactive"}</p>
                                                         </td>
                                                         <td class="">
                                                             <div class="">
-                                                                <img src="${p.getImg1()}" style="margin: 0; height: 60px; width: 60px" alt="IMG">
+                                                                <img src="${p.getImg1()}" style="margin: 0 5px; height: 60px; width: 60px" alt="IMG">
                                                             </div>
                                                         </td>
                                                         <td class="column-2">
                                                             <p style="font-weight: 700">${p.getName()}</p>
                                                             <p style="font-size: 10px">${v.getColor()}, ${v.getSize()}</p>
                                                         </td>
-                                                        <td class="column-3">$ ${p.getPrice()}</td>
-                                                        <td class="column-4">
-                                                            <input class=" txt-center " type="number" value="0" readonly />
+                                                        <td class="column-1">$ ${p.getPrice()}</td>
+                                                        <td class="column-2">
+                                                            <input class=" txt-center " type="number" value="1" readonly />
                                                         </td>
+                                                        <td class="column-5" style="text-align: start;">$ ${p.getPrice()}</td>
                                                     <form action="cart?action=delete" method="post">
                                                         <input name="itemIdDelete" value="${item.getProductVariantId()}" hidden=""/>
                                                         <input name="cItemIdDelete" value="${item.getCartItemId()}" hidden=""/>
-                                                        <td class="p-r-15 text-center">
+                                                        <td class="">
                                                             <button onclick="this.closest('form').submit()" class="btn btn-danger text-white" />
                                                             <i class="bi bi-trash"></i>
                                                             </button>
@@ -262,7 +268,7 @@
                                             <span class="mtext-110 cl2" id="discountTxt"></span>
                                         </div>
                                     </div>
-                                    <input name="discount" id="discount" hidden="" type="number" value="${discount}"/>
+                                    <input name="discount" id="discount" hidden="" type="number" value="${discount ne null ? discount : 0}"/>
 
                                     <div class="flex-w flex-t p-t-27 p-b-33">
                                         <div class="size-208">
@@ -347,9 +353,16 @@
         <script>
                                         document.addEventListener('DOMContentLoaded', function () {
 
-                                            document.querySelector('#subTotalTxt').innerText = "$ 0.0";
-                                            document.querySelector('#discountTxt').innerText = "$ 0.0";
-                                            document.querySelector('#totalTxt').innerText = "$ 0.0";
+                                            let subTotalTxt = document.querySelector('#subTotalTxt');
+                                            subTotalTxt.innerText = "$ 0.0";
+                                            let discountTxt = document.querySelector('#discountTxt');
+                                            discountTxt.innerText = "$ 0.0";
+                                            let totalTxt = document.querySelector('#totalTxt');
+                                            totalTxt.innerText = "$ 0.0";
+
+                                            let subTotal = parseFloat(subTotalTxt.textContent.trim().replace('$', '').trim());
+                                            let total = parseFloat(totalTxt.textContent.trim().replace('$', '').trim());
+                                            const discount = parseFloat(document.querySelector('#discount').value);
 
                                             const inputs = document.querySelectorAll('input[id="num-product"]');
 
@@ -436,10 +449,8 @@
 
                                             const checkboxs = document.querySelectorAll('input[id="itemSelected"]');
 
-                                            let subTotal = 0;
-                                            const discountTxt = document.querySelector('#discountTxt').textContent.trim();
-                                            const discount = parseFloat(document.querySelector('#discount').value);
-                                            let total = 0;
+                                            subTotal = 0;
+                                            total = 0;
 
                                             checkboxs.forEach(function (checkbox) {
                                                 const itemTotalText = checkbox.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
@@ -454,15 +465,14 @@
                                                     } else {
                                                         subTotal -= itemTotal;
                                                     }
-                                                    let subTotalDisplay = document.querySelector('#subTotalTxt');
-                                                    subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
-                                                    let totalText = document.querySelector('#totalTxt');
+                                                    document.querySelector('#selectAll').checked = false;
+                                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
                                                     if (subTotal === 0) {
-                                                        totalText.innerText = "$ 0.0";
+                                                        totalTxt.innerText = "$ 0.0";
                                                     } else {
-                                                        document.querySelector('#discountTxt').innerText = (subTotal * discount / 100);
+                                                        discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
                                                         total = subTotal - (subTotal * discount / 100);
-                                                        totalText.innerText = "$ " + total.toFixed(1);
+                                                        totalTxt.innerText = "$ " + total.toFixed(1);
                                                         document.querySelector('#totalAmount').value = total;
                                                     }
                                                 });
@@ -471,31 +481,34 @@
                                             const checkBoxAll = document.querySelector('#selectAll');
 
                                             checkBoxAll.addEventListener('change', function () {
+                                                subTotal = 0;
                                                 if (checkBoxAll.checked) {
                                                     checkboxs.forEach(function (checkbox) {
+                                                        const itemTotalText = checkbox.closest('tr').querySelector('td[id="itemTotal"]').textContent.trim();
+                                                        const itemTotal = parseFloat(itemTotalText.replace('$', '').trim());
                                                         if (!checkbox.checked) {
                                                             checkbox.checked = true;
                                                         }
+                                                        subTotal += itemTotal;
                                                     });
+                                                    discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
+                                                    total = subTotal - (subTotal * discount / 100);
+                                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
+                                                    totalTxt.innerText = "$ " + total.toFixed(1);
+                                                    document.querySelector('#totalAmount').value = total;
                                                 } else {
                                                     checkboxs.forEach(function (checkbox) {
                                                         if (checkbox.checked) {
                                                             checkbox.checked = false;
                                                         }
                                                     });
+                                                    discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
+                                                    total = subTotal;
+                                                    subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
+                                                    totalTxt.innerText = "$ " + total.toFixed(1);
+                                                    document.querySelector('#totalAmount').value = total;
                                                 }
                                             });
-
-                                            let subTotalDisplay = document.querySelector('#subTotalTxt');
-                                            subTotalDisplay.innerText = "$ " + subTotal.toFixed(1);
-                                            let totalText = document.querySelector('#totalTxt');
-                                            if (subTotal === 0 || subTotal - discount === 0) {
-                                                totalText.innerText = "$ 0.0";
-                                            } else {
-                                                total = subTotal - discount;
-                                                totalText.innerText = "$ " + total.toFixed(1);
-                                                document.querySelector('#totalAmount').value = total;
-                                            }
 
                                             let tableTitle = document.querySelector('#inactiveTitle');
                                             let table = document.querySelector('#inactiveTable');

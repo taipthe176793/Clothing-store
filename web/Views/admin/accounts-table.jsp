@@ -41,18 +41,13 @@
 
         <div class="wrapper">
             <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
-
-
-
             </div>
             <jsp:include page="../common/admin/side-bar.jsp"></jsp:include>
                 <div class="main-panel">
-
                 <jsp:include page="../common/admin/header.jsp"></jsp:include>
 
                     <div class="content">
                         <div class="container-fluid">
-
                             <!-- Breadcrumbs-->
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -73,19 +68,28 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Username</th>
-                                                    <th>Full name</th>
-                                                    <th>Email</th>
-                                                    <th>Phone</th>
-                                                    <th>Role</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <form action="#">
+                                            <input hidden value="${roleFilter}" id="selectedRole" />
+                                        <label for="role">Filter:</label>
+                                        <select onchange="filterByRole(this)" name="roleFilter" id="roleFilter" >
+                                            <option value="all">All</option>
+                                            <option value="customer">Customer</option>
+                                            <option value="staff">Staff</option>
+                                        </select>
+                                    </form>
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Username</th>
+                                                <th>Full name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Role</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
                                             <c:forEach items="${accountList}" var="account"> 
                                                 <tr>
@@ -101,8 +105,8 @@
                                                     </c:forEach>
                                                     <td name="edit" class="d-flex justify-content-center">
                                                         <button type="button" class="btn btn-primary"
-                                                            data-toggle="modal" data-target="#editUserModal"
-                                                            onclick="editUserModal(this)">Edit</button>
+                                                                data-toggle="modal" data-target="#editUserModal"
+                                                                onclick="editUserModal(this)">Edit</button>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -114,12 +118,12 @@
                         </div>
                     </div>
                 </div>
-                <jsp:include page="../common/admin/footer.jsp"></jsp:include>
-                </div>
             </div>
-                
-                
-        <!-- Add Modal -->
+            <jsp:include page="../common/admin/footer.jsp"></jsp:include>
+            </div>
+
+
+            <!-- Add Modal -->
             <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -130,31 +134,36 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="addStaffForm" action="accounts?action=add" method="post" enctype="multipart/form-data">
+                            <form id="addStaffForm" action="accounts?action=add" method="post">
                                 <!--Username-->
                                 <div class="form-group">
                                     <label for="username">Username:</label>
-                                    <input type="text" class="form-control" id="usernameInput" name="username">
+                                    <input type="text" class="form-control" id="usernameInput" name="username" required>
                                 </div>
                                 <!--Password-->
                                 <div class="form-group">
                                     <label for="password">Password:</label>
-                                    <input type="password" class="form-control" id="passwordInput" name="password">
+                                    <input type="password" class="form-control" id="passwordInput" name="password" required>
+                                </div>
+                                <!--Confirm Password-->
+                                <div class="form-group">
+                                    <label for="confirm-pass">Confirm Password:</label>
+                                    <input type="password" class="form-control" id="confirm-passInput" name="confirm-pass" required>
                                 </div>
                                 <!--Full Name-->
                                 <div class="form-group">
                                     <label for="fullname">Full Name:</label>
-                                    <input type="text" class="form-control" id="fullnameInput" name="fullname">
+                                    <input type="text" class="form-control" id="fullnameInput" name="fullname" required>
                                 </div>
                                 <!--Email-->
                                 <div class="form-group">
                                     <label for="email">Email:</label>
-                                    <input type="text" class="form-control" id="emailInput" name="email">
+                                    <input type="text" class="form-control" id="emailInput" name="email" required>
                                 </div>
                                 <!--Phone-->
                                 <div class="form-group">
                                     <label for="phone">Phone:</label>
-                                    <input type="text" class="form-control" id="phoneInput" name="phone">
+                                    <input type="text" class="form-control" id="phoneInput" name="phone" required>
                                 </div>
                                 <!-- Role -->
                                 <input type="hidden" name="role" value="2">
@@ -166,66 +175,66 @@
                         </div>
                     </div>
                 </div>
-            </div>        
-                
-        <!-- Update Modal -->
-        <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="">Edit User</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editModalForm" action="accounts?action=update" method="POST" >
-                            <div class="form-group" style="display: none">
-                                <input type="text" class="form-control" id="idEditInput" name="id">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="text" class="form-control" id="usernameEditInput" name="username" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="fullname">Full name:</label>
-                                <input type="text" class="form-control" id="fullnameEditInput" name="fullname" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="phone">Phone:</label>
-                                <input type="text" class="form-control" id="phoneEditInput" name="phone" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="text" class="form-control" id="emailEditInput" name="email" readonly> 
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="role">Role:</label>
-                                <br/>
-                                <input type="radio" id="" name="role" value="3"> Customer
-                                <input type="radio" id="" name="role" value="2" style="margin-left: 40px"> Staff
-                            </div>
-                            
-                            <div class="form-group" hidden="">
-                                <input type="text" name="pId" value=""/>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" form="editModalForm"
-                                onclick="validateForm2()">Update</button>
+            </div>         
+
+            <!-- Update Modal -->
+            <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">Edit User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editModalForm" action="accounts?action=update" method="POST" >
+                                <div class="form-group" style="display: none">
+                                    <input type="text" class="form-control" id="idEditInput" name="id">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" class="form-control" id="usernameEditInput" name="username" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="fullname">Full name:</label>
+                                    <input type="text" class="form-control" id="fullnameEditInput" name="fullname" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone:</label>
+                                    <input type="text" class="form-control" id="phoneEditInput" name="phone" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="text" class="form-control" id="emailEditInput" name="email" readonly> 
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="role">Role:</label>
+                                    <br/>
+                                    <input type="radio" name="role" value="3"> Customer
+                                    <input type="radio" name="role" value="2" style="margin-left: 40px"> Staff
+                                </div>
+
+                                <div class="form-group" hidden="">
+                                    <input type="text" name="pId" value=""/>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" form="editModalForm"
+                                    onclick="validateForm2()">Update</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
+
+            <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -243,10 +252,10 @@
                 </div>
             </div>
         </div>
-                    
-        </body>
 
-        <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+    </body>
+
+    <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
@@ -279,143 +288,162 @@
     <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
     <script>
-        function validateForm() {
-    // Define validation patterns
-    let usernamePattern = /^(?!.*\s).{6,}$/;
-    let phonePattern = /^0\d{9}$/;
-    let passwordPattern = /^(?!.*\s).{8,}$/;
-    let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+                                        function validateForm() {
+                                            // Define validation patterns
+                                            let usernamePattern = /^(?!.*\s).{6,}$/;
+                                            let phonePattern = /^0\d{9}$/;
+                                            let passwordPattern = /^(?!.*\s).{8,}$/;
+                                            let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
-    let form = document.forms["addStaffForm"];
-    let username = form["username"];
-    let phone = form["phone"];
-    let password = form["password"];
-    let fullname = form["fullname"];
-    let email = form["email"];
-    let role = form["role"];
+                                            let form = document.forms["addStaffForm"];
+                                            let username = form["username"];
+                                            let phone = form["phone"];
+                                            let password = form["password"];
+                                            let confirmPassword = form["confirm-pass"];
+                                            let fullname = form["fullname"];
+                                            let email = form["email"];
+                                            let role = form["role"];
 
-    let isValid = true;
+                                            let isValid = true;
 
-    // Reset custom validity messages
-    fullname.setCustomValidity("");
-    username.setCustomValidity("");
-    phone.setCustomValidity("");
-    password.setCustomValidity("");
-    email.setCustomValidity("");
+                                            // Reset custom validity messages
+                                            fullname.setCustomValidity("");
+                                            username.setCustomValidity("");
+                                            phone.setCustomValidity("");
+                                            password.setCustomValidity("");
+                                            email.setCustomValidity("");
+                                            confirmPassword.setCustomValidity("");
 
-    // Validate Fullname
-    if (fullname.value.trim() === "") {
-        fullname.setCustomValidity("Fullname cannot be empty.");
-        isValid = false;
-    } else {
-        fullname.setCustomValidity("");
-    }
+                                            // Validate Fullname
+                                            if (fullname.value.trim() === "") {
+                                                fullname.setCustomValidity("Fullname cannot be empty.");
+                                                isValid = false;
+                                            }
 
-    // Validate Username
-    if (!usernamePattern.test(username.value)) {
-        username.setCustomValidity("Username must be at least 6 characters and contain no spaces.");
-        isValid = false;
-    } else {
-        username.setCustomValidity("");
-    }
+                                            // Validate Username
+                                            if (!usernamePattern.test(username.value)) {
+                                                username.setCustomValidity("Username must be at least 6 characters and contain no spaces.");
+                                                isValid = false;
+                                            }
 
-    // Validate Phone
-    if (!phonePattern.test(phone.value)) {
-        phone.setCustomValidity("Phone must be 10 digits, start with 0 and contain no spaces.");
-        isValid = false;
-    } else {
-        phone.setCustomValidity("");
-    }
+                                            // Validate Phone
+                                            if (!phonePattern.test(phone.value)) {
+                                                phone.setCustomValidity("Phone must be 10 digits, start with 0 and contain no spaces.");
+                                                isValid = false;
+                                            }
 
-    // Validate Password
-    if (!passwordPattern.test(password.value)) {
-        password.setCustomValidity("Password must be at least 8 characters and contain no spaces.");
-        isValid = false;
-    } else {
-        password.setCustomValidity("");
-    }
+                                            // Validate Password
+                                            if (!passwordPattern.test(password.value)) {
+                                                password.setCustomValidity("Password must be at least 8 characters and contain no spaces.");
+                                                isValid = false;
+                                            }
 
-    // Validate Email
-    if (!emailPattern.test(email.value)) {
-        email.setCustomValidity("Please enter a valid email address.");
-        isValid = false;
-    } else {
-        email.setCustomValidity("");
-    }
+                                            // Validate Confirm Password
+                                            if (password.value !== confirmPassword.value) {
+                                                confirmPassword.setCustomValidity("Confirm Password is different from Password.");
+                                                isValid = false;
+                                            }
 
-    if (!role.value) {
-        role.value = '2';
-    }
+                                            // Validate Email
+                                            if (!emailPattern.test(email.value)) {
+                                                email.setCustomValidity("Please enter a valid email address.");
+                                                isValid = false;
+                                            }
 
-    if (!isValid) {
-        form.reportValidity();
-        return false;
-    }
+                                            if (!role.value) {
+                                                role.value = '2';
+                                            }
 
-    return true;
-}
+                                            if (!isValid) {
+                                                form.reportValidity();
+                                                return false;
+                                            }
 
-
-$(document).ready(function () {
-    $('#addStaffForm').submit(function(event) {
-        if (!validateForm()) {
-            event.preventDefault();
-        } else {
-            $('#notiModal').modal('show');
-        }
-    });
-});
+                                            return true;
+                                        }
+                                        $(document).ready(function () {
+                                            $('#addStaffForm').submit(function (event) {
+                                                if (!validateForm()) {
+                                                    event.preventDefault();
+                                                } else {
+                                                    $('#notiModal').modal('show');
+                                                }
+                                            });
+                                        });
 
 
-        function validateForm2() {
-        let quantity = $('#quantityEditInput').val();
 
-        $('.error').html('');
 
-        if (quantity === '') {
-            $('#quantityEditError').html('Quantity cannot be empty');
-        } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
-            $('#quantityEditError').html('Quantity must be greater than 0');
-        }
 
-        let error = '';
-        $('.error').each(function () {
-            error += $(this).html();
-        });
-        if (error === '') {
-            $('#editModalForm').submit();
-        } else {
-            event.preventDefault();
-        }
-    }
+                                        function validateForm2() {
+                                            let quantity = $('#quantityEditInput').val();
 
-        function editUserModal(button) {
-        let id = $(button).closest('tr').find('td[name="id"]').text().trim();
-        let username = $(button).closest('tr').find('td[name="username"]').text().trim();
-        let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
-        let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
-        let email = $(button).closest('tr').find('td[name="email"]').text().trim();
-        let role = $(button).closest('tr').find('td[name="role"]').text().trim();
+                                            $('.error').html('');
 
-        $('#idEditInput').val(id);
-        $('#usernameEditInput').val(username);
-        $('#fullnameEditInput').val(fullname);
-        $('#phoneEditInput').val(phone);
-        $('#emailEditInput').val(email);
+                                            if (quantity === '') {
+                                                $('#quantityEditError').html('Quantity cannot be empty');
+                                            } else if (!$.isNumeric(quantity) || parseFloat(quantity) < 0) {
+                                                $('#quantityEditError').html('Quantity must be greater than 0');
+                                            }
 
-        if (role === 'customer') {
-            $('input[name="role"][value="3"]').prop('checked', true);
-        } else if (role === 'staff') {
-            $('input[name="role"][value="2"]').prop('checked', true);
-        } else {
-            $('input[name="role"]').prop('checked', false);
-        }
-    }
-    
-        $(document).ready(function () {
-    <c:if test="${notification != null}">
-        $('#notiModal').modal('show');
-    </c:if>
-    });
+                                            let error = '';
+                                            $('.error').each(function () {
+                                                error += $(this).html();
+                                            });
+                                            if (error === '') {
+                                                $('#editModalForm').submit();
+                                            } else {
+                                                event.preventDefault();
+                                            }
+                                        }
+
+                                        function editUserModal(button) {
+                                            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+                                            let username = $(button).closest('tr').find('td[name="username"]').text().trim();
+                                            let fullname = $(button).closest('tr').find('td[name="fullname"]').text().trim();
+                                            let phone = $(button).closest('tr').find('td[name="phone"]').text().trim();
+                                            let email = $(button).closest('tr').find('td[name="email"]').text().trim();
+                                            let role = $(button).closest('tr').find('td[name="role"]').text().trim();
+
+                                            $('#idEditInput').val(id);
+                                            $('#usernameEditInput').val(username);
+                                            $('#fullnameEditInput').val(fullname);
+                                            $('#phoneEditInput').val(phone);
+                                            $('#emailEditInput').val(email);
+
+                                            if (role === 'customer') {
+                                                $('input[name="role"][value="3"]').prop('checked', true);
+                                            } else if (role === 'staff') {
+                                                $('input[name="role"][value="2"]').prop('checked', true);
+                                            } else {
+                                                $('input[name="role"]').prop('checked', false);
+                                            }
+                                        }
+
+                                        function filterByRole(selectedOption) {
+                                            let form = selectedOption.closest('form');
+                                            const selected = selectedOption.value;
+                                            console.log(selected);
+                                            form.action = "accounts?role=" + selected;
+                                            form.method = "get";
+                                            form.submit();
+                                        }
+                                        ;
+
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const roleFilterValue = document.getElementById('selectedRole').value;
+                                            const selectFilter = document.getElementById('roleFilter');
+
+                                            Array.from(selectFilter.options).forEach(option => {
+                                                if (option.value === roleFilterValue) {
+                                                    option.selected = true;
+                                                }
+                                            });
+                                        });
+                                        $(document).ready(function () {
+        <c:if test="${notification != null}">
+                                            $('#notiModal').modal('show');
+        </c:if>
+                                        });
     </script>
 </html>

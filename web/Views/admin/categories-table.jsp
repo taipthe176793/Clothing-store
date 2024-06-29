@@ -277,8 +277,8 @@
 
         $('.error').html('');
 
-        if (name === '') {
-            $('#nameError').html('Name cannot be empty!');
+        if (name.trim() === '') {
+            $('#nameError').html('Name cannot be empty or contain spaces only!');
         }
 
         let error = '';
