@@ -64,6 +64,12 @@ public class PublicProductsControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            if (request.getSession().getAttribute("notification") != null) {
+                request.setAttribute("notification", request.getSession().getAttribute("notification"));
+                request.setAttribute("type", request.getSession().getAttribute("type"));
+                request.getSession().invalidate();
+
+            }
             ProductDAO pDao = new ProductDAO();
             CategoryDAO cDao = new CategoryDAO();
 

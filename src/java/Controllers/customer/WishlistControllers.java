@@ -149,6 +149,8 @@ public class WishlistControllers extends HttpServlet {
                 if (!accountDAO.isProductInWishlist(account.getAccountId(), productId)) {
                     if (accountDAO.addToWishlist(account.getAccountId(), productId)) {
                         account.addToWishlist(productId);
+                        request.getSession().setAttribute("notification", "Add to wishlist successfully");
+                        request.getSession().setAttribute("type", "alert-box-success");
                     } else {
                         request.setAttribute("error", "Failed to add product to wishlist.");
                     }

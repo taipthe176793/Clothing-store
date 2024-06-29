@@ -600,7 +600,7 @@ public class AccountDAO extends DBContext {
                 String sql = "SELECT p.product_id, p.name, p.description, p.price, p.image1, p.image2, p.image3, p.category_id, p.is_deleted, p.rating "
                         + "FROM wishlist w "
                         + "JOIN product p ON w.product_id = p.product_id "
-                        + "WHERE w.customer_id = ? AND p.is_deleted = 0";
+                        + "WHERE w.customer_id = ? ";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, accountId);
 

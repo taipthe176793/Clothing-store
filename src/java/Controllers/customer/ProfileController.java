@@ -65,7 +65,12 @@ public class ProfileController extends HttpServlet {
 
         try {
             String action = request.getParameter("action");
+            if (request.getSession().getAttribute("notification") != null) {
+                request.setAttribute("notification", request.getSession().getAttribute("notification"));
+                request.setAttribute("type", request.getSession().getAttribute("type"));
+                request.getSession().invalidate();
 
+            }
             if (action == null) {
                 action = "view";  // default action
             }
@@ -171,6 +176,8 @@ public class ProfileController extends HttpServlet {
                 request.setAttribute("account", updatedAccount);
                 request.setAttribute("message", "Update Successfully");
                 response.sendRedirect(request.getContextPath() + "/customer/profile?action=view");
+                request.getSession().setAttribute("notification", "Update Successfully");
+                request.getSession().setAttribute("type", "alert-box-success");
             } else {
                 request.setAttribute("message", "Update Failed");
                 request.getRequestDispatcher("/Views/user/edit-user-profile.jsp").forward(request, response);

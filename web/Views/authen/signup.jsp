@@ -77,7 +77,7 @@
                         let usernamePattern = /^(?!.*\s).{6,}$/;
                         let phonePattern = /^(?!.*\s)0\d{9}$/;
                         let passwordPattern = /^(?!.*\s).{8,}$/;
-                        let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+                        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
                         let form = document.forms["signupForm"];
                         let username = form["user"];
@@ -111,11 +111,11 @@
                         } else {
                             password.setCustomValidity("");
                         }
-                        if (!emailPattern.test(email.value)) {
+                        if (!emailPattern.test(email.value) || emailPattern.value.trim() === "") {
                             email.setCustomValidity("Please enter a valid email address.");
                             isValid = false;
                         } else {
-                            email.setCustomValidity("");
+                            email.setCustomValidity("Invalid Emails");
                         }
 
                         if (!isValid) {
@@ -125,73 +125,6 @@
                         return isValid;
                     }
         </script>
-         <script>
-                    function validateForm() {
-                        let usernamePattern = /^(?!.*\s).{6,}$/;
-                        let phonePattern = /^(?!.*\s)0\d{9}$/;
-                        let passwordPattern = /^(?!.*\s).{8,}$/;
-                        let emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-
-                        let form = document.forms["signupForm"];
-                        let username = form["user"];
-                        let phone = form["phone"];
-                        let password = form["pass"];
-                        let fullname = form["fullname"];
-                        let email = form["email"];
-                        let confirmPassword = form["confirm-pass"];
-
-                        let isValid = true;
-
-                        // Reset custom validity messages
-                        fullname.setCustomValidity("");
-                        username.setCustomValidity("");
-                        phone.setCustomValidity("");
-                        password.setCustomValidity("");
-                        email.setCustomValidity("");
-                        confirmPassword.setCustomValidity("");
-
-                        // Validate Fullname
-                        if (fullname.value.trim() === "") {
-                            fullname.setCustomValidity("Fullname cannot be empty!!!");
-                            isValid = false;
-                        }
-
-                        // Validate Username
-                        if (!usernamePattern.test(username.value)) {
-                            username.setCustomValidity("Username must be at least 6 characters without spaces.");
-                            isValid = false;
-                        }
-
-                        // Validate Phone
-                        if (!phonePattern.test(phone.value)) {
-                            phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
-                            isValid = false;
-                        }
-
-                        // Validate Password
-                        if (!passwordPattern.test(password.value)) {
-                            password.setCustomValidity("Password must be at least 8 characters without spaces.");
-                            isValid = false;
-                        }
-
-                        // Validate Confirm Password
-                        if (password.value !== confirmPassword.value) {
-                            confirmPassword.setCustomValidity("Confirm Password not match.");
-                            isValid = false;
-                        }
-
-                        // Validate Email
-                        if (!emailPattern.test(email.value)) {
-                            email.setCustomValidity("Please enter a valid email address.");
-                            isValid = false;
-                        }
-
-                        if (!isValid) {
-                            form.reportValidity();
-                        }
-
-                        return isValid;
-                    }
-        </script>
+        
     </body>
 </html>

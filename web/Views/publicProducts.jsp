@@ -47,15 +47,19 @@
     <body>
 
         <jsp:include page="common/homepage/page-header.jsp"></jsp:include>
-
-            <!-- Product -->
-            <div class="bg0 m-t-23 p-b-140">
-                <div class="container">
-                    <div class="flex-w flex-sb-m p-b-52">
-                        <div class="flex-w flex-l-m filter-tope-group m-tb-10">
-                            <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-                                All Products
-                            </button>
+        <c:if test="${notification ne null}">
+            <div id="alert" class="alert-box ${type}">
+                ${notification}
+            </div>
+        </c:if>
+        <!-- Product -->
+        <div class="bg0 m-t-23 p-b-140">
+            <div class="container">
+                <div class="flex-w flex-sb-m p-b-52">
+                    <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+                            All Products
+                        </button>
 
                         <c:forEach items="${categoryList}" var="category">
                             <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" onclick='location.href = "shop?categoryId=${category.getCategoryId()}"'>
@@ -554,7 +558,24 @@
 
         <script>
 
+                                document.addEventListener('DOMContentLoaded', function () {
 
+                                    const alert = document.querySelector('#alert');
+
+                                    if (alert) {
+                                        alert.style.display = 'block';
+                                        alert.style.opacity = '1';
+
+                                        setTimeout(function () {
+                                            alert.style.opacity = '0';
+
+                                            setTimeout(function () {
+                                                alert.classList.add('show');
+                                            }, 500);
+                                        }, 4000);
+                                    }
+
+                                });
 
         </script>
 

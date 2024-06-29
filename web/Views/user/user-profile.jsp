@@ -97,12 +97,38 @@
                 </div>
             </div>
         </div>
-
+        <c:if test="${notification ne null}">
+            <div id="alert" class="alert-box ${type}">
+                ${notification}
+            </div>
+        </c:if>
         <jsp:include page="../common/homepage/page-footer.jsp"></jsp:include>
             <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
             <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
+        <script>
+
+                                document.addEventListener('DOMContentLoaded', function () {
+
+                                    const alert = document.querySelector('#alert');
+
+                                    if (alert) {
+                                        alert.style.display = 'block';
+                                        alert.style.opacity = '1';
+
+                                        setTimeout(function () {
+                                            alert.style.opacity = '0';
+
+                                            setTimeout(function () {
+                                                alert.classList.add('show');
+                                            }, 500);
+                                        }, 4000);
+                                    }
+
+                                });
+
+        </script>
     </body>
 </html>
