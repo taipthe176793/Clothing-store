@@ -27,11 +27,12 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link" href="">
+                <a class="nav-link"  href="${pageContext.request.contextPath}/staff/blog">
                     <i class="nc-icon nc-tag-content"></i>
                     <p>Manage Blogs</p>
                 </a>
             </li>
+           
         </ul>
     </div>
 </div>

@@ -67,10 +67,33 @@
                                     <input type="text" id="addPhone" name="phone" class="form-control" required>
                                     <div class="invalid-feedback">Phone number must be 10 digits and start with 0 without spaces.</div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="addAddress">Address</label>
-                                    <textarea id="addAddress" name="address" class="form-control" rows="3" required></textarea>
-                                    <div class="invalid-feedback">Address must not be empty.</div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="city">City <span class="text-danger">*</span></label>
+                                        <select class="form-control mb-3" id="city" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose city</option>           
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="district">District <span class="text-danger">*</span></label>
+                                        <select class="form-control mb-3" id="district" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose district</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="ward">Ward <span class="text-danger">*</span></label>
+                                        <select class="form-control mb-3" id="ward" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose ward</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="stAddress">Street Address <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="stAddress" id="stAddress"
+                                               value="" required>
+                                        <div class="invalid-feedback">Street Address must not be empty.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -150,10 +173,33 @@
                                     <input type="text" id="updatePhone" name="phone" class="form-control" required>
                                     <div class="invalid-feedback">Phone number must be 10 digits and start with 0 without spaces.</div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="updateAddress">Address</label>
-                                    <textarea id="updateAddress" name="address" class="form-control" rows="3" required></textarea>
-                                    <div class="invalid-feedback">Address must not be empty.</div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="city">City <span class="text-danger">*</span></label>
+                                        <select class="form-control mb-3" id="uCity" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose city</option>           
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="district">District <span class="text-danger">*</span></label>
+                                        <select class="form-control mb-3" id="uDistrict" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose district</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="ward">Ward <span class="text-danger">*</span></label>
+                                        <select class="form-control mb-3" id="uWard" aria-label=".form-select-sm" required>
+                                            <option value="" selected>Choose ward</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="stAddress">Street Address <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="stAddress" id="uStAddress"
+                                               value="" required>
+                                        <div class="invalid-feedback">Street Address must not be empty.</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -174,92 +220,186 @@
             <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
         <script>
-                                $(document).ready(function () {
-                                    // Xử lý khi nhấn nút Update trong bảng
-                                    $('.btn-update').click(function (e) {
-                                        e.preventDefault();
-                                        var addressId = $(this).closest('tr').find('td:first').text();
-                                        var phone = $(this).closest('tr').find('td:eq(1)').text();
-                                        var address = $(this).closest('tr').find('td:eq(2)').text();
-
-                                        // Đổ dữ liệu vào modal
-                                        $('#updateAddressId').val(addressId);
-                                        $('#updatePhone').val(phone);
-                                        $('#updateAddress').val(address);
-
-                                        // Hiển thị modal
-                                        $('#updateAddressModal').modal('show');
-                                    });
+                                var citis = document.getElementById("city");
+                                var districts = document.getElementById("district");
+                                var wards = document.getElementById("ward");
+                                var uCitis = document.getElementById("uCity");
+                                var uDistricts = document.getElementById("uDistrict");
+                                var uWards = document.getElementById("uWard");
+                                var Parameter = {
+                                    url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+                                    method: "GET",
+                                    responseType: "application/json",
+                                };
+                                var promise = axios(Parameter);
+                                promise.then(function (result) {
+                                    renderCity(result.data);
                                 });
 
-// Xử lý khi nhấn nút "Add Address"
-                                $('#addAddressForm').submit(function (e) {
-                                    e.preventDefault();
-                                    if (validateForm('addAddressForm')) {
-                                        $.ajax({
-                                            type: 'POST',
-                                            url: $(this).attr('action'),
-                                            data: $(this).serialize(),
-                                            success: function (data) {
-                                                // Đóng modal khi thêm mới thành công
-                                                $('#addAddressModal').modal('hide');
-                                                // Cập nhật lại nội dung trang hoặc reload trang
-                                                location.reload(); // Có thể sử dụng location.reload() để reload trang
-                                            },
-                                            error: function () {
-                                                alert('Failed to add new address.');
+                                function renderCity(data) {
+                                    for (const x of data) {
+                                        citis.options[citis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Id);
+                                        uCitis.options[uCitis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Id);
+                                    }
+                                    citis.onchange = function () {
+                                        district.length = 1;
+                                        ward.length = 1;
+                                        if (this.value != "") {
+                                            const result = data.filter(n => n.Id === this.value);
+
+                                            for (const k of result[0].Districts) {
+                                                district.options[district.options.length] = new Option(k.Name, k.Id);
                                             }
-                                        });
-                                    }
-                                });
+                                        }
+                                    };
+                                    uCitis.onchange = function () {
+                                        uDistrict.length = 1;
+                                        uWard.length = 1;
+                                        if (this.value != "") {
+                                            const result = data.filter(n => n.Id === this.value);
 
-// Xử lý khi nhấn nút "Update Address"
-                                $('#updateAddressForm').submit(function (e) {
-                                    e.preventDefault();
-                                    if (validateForm('updateAddressForm')) {
-                                        $.ajax({
-                                            type: 'POST',
-                                            url: $(this).attr('action'),
-                                            data: $(this).serialize(),
-                                            success: function (data) {
-                                                // Đóng modal khi cập nhật thành công
-                                                $('#updateAddressModal').modal('hide');
-                                                // Cập nhật lại nội dung trang hoặc reload trang
-                                                location.reload(); // Có thể sử dụng location.reload() để reload trang
-                                            },
-                                            error: function () {
-                                                alert('Failed to update address.');
+                                            for (const k of result[0].Districts) {
+                                                uDistrict.options[uDistrict.options.length] = new Option(k.Name, k.Id);
                                             }
-                                        });
-                                    }
-                                });
+                                        }
+                                    };
+                                    district.onchange = function () {
+                                        ward.length = 1;
+                                        const dataCity = data.filter((n) => n.Id === citis.value);
+                                        if (this.value != "") {
+                                            const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
 
-                                function validateForm(formId) {
-                                    let phonePattern = /^(?!.*\s)0\d{9}$/;
+                                            for (const w of dataWards) {
+                                                wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                                            }
+                                        }
+                                    };
+                                    uDistrict.onchange = function () {
+                                        uWard.length = 1;
+                                        const dataCity = data.filter((n) => n.Id === uCitis.value);
+                                        if (this.value != "") {
+                                            const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
 
-                                    let form = document.forms[formId];
-                                    let address = form["address"];
-                                    let phone = form["phone"];
-
-                                    let isValid = true;
-
-                                    if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
-                                        phone.classList.add("is-invalid");
-                                        isValid = false;
-                                    } else {
-                                        phone.classList.remove("is-invalid");
-                                    }
-
-                                    if (address.value.trim() === "") {
-                                        address.classList.add("is-invalid");
-                                        isValid = false;
-                                    } else {
-                                        address.classList.remove("is-invalid");
-                                    }
-
-                                    return isValid;
+                                            for (const w of dataWards) {
+                                                uWard.options[uWard.options.length] = new Option(w.Name, w.Id);
+                                            }
+                                        }
+                                    };
                                 }
         </script>
+
+        <script>
+            $(document).ready(function () {
+                // Xử lý khi nhấn nút Update trong bảng
+                $('.btn-update').click(function (e) {
+                    e.preventDefault();
+                    let addressId = $(this).closest('tr').find('td:first').text();
+                    let phone = $(this).closest('tr').find('td:eq(1)').text();
+                    let address = $(this).closest('tr').find('td:eq(2)').text().split(',');
+                    let city = address[0].trim();
+                    let district = address[1].trim();
+                    let ward = address[2].trim();
+                    let strAddress = address[3].trim();
+
+                    // Đổ dữ liệu vào modal
+                    $('#updateAddressId').val(addressId);
+                    $('#updatePhone').val(phone);
+                    $('#uCity').find('option').each(function () {
+                        if ($(this).text().replace("Thành phố", "").replace("Tỉnh", "").trim() === city) {
+                            $(this).prop('selected', true);
+                            $(this).trigger('change');
+                        }
+                    });
+                    $('#uCity').trigger('change');
+                    $('#uDistrict').find('option').each(function () {
+                        if ($(this).text() === district) {
+                            $(this).prop('selected', true);
+                            $(this).trigger('change');
+                        }
+                    });
+                    $('#uWard').find('option').each(function () {
+                        if ($(this).text() === ward) {
+                            $(this).prop('selected', true);
+                        }
+                    });
+                    $('#uStAddress').val(strAddress);
+
+                    // Hiển thị modal
+                    $('#updateAddressModal').modal('show');
+                });
+            });
+
+// Xử lý khi nhấn nút "Add Address"
+            $('#addAddressForm').submit(function (e) {
+                e.preventDefault();
+                if (validateForm('addAddressForm')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: $(this).serialize(),
+                        success: function (data) {
+                            // Đóng modal khi thêm mới thành công
+                            $('#addAddressModal').modal('hide');
+                            // Cập nhật lại nội dung trang hoặc reload trang
+                            location.reload(); // Có thể sử dụng location.reload() để reload trang
+                        },
+                        error: function () {
+                            alert('Failed to add new address.');
+                        }
+                    });
+                }
+            });
+
+// Xử lý khi nhấn nút "Update Address"
+            $('#updateAddressForm').submit(function (e) {
+                e.preventDefault();
+                if (validateForm('updateAddressForm')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: $(this).serialize(),
+                        success: function (data) {
+                            // Đóng modal khi cập nhật thành công
+                            $('#updateAddressModal').modal('hide');
+                            // Cập nhật lại nội dung trang hoặc reload trang
+                            location.reload(); // Có thể sử dụng location.reload() để reload trang
+                        },
+                        error: function () {
+                            alert('Failed to update address.');
+                        }
+                    });
+                }
+            });
+
+            function validateForm(formId) {
+                let phonePattern = /^(?!.*\s)0\d{9}$/;
+
+                let form = document.forms[formId];
+                let address = form["stAddress"];
+                let phone = form["phone"];
+
+                let isValid = true;
+
+                if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
+                    phone.classList.add("is-invalid");
+                    isValid = false;
+                } else {
+                    phone.classList.remove("is-invalid");
+                }
+
+                if (address.value.trim() === "") {
+                    address.classList.add("is-invalid");
+                    isValid = false;
+                } else {
+                    address.classList.remove("is-invalid");
+                }
+
+                return isValid;
+            }
+        </script>
+
     </body>
 </html>

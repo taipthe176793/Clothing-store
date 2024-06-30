@@ -368,7 +368,7 @@ public class AccountDAO extends DBContext {
         List<CustomerAddress> addresses = new ArrayList<>();
         try {
             con = connect;
-            String sql = "SELECT * FROM customer_address WHERE customer_id = ?";
+            String sql = "SELECT * FROM [dbo].[customer_address] WHERE [customer_id] = ? ORDER BY [is_default] desc";
             stm = con.prepareStatement(sql);
             stm.setInt(1, customerId);
 
@@ -633,8 +633,6 @@ public class AccountDAO extends DBContext {
     }
 
     public boolean addToWishlist(int accountId, int productId) throws SQLException {
-        System.out.println("In add func");
-
         Connection con = null;
         PreparedStatement stm = null;
 
@@ -696,7 +694,6 @@ public class AccountDAO extends DBContext {
                 return rs.getInt(1) > 0;
             }
         } catch (Exception e) {
-            System.out.println("isProductInWishlist: " + e.getMessage());
         } finally {
             if (rs != null) {
                 rs.close();
