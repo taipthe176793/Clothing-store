@@ -408,9 +408,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            if (con != null) {
-                con.close();
-            }
+            
         }
     }
 
@@ -429,9 +427,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            if (con != null) {
-                con.close();
-            }
+          
         }
     }
 
@@ -448,9 +444,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            if (con != null) {
-                con.close();
-            }
+           
         }
     }
 

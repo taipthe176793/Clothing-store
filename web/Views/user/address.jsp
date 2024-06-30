@@ -70,13 +70,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" id="city" aria-label=".form-select-sm" required>
+                                        <select class="form-control mb-3" name="city" id="city" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose city</option>           
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="district">District <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" id="district" aria-label=".form-select-sm" required>
+                                        <select class="form-control mb-3" name="district" id="district" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose district</option>
                                         </select>
                                     </div>
@@ -84,7 +84,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ward">Ward <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" id="ward" aria-label=".form-select-sm" required>
+                                        <select class="form-control mb-3" name="ward" id="ward" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose ward</option>
                                         </select>
                                     </div>
@@ -166,7 +166,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="updateAddressForm" action="${pageContext.request.contextPath}/customer/address" method="post">
+                        <form id="updateAddressForm" action="address?action=update" method="post">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="updatePhone">Phone</label>
@@ -176,13 +176,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" id="uCity" aria-label=".form-select-sm" required>
+                                        <select class="form-control mb-3" name="city" id="uCity" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose city</option>           
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="district">District <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" id="uDistrict" aria-label=".form-select-sm" required>
+                                        <select class="form-control mb-3" name="district" id="uDistrict" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose district</option>
                                         </select>
                                     </div>
@@ -190,7 +190,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ward">Ward <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" id="uWard" aria-label=".form-select-sm" required>
+                                        <select class="form-control mb-3" name="ward" id="uWard" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose ward</option>
                                         </select>
                                     </div>
@@ -204,7 +204,6 @@
                             </div>
                             <div class="modal-footer">
                                 <input type="hidden" id="updateAddressId" name="id">
-                                <input type="hidden" name="action" value="update">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-dark">Update</button>
                             </div>
@@ -241,17 +240,17 @@
 
                                 function renderCity(data) {
                                     for (const x of data) {
-                                        citis.options[citis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Id);
-                                        uCitis.options[uCitis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Id);
+                                        citis.options[citis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Name.replace("Thành phố", "").replace("Tỉnh", ""));
+                                        uCitis.options[uCitis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Name.replace("Thành phố", "").replace("Tỉnh", ""));
                                     }
                                     citis.onchange = function () {
                                         district.length = 1;
                                         ward.length = 1;
                                         if (this.value != "") {
-                                            const result = data.filter(n => n.Id === this.value);
+                                            const result = data.filter(n => n.Name.replace("Thành phố", "").replace("Tỉnh", "") === this.value);
 
                                             for (const k of result[0].Districts) {
-                                                district.options[district.options.length] = new Option(k.Name, k.Id);
+                                                district.options[district.options.length] = new Option(k.Name, k.Name);
                                             }
                                         }
                                     };
@@ -259,32 +258,32 @@
                                         uDistrict.length = 1;
                                         uWard.length = 1;
                                         if (this.value != "") {
-                                            const result = data.filter(n => n.Id === this.value);
+                                            const result = data.filter(n => n.Name.replace("Thành phố", "").replace("Tỉnh", "") === this.value);
 
                                             for (const k of result[0].Districts) {
-                                                uDistrict.options[uDistrict.options.length] = new Option(k.Name, k.Id);
+                                                uDistrict.options[uDistrict.options.length] = new Option(k.Name, k.Name);
                                             }
                                         }
                                     };
                                     district.onchange = function () {
                                         ward.length = 1;
-                                        const dataCity = data.filter((n) => n.Id === citis.value);
+                                        const dataCity = data.filter((n) => n.Name.replace("Thành phố", "").replace("Tỉnh", "") === citis.value);
                                         if (this.value != "") {
-                                            const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+                                            const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
 
                                             for (const w of dataWards) {
-                                                wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                                                wards.options[wards.options.length] = new Option(w.Name, w.Name);
                                             }
                                         }
                                     };
                                     uDistrict.onchange = function () {
                                         uWard.length = 1;
-                                        const dataCity = data.filter((n) => n.Id === uCitis.value);
+                                        const dataCity = data.filter((n) => n.Name.replace("Thành phố", "").replace("Tỉnh", "") === uCitis.value);
                                         if (this.value != "") {
-                                            const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+                                            const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
 
                                             for (const w of dataWards) {
-                                                uWard.options[uWard.options.length] = new Option(w.Name, w.Id);
+                                                uWard.options[uWard.options.length] = new Option(w.Name, w.Name);
                                             }
                                         }
                                     };
@@ -293,10 +292,9 @@
 
         <script>
             $(document).ready(function () {
-                // Xử lý khi nhấn nút Update trong bảng
                 $('.btn-update').click(function (e) {
                     e.preventDefault();
-                    let addressId = $(this).closest('tr').find('td:first').text();
+                    let addressId = $(this).closest('form').find('input[name="id"]').val();
                     let phone = $(this).closest('tr').find('td:eq(1)').text();
                     let address = $(this).closest('tr').find('td:eq(2)').text().split(',');
                     let city = address[0].trim();
@@ -304,7 +302,6 @@
                     let ward = address[2].trim();
                     let strAddress = address[3].trim();
 
-                    // Đổ dữ liệu vào modal
                     $('#updateAddressId').val(addressId);
                     $('#updatePhone').val(phone);
                     $('#uCity').find('option').each(function () {
@@ -327,12 +324,10 @@
                     });
                     $('#uStAddress').val(strAddress);
 
-                    // Hiển thị modal
                     $('#updateAddressModal').modal('show');
                 });
             });
 
-// Xử lý khi nhấn nút "Add Address"
             $('#addAddressForm').submit(function (e) {
                 e.preventDefault();
                 if (validateForm('addAddressForm')) {
@@ -341,10 +336,8 @@
                         url: $(this).attr('action'),
                         data: $(this).serialize(),
                         success: function (data) {
-                            // Đóng modal khi thêm mới thành công
                             $('#addAddressModal').modal('hide');
-                            // Cập nhật lại nội dung trang hoặc reload trang
-                            location.reload(); // Có thể sử dụng location.reload() để reload trang
+                            location.reload(); 
                         },
                         error: function () {
                             alert('Failed to add new address.');
@@ -362,10 +355,8 @@
                         url: $(this).attr('action'),
                         data: $(this).serialize(),
                         success: function (data) {
-                            // Đóng modal khi cập nhật thành công
                             $('#updateAddressModal').modal('hide');
-                            // Cập nhật lại nội dung trang hoặc reload trang
-                            location.reload(); // Có thể sử dụng location.reload() để reload trang
+                            location.reload(); 
                         },
                         error: function () {
                             alert('Failed to update address.');

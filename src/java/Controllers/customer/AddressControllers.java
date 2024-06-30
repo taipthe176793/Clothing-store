@@ -168,7 +168,6 @@ public class AddressControllers extends HttpServlet {
 
                 }
             }
-
             if (account == null) {
                 response.sendRedirect(request.getContextPath() + "/Views/authen/login.jsp");
                 return;
@@ -176,7 +175,12 @@ public class AddressControllers extends HttpServlet {
             AccountDAO accountDAO = new AccountDAO();
             int customerId = accountDAO.getCustomerIdByAccountId(account.getAccountId());
             String phone = request.getParameter("phone");
-            String address = request.getParameter("address");
+            String city = request.getParameter("city");
+            String district = request.getParameter("district");
+            String ward = request.getParameter("ward");
+            String stAddress = request.getParameter("stAddress");
+            
+            String address = city + ", " + district + ", " + ward + ", " + stAddress;
 
             CustomerAddress newAddress = new CustomerAddress();
             newAddress.setCustomerId(customerId);
@@ -196,7 +200,12 @@ public class AddressControllers extends HttpServlet {
         try {
             int addressId = Integer.parseInt(request.getParameter("id"));
             String phone = request.getParameter("phone");
-            String address = request.getParameter("address");
+            String city = request.getParameter("city");
+            String district = request.getParameter("district");
+            String ward = request.getParameter("ward");
+            String stAddress = request.getParameter("stAddress");
+            
+            String address = city + ", " + district + ", " + ward + ", " + stAddress;
 
             CustomerAddress updatedAddress = new CustomerAddress();
             updatedAddress.setAddressId(addressId);
