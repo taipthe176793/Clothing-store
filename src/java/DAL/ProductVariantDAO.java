@@ -345,4 +345,41 @@ public class ProductVariantDAO extends DBContext {
         return new ProductVariant();
     }
 
+    public void updateVariantQuantity(ProductVariant variation, int quantity, char operation) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        switch (operation) {
+            case '+':
+                quantity = variation.getQuantity() + quantity;
+                break;
+            case '-':
+                quantity = variation.getQuantity() - quantity;
+                break;
+            default:
+                throw new AssertionError();
+        }
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "UPDATE [dbo].[product_variants]\n"
+                        + "   SET [quantity] = ? \n"
+                        + " WHERE [product_variant_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, quantity);
+                stm.setInt(2, variation.getProductVariantId());
+
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+    }
 }

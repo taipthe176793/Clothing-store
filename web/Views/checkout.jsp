@@ -53,8 +53,6 @@
             <div class="container mt-4 mb-5">
                 <form class="needs-validation" id="checkoutForm" name="frmthanhtoan" method="post"
                       action="checkout" onsubmit="return validateCheckout()" >
-                    <input type="hidden" name="kh_tendangnhap" value="dnpcuong">
-
                     <div class="py-5 text-center">
                         <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
                         <h2>Checkout</h2>
@@ -75,9 +73,8 @@
                                     </c:if>
                                 </c:forEach>
 
-                                <input type="hidden" name="sanphamgiohang[1][sp_ma]" value="2">
-                                <input type="hidden" name="sanphamgiohang[1][gia]" value="11800000.00">
-                                <input type="hidden" name="sanphamgiohang[1][soluong]" value="2">
+                                <input type="hidden" name="vId" value="${v.getProductVariantId()}">
+                                <input type="hidden" name="vQuantity" value="${v.getQuantity()}">
 
                                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                                     <div>
@@ -98,10 +95,12 @@
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Discount</span>
                                 <p>$ ${discount}</p>
+                                <input hidden value="${discount}" name="discount"/>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Total amount</span>
                                 <strong>$ ${totalAmount}</strong>
+                                <input hidden value="${totalAmount}" name="totalAmount"/>
                             </li>
                         </ul>
                         <form></form>
@@ -130,19 +129,19 @@
                             <c:if test="${account eq null}">
                                 <div class="col-md-6">
                                     <label for="city">City <span class="text-danger">*</span></label>
-                                    <select class="form-select mb-3" id="city" aria-label=".form-select-sm" required>
+                                    <select class="form-select mb-3" name="city" id="city" aria-label=".form-select-sm" required>
                                         <option value="" selected>Choose city</option>           
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="district">District <span class="text-danger">*</span></label>
-                                    <select class="form-select mb-3" id="district" aria-label=".form-select-sm" required>
+                                    <select class="form-select mb-3" name="district" id="district" aria-label=".form-select-sm" required>
                                         <option value="" selected>Choose district</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="ward">Ward <span class="text-danger">*</span></label>
-                                    <select class="form-select mb-3" id="ward" aria-label=".form-select-sm" required>
+                                    <select class="form-select mb-3" name="ward" id="ward" aria-label=".form-select-sm" required>
                                         <option value="" selected>Choose ward</option>
                                     </select>
                                 </div>
@@ -158,22 +157,23 @@
                                 </div>
                             </c:if>
                             <c:if test="${account ne null}">
+                                <input value="${cookie.userId.value}" hidden name="accId" />
                                 <c:if test="${account.getAddresses().size() == 0}">
                                     <div class="col-md-6">
                                         <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-3" id="city" aria-label=".form-select-sm" required>
+                                        <select class="form-select mb-3" name="city" id="city" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose city</option>           
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="district">District <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-3" id="district" aria-label=".form-select-sm" required>
+                                        <select class="form-select mb-3" name="district" id="district" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose district</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="ward">Ward <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-3" id="ward" aria-label=".form-select-sm" required>
+                                        <select class="form-select mb-3" name="ward" id="ward" aria-label=".form-select-sm" required>
                                             <option value="" selected>Choose ward</option>
                                         </select>
                                     </div>
@@ -190,32 +190,36 @@
                                 </c:if>
                                 <c:if test="${account.getAddresses().size() > 0}">
                                     <div class="col-md-12 mb-3" id="cusAddress">
-                                        <label for="address">Address</label>
+                                        <label for="address" class="d-flex justify-content-between">Delivery Address
+                                            <c:if test="${account.getAddresses().size() < 10}">
+                                                <a href="#" onclick="handleAddNewAddress()">New Address</a>
+                                            </c:if>
+                                        </label>
                                         <select name="address" class="form-select" id="addressDropdown">
                                             <c:forEach items="${account.getAddresses()}" var="address">
-                                                <option value="${address.getAddressId()}" 
+                                                <option value="${address.getAddress()} - ${address.getPhone()}" 
                                                         ${address.isIsDefault() ? "selected" : ""}> ${address.getAddress()} 
                                                     - ${address.getPhone()} ${address.isIsDefault() 
                                                         ? " - Default" : ""}</option>
                                                 </c:forEach>
                                         </select> 
-                                        <button type="button" class="btn btn-secondary btn-sm mt-3" onclick="handleAddNewAddress()">Use another address</button>
+
                                     </div>
                                     <div class="col-md-6 d-none" name="cusNewAddress">
                                         <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-3" id="city" aria-label=".form-select-sm">
+                                        <select class="form-select mb-3" name="city" id="city" aria-label=".form-select-sm">
                                             <option value="" selected>Choose city</option>           
                                         </select>
                                     </div>
                                     <div class="col-md-6 d-none" name="cusNewAddress">
                                         <label for="district">District <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-3" id="district" aria-label=".form-select-sm">
+                                        <select class="form-select mb-3" name="district" id="district" aria-label=".form-select-sm">
                                             <option value="" selected>Choose district</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 d-none" name="cusNewAddress">
                                         <label for="ward">Ward <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-3" id="ward" aria-label=".form-select-sm">
+                                        <select class="form-select mb-3" name="ward" id="ward" aria-label=".form-select-sm">
                                             <option value="" selected>Choose ward</option>
                                         </select>
                                     </div>
@@ -229,9 +233,9 @@
                                         <input type="text" class="form-control" name="phone" id="phone"
                                                value="">
                                     </div>
-                                    <span>
-                                        <button type="button" class="btn btn-secondary btn-sm mt-3 d-none" id="selectAddressBtn" onclick="handleSelectAddress()">Select from Address List</button>
-                                    </span>
+                                    <div class="col-md-12 mt-3">
+                                        <a href="#" class="d-none" id="selectAddressBtn" onclick="handleSelectAddress()">My Addresses</a>
+                                    </div>
                                 </c:if>
                             </c:if>
                         </div>
@@ -382,6 +386,8 @@
 
                                             document.addEventListener('DOMContentLoaded', function () {
 
+                                                //Display subtotal
+
                                                 let subTotalTxt = document.querySelector('#subTotal');
 
                                                 const itemPricesTxt = document.querySelectorAll('#itemPrice');
@@ -400,11 +406,19 @@
 
                                                 subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
 
+                                                //add event for tag 'a'
+                                                document.querySelectorAll('a').forEach(link => {
+                                                    link.addEventListener('click', (e) => {
+                                                        if (link.getAttribute('href') === '#') {
+                                                            e.preventDefault();
+                                                        }
+                                                    });
+                                                });
+
                                             });
 
                                             $(document).ready(function () {
                                                 $('#addressDropdown').select2({
-
                                                     templateResult: formatOption
                                                 });
 
@@ -415,7 +429,7 @@
 
                                                     var parts = data.text.split('-');
                                                     var $result = $('<span>' + parts[0] + '<br>' + parts[1] +
-                                                            (parts[2] === undefined ? '</small></span>' : '<br><small>' + parts[2] + '</small></span>'));
+                                                            (parts[2] === undefined ? '</small></span>' : '<br><small class="text-warning">' + parts[2] + '</small></span>'));
                                                     return $result;
                                                 }
 
@@ -440,27 +454,27 @@
 
                                             function renderCity(data) {
                                                 for (const x of data) {
-                                                    citis.options[citis.options.length] = new Option(x.Name, x.Id);
+                                                    citis.options[citis.options.length] = new Option(x.Name.replace("Thành phố", "").replace("Tỉnh", ""), x.Name.replace("Thành phố", "").replace("Tỉnh", ""));
                                                 }
                                                 citis.onchange = function () {
                                                     district.length = 1;
                                                     ward.length = 1;
                                                     if (this.value != "") {
-                                                        const result = data.filter(n => n.Id === this.value);
+                                                        const result = data.filter(n => n.Name.replace("Thành phố", "").replace("Tỉnh", "") === this.value);
 
                                                         for (const k of result[0].Districts) {
-                                                            district.options[district.options.length] = new Option(k.Name, k.Id);
+                                                            district.options[district.options.length] = new Option(k.Name, k.Name);
                                                         }
                                                     }
                                                 };
                                                 district.onchange = function () {
                                                     ward.length = 1;
-                                                    const dataCity = data.filter((n) => n.Id === citis.value);
+                                                    const dataCity = data.filter((n) => n.Name.replace("Thành phố", "").replace("Tỉnh", "") === citis.value);
                                                     if (this.value != "") {
-                                                        const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+                                                        const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
 
                                                         for (const w of dataWards) {
-                                                            wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                                                            wards.options[wards.options.length] = new Option(w.Name, w.Name);
                                                         }
                                                     }
                                                 };

@@ -16,22 +16,22 @@ public class Order {
 
     private int orderId;
     private int customerId;
-    private int totalAmount;
-    private int discount;
+    private double totalAmount;
+    private double discount;
     private boolean isPaid;
     private Timestamp createdAt;
     private String status;
     private String trackingCode;
-    private int addressId;
     private String email;
     private String fullname;
     private String phone;
+    private String deliveryAddress;
     List<OrderDetails> listOrderDetails = new ArrayList<>();
 
     public Order() {
     }
 
-    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, int addressId, String email, String fullname, String phone) {
+    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
         this.customerId = customerId;
         this.totalAmount = totalAmount;
         this.discount = discount;
@@ -39,13 +39,13 @@ public class Order {
         this.createdAt = createdAt;
         this.status = status;
         this.trackingCode = trackingCode;
-        this.addressId = addressId;
         this.email = email;
         this.fullname = fullname;
         this.phone = phone;
+        this.deliveryAddress = deliveryAddress;
     }
 
-    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, int addressId, String email, String fullname, String phone) {
+    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.totalAmount = totalAmount;
@@ -54,10 +54,10 @@ public class Order {
         this.createdAt = createdAt;
         this.status = status;
         this.trackingCode = trackingCode;
-        this.addressId = addressId;
         this.email = email;
         this.fullname = fullname;
         this.phone = phone;
+        this.deliveryAddress = deliveryAddress;
     }
 
     public int getOrderId() {
@@ -76,19 +76,19 @@ public class Order {
         this.customerId = customerId;
     }
 
-    public int getTotalAmount() {
+    public double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(int totalAmount) {
+    public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
@@ -132,14 +132,6 @@ public class Order {
         this.trackingCode = trackingCode;
     }
 
-    public int getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -164,9 +156,17 @@ public class Order {
         this.phone = phone;
     }
 
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
     @Override
     public String toString() {
-        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", discount=" + discount + ", isPaid=" + isPaid + ", createdAt=" + createdAt + ", status=" + status + ", trackingCode=" + trackingCode + ", addressId=" + addressId + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", listOrderDetails=" + listOrderDetails + '}';
+        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", discount=" + discount + ", isPaid=" + isPaid + ", createdAt=" + createdAt + ", status=" + status + ", trackingCode=" + trackingCode + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", deliveryAddress=" + deliveryAddress + ", listOrderDetails=" + listOrderDetails + '}';
     }
 
 }

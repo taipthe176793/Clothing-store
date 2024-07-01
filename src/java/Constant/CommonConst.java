@@ -21,14 +21,30 @@ public class CommonConst {
     public static final int ROLE_STAFF = 2;
     public static final int ROLE_CUSTOMER = 3;
     public static final int ROLE_GUEST = 4;
-    
+
     public static final String NOTIFICATION = "notification";
     public static final String NOTI_TYPE = "type";
-    
+
     public static final String NOTI_SUCCESS = "alert-box-success";
     public static final String NOTI_WARNING = "alert-box-warning";
     public static final String NOTI_ERROR = "alert-box-danger";
     public static final String NOTI_INFO = "alert-box-info";
+
+    public static final String ORDER_PENDING_STATUS = "Pending";
+    public static final String ORDER_SHIPPED_STATUS = "Shipping";
+    public static final String ORDER_DELIVERED_STATUS = "Delivered";
+    public static final String ORDER_CANCELLED_STATUS = "Cancelled";
+
+    public static final String COD_METHOD = "cod";
+    public static final String VNPAY_METHOD = "vnpay";
+
+    public static final int TRACKING_CODE_LENGTH = 10;
+
+    public static final char OPERATION_DESCREASE = '-';
+    public static final char OPERATION_INCREASE = '+';
     
+    public static final String CART_COOKIE = "cart";
+    public static final String ITEMS_NUMBER_CART_COOKIE = "cin";
     
+
 }

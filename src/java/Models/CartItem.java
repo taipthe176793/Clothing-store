@@ -9,6 +9,7 @@ package Models;
  * @author admin
  */
 public class CartItem {
+
     private int cartItemId;
     private int customerId;
     private int productVariantId;
@@ -22,6 +23,11 @@ public class CartItem {
         this.customerId = customerId;
         this.productVariantId = productVariantId;
         this.quantity = quantity;
+    }
+
+    public CartItem(int customerId, int productVariantId) {
+        this.customerId = customerId;
+        this.productVariantId = productVariantId;
     }
 
     public int getCartItemId() {
@@ -61,6 +67,4 @@ public class CartItem {
         return "CartDetails{" + "cartItemId=" + cartItemId + ", customerId=" + customerId + ", productVariantId=" + productVariantId + ", quantity=" + quantity + '}';
     }
 
-    
-    
 }
