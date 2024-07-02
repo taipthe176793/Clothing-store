@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -64,12 +65,7 @@ public class PublicProductsControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            if (request.getSession().getAttribute("notification") != null) {
-                request.setAttribute("notification", request.getSession().getAttribute("notification"));
-                request.setAttribute("type", request.getSession().getAttribute("type"));
-                request.getSession().invalidate();
-
-            }
+            GeneratorUtils.getNotification(request);
             ProductDAO pDao = new ProductDAO();
             CategoryDAO cDao = new CategoryDAO();
 

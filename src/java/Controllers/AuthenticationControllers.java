@@ -6,12 +6,9 @@ package Controllers;
 
 import Controllers.customer.CartControllers;
 import DAL.AccountDAO;
-import DAL.CartItemDAO;
 import Models.Account;
-import Models.CartItem;
 import Models.GoogleAccount;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
@@ -63,11 +60,11 @@ public class AuthenticationControllers extends HttpServlet {
 
             switch (action) {
                 case "login":
-                    HttpSession session= request.getSession();
+                    HttpSession session = request.getSession();
                     if (session.getAttribute("notification") != null) {
                         request.setAttribute("notification", session.getAttribute("notification"));
-                          request.setAttribute("type", session.getAttribute("type"));
-                          session.invalidate();   
+                        request.setAttribute("type", session.getAttribute("type"));
+                        session.invalidate();
                     }
                     request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                     break;
@@ -95,15 +92,7 @@ public class AuthenticationControllers extends HttpServlet {
                 case "loginWithGoogle":
                     Account gAccount = loginWithGoogle(request, response);
                     if (gAccount != null) {
-                        arr = request.getCookies();
-                        String cartCookie = "";
-                        if (arr != null) {
-                            for (Cookie o : arr) {
-                                if (o.getName().equals("cart")) {
-                                    CartControllers.mergeAndSyncCart(response, gAccount, o);
-                                }
-                            }
-                        }
+                        CartControllers.mergeAndSyncCart(request, response, gAccount);
 
                         Cookie userId = new Cookie("userId", gAccount.getAccountId() + "");
                         userId.setMaxAge(60 * 60 * 24 * 7);
@@ -172,7 +161,7 @@ public class AuthenticationControllers extends HttpServlet {
                             if (arr != null) {
                                 for (Cookie o : arr) {
                                     if (o.getName().equals("cart")) {
-                                        CartControllers.mergeAndSyncCart(response, account, o);
+                                        CartControllers.mergeAndSyncCart(request, response, account);
                                         break;
                                     }
                                 }
@@ -312,7 +301,7 @@ public class AuthenticationControllers extends HttpServlet {
     }
 
     private boolean validateInput(String username, String password) {
-        return username != null && !username.contains(" ") &&
-                password != null && !password.contains(" ");
+        return username != null && !username.contains(" ")
+                && password != null && !password.contains(" ");
     }
 }
