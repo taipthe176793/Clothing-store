@@ -5,6 +5,7 @@
 package DAL;
 
 import Models.Blog;
+import Models.BlogType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,15 +50,41 @@ public class BlogDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            if (con != null) {
-                con.close();
-            }
         }
 
         return blogList;
     }
 
-    
+    public List<BlogType> getAllBlogTypes() throws SQLException {
+        List<BlogType> blogTypes = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT blog_type_id, name FROM blog_type";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    BlogType blogType = new BlogType();
+                    blogType.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blogType.setName(rs.getString("name"));
+                    blogTypes.add(blogType);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogTypes;
+    }
 
     public void addBlog(Blog blog) throws SQLException, ClassNotFoundException {
         Connection con = null;
@@ -66,13 +93,13 @@ public class BlogDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "INSERT INTO [dbo].[blog] ([title], [body], [image], [blog_type_id], [status]) VALUES (?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO [dbo].[blog] ([title], [body], [image], [blog_type_id], [created_at]) VALUES (?, ?, ?, ?, GETDATE())";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, blog.getTitle());
                 stm.setString(2, blog.getBody());
                 stm.setString(3, blog.getImage());
                 stm.setInt(4, blog.getBlogTypeId());
-                stm.setBoolean(5, blog.isStatus());
+                
 
                 stm.executeUpdate();
             }
@@ -90,14 +117,13 @@ public class BlogDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "UPDATE [dbo].[blog] SET [title] = ?, [body] = ?, [image] = ?, [blog_type_id] = ?, [status] = ? WHERE [blog_id] = ?";
+                String sql = "UPDATE [dbo].[blog] SET [title] = ?, [body] = ?, [image] = ?, [blog_type_id] = ? WHERE [blog_id] = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, blog.getTitle());
                 stm.setString(2, blog.getBody());
                 stm.setString(3, blog.getImage());
                 stm.setInt(4, blog.getBlogTypeId());
-                stm.setBoolean(5, blog.isStatus());
-                stm.setInt(6, blog.getBlogId());
+                stm.setInt(5, blog.getBlogId());
 
                 stm.executeUpdate();
             }
@@ -115,11 +141,14 @@ public class BlogDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "DELETE FROM [dbo].[blog] WHERE [blog_id] = ?";
-                stm = con.prepareStatement(sql);
-                stm.setInt(1, blogId);
+                Blog blog = findBlogById(blogId);
+                if (blog != null && !blog.isStatus()) {
+                    String sql = "DELETE FROM [dbo].[blog] WHERE [blog_id] = ?";
+                    stm = con.prepareStatement(sql);
+                    stm.setInt(1, blogId);
 
-                stm.executeUpdate();
+                    stm.executeUpdate();
+                }
             }
         } finally {
             if (stm != null) {

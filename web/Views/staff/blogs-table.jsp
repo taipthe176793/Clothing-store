@@ -5,6 +5,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,7 +13,7 @@
         <link rel="apple-touch-icon" sizes="76x76" href="${pageContext.request.contextPath}/images/apple-icon.png">
         <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/favicon.ico">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <title>Account Profile</title>
+        <title>Blog</title>
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
@@ -42,8 +43,9 @@
                                 <div class="col-md-2">
                                     <select id="filterStatus" class="form-control">
                                         <option value="">Filter by Status</option>
-                                        <option value="true">Visible</option>
-                                        <option value="false">Hidden</option>
+                                        <option value="true">Active</option>
+                                        <option value="true">Hidden</option>
+                                        <option value="false">Pending</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
@@ -53,51 +55,66 @@
                                         <option value="2">Type 2</option>
                                     </select>
                                 </div>
-                                <div class="col-md-2">
-                                    <input type="date" id="filterDateFrom" class="form-control" placeholder="From Date">
-                                </div>
-                                <div class="col-md-2">
-                                    <input type="date" id="filterDateTo" class="form-control" placeholder="To Date">
-                                </div>
+                               
                             </div>
                             <div class="row mb-3">
-                                <!-- Add new blog button -->
                                 <div class="col-md-12">
-                                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#addBlogModal">Add New Blog</button>
-                                </div>
+                                    <a href="${pageContext.request.contextPath}/staff/blog?action=add" class="btn btn-primary float-right">Add New Blog</a>
                             </div>
-                            <!-- Blog table -->
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Body</th>
-                                        <th>Image</th>
-                                        <th>Blog Type</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        </div>
+
+                        <!-- Blog table -->
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Image</th>
+                                    <th>Blog Type</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <c:forEach var="blog" items="${blogs}">
                                     <tr>
-                                        <td>${blog.getBlogId}</td>
-                                        <td>${blog.getTitle}</td>
-                                        <td>${blog.getBody}</td>
-                                        <td><img src="${blog.getImage}" alt="Blog Image" style="width: 50px; height: 50px;"></td>
-                                        <td>${blog.getBlogTypeId}</td>
-                                        <td>${blog.getCreatedAt}</td>
-                                        <td>${blog.getStatus ? 'Visible' : 'Hidden'}</td>
+                                        <td>${blog.blogId}</td>
+                                        <td>${blog.title}</td>
                                         <td>
-                                            <button class="btn btn-warning btn-sm" onclick="editBlog(${blog.getBlogId})">Edit</button>
-                                            <button class="btn btn-danger btn-sm" onclick="deleteBlog(${blog.getBlogId})">Delete</button>
+                                            <img src="${blog.image}" name="image" alt="Blog Image" style="width: 50px; height: 50px;">
+                                        </td>
+                                        <td>
+                                            <c:forEach var="blogType" items="${blogTypes}">
+                                                <c:if test="${blog.blogTypeId == blogType.blogTypeId}">
+                                                    ${blogType.name}
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>${blog.createdAt}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${blog.status == false}">Pending</c:when>
+                                                <c:when test="${blog.status == true && blog.status != 'Pending'}">Active</c:when>
+                                                <c:when test="${blog.status == true && blog.status != 'Pending'}">Hidden</c:when>
+                                            </c:choose>
+                                        </td>
+                                        <td class="d-flex">
+                                            <button class="btn btn-warning btn-sm text-white " style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
+                                           
+                                            <c:if test="${blog.status == false}">
+                                                <form action="blog?action=delete" method="post" >
+                                                      <input name="blogId" value="${blog.blogId}" hidden="" />
+                                                    <button onclick="this.closest('form').submit()" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            </c:if>
+                                                
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
                 <jsp:include page="../common/staff/footer.jsp"></jsp:include>
@@ -105,54 +122,7 @@
             </div>
 
 
-            <!-- Add Blog Modal -->
-            <div class="modal fade" id="addBlogModal" tabindex="-1" role="dialog" aria-labelledby="addBlogModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addBlogModalLabel">Add New Blog</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addBlogForm" action="${pageContext.request.contextPath}/staff/blog" method="post">
-                            <input type="hidden" name="action" value="add">
-                            <div class="form-group">
-                                <label for="title">Title</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="body">Body</label>
-                                <textarea class="form-control" id="body" name="body" rows="5" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="image">Image URL</label>
-                                <input type="text" class="form-control" id="image" name="image" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="blogTypeId">Blog Type</label>
-                                <select class="form-control" id="blogTypeId" name="blogTypeId" required>
-                                    <option value="1">Type 1</option>
-                                    <option value="2">Type 2</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" id="status" name="status" required>
-                                    <option value="true">Visible</option>
-                                    <option value="false">Hidden</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+            <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 

@@ -6,20 +6,26 @@ package Controllers.staff;
 
 import DAL.BlogDAO;
 import Models.Blog;
+import Models.BlogType;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.List;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  *
  * @author caoqu
  */
+@MultipartConfig
 public class BlogControllers extends HttpServlet {
 
     /**
@@ -61,15 +67,32 @@ public class BlogControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+            String action = request.getParameter("action");
             BlogDAO blogDAO = new BlogDAO();
-            List<Blog> blogs = blogDAO.getBlogs();
+            BlogDAO blogTypeDAO = new BlogDAO();
+            List<BlogType> blogTypes = blogTypeDAO.getAllBlogTypes();
 
-            request.setAttribute("blogs", blogs);
-            request.getRequestDispatcher("/Views/staff/blogs-table.jsp").forward(request, response);
+            if ("edit".equals(action)) {
+                int blogId = Integer.parseInt(request.getParameter("blogId"));
+                Blog blog = blogDAO.findBlogById(blogId);
 
+                request.setAttribute("blog", blog);
+                request.setAttribute("blogTypes", blogTypes);
+                request.getRequestDispatcher("/Views/staff/edit-blog.jsp").forward(request, response);
+            } else if ("add".equals(action)) {
+                request.setAttribute("blogTypes", blogTypes);
+                request.getRequestDispatcher("/Views/staff/add-blog.jsp").forward(request, response);
+            } else {
+                List<Blog> blogs = blogDAO.getBlogs();
+
+                request.setAttribute("blogs", blogs);
+                request.setAttribute("blogTypes", blogTypes);
+                request.getRequestDispatcher("/Views/staff/blogs-table.jsp").forward(request, response);
+            }
         } catch (IOException | ServletException ex) {
+            ex.printStackTrace();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -98,50 +121,90 @@ public class BlogControllers extends HttpServlet {
         try {
             String title = request.getParameter("title");
             String body = request.getParameter("body");
-            String image = request.getParameter("image");
             int blogTypeId = Integer.parseInt(request.getParameter("blogTypeId"));
-            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            Part part = request.getPart("image");
 
+            String imagePath = "";
+            if (part != null && part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
+                String path = request.getServletContext().getRealPath("/images/blog");
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                String fileName = part.getSubmittedFileName();
+                String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+                String savedFileName = UUID.randomUUID().toString() + "." + fileExtension;
+
+                File file = new File(dir, savedFileName);
+                part.write(file.getAbsolutePath());
+
+                imagePath = request.getContextPath() + "/images/blog/" + savedFileName;
+            }
             Blog blog = new Blog();
             blog.setTitle(title);
             blog.setBody(body);
-            blog.setImage(image);
             blog.setBlogTypeId(blogTypeId);
-            blog.setStatus(status);
+            blog.setImage(imagePath);
 
             BlogDAO blogDAO = new BlogDAO();
             blogDAO.addBlog(blog);
 
             HttpSession session = request.getSession();
             session.setAttribute("notification", "New blog added successfully");
+            response.sendRedirect(request.getContextPath() + "/staff/blog");
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new ServletException("Error adding blog", ex);
         }
     }
 
-   private void editBlog(HttpServletRequest request, HttpServletResponse response)
+    private void editBlog(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             int blogId = Integer.parseInt(request.getParameter("blogId"));
             String title = request.getParameter("title");
             String body = request.getParameter("body");
-            String image = request.getParameter("image");
             int blogTypeId = Integer.parseInt(request.getParameter("blogTypeId"));
+            Part part = request.getPart("image");
+
+            String imagePath = "";
+            if (part != null && part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
+                String path = request.getServletContext().getRealPath("/images/blog");
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                String fileName = part.getSubmittedFileName();
+                String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+                String savedFileName = UUID.randomUUID().toString() + "." + fileExtension;
+
+                File file = new File(dir, savedFileName);
+                part.write(file.getAbsolutePath());
+
+                imagePath = request.getContextPath() + "/images/blog/" + savedFileName;
+            } else {
+                BlogDAO blogDAO = new BlogDAO();
+                Blog currentBlog = blogDAO.findBlogById(blogId);
+                if (currentBlog != null) {
+                    imagePath = currentBlog.getImage();
+                }
+            }
 
             Blog blog = new Blog();
             blog.setBlogId(blogId);
             blog.setTitle(title);
             blog.setBody(body);
-            blog.setImage(image);
             blog.setBlogTypeId(blogTypeId);
-            blog.setStatus(false);
+            blog.setImage(imagePath);
 
             BlogDAO blogDAO = new BlogDAO();
             blogDAO.updateBlog(blog);
 
             HttpSession session = request.getSession();
             session.setAttribute("notification", "Blog updated successfully");
+            response.sendRedirect(request.getContextPath() + "/staff/blog");
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new ServletException("Error editing blog", ex);
@@ -160,16 +223,17 @@ public class BlogControllers extends HttpServlet {
                 blogDAO.deleteBlog(blogId);
                 HttpSession session = request.getSession();
                 session.setAttribute("notification", "Blog deleted successfully");
+                response.sendRedirect(request.getContextPath() + "/staff/blog");
             } else {
                 HttpSession session = request.getSession();
                 session.setAttribute("notification", "Cannot delete an approved blog");
+                response.sendRedirect(request.getContextPath() + "/staff/blog");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new ServletException("Error deleting blog", ex);
         }
     }
-
 
     @Override
     public String getServletInfo() {
