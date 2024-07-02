@@ -117,10 +117,10 @@ public class CheckoutServlet extends HttpServlet {
             order.setEmail(cusEmail);
             order.setPhone(phone);
             order.setDeliveryAddress(address);
-            order.setStatus(Constant.CommonConst.ORDER_PENDING_STATUS);
+            order.setStatus(utilities.CommonConst.ORDER_PENDING_STATUS);
             order.setDiscount(discount);
             order.setTotalAmount(totalAmount);
-            order.setIsPaid(!paymentMethod.equals(Constant.CommonConst.COD_METHOD));
+            order.setIsPaid(!paymentMethod.equals(utilities.CommonConst.COD_METHOD));
             order.setTrackingCode(GeneratorUtils.generateOrderTrackingCode());
 
             //Insert order to database
@@ -142,7 +142,7 @@ public class CheckoutServlet extends HttpServlet {
                 items += itemsId[i] + ":" + itemsQuantities[i] + "/";
                 //Update variantion quantity
                 pvDAO.updateVariantQuantity(pvDAO.findProductVariantById(Integer.parseInt(itemsId[i])),
-                        Integer.parseInt(itemsQuantities[i]), Constant.CommonConst.OPERATION_DESCREASE);
+                        Integer.parseInt(itemsQuantities[i]), utilities.CommonConst.OPERATION_DESCREASE);
             }
             //Update cart cookie after placed an order
             items = items.substring(0, items.length() - 1);
@@ -176,7 +176,7 @@ public class CheckoutServlet extends HttpServlet {
     }// </editor-fold>
 
     private void updateCartAfterPlacedOrder(String items, HttpServletRequest request, HttpServletResponse response) {
-        String cartCookie = CookieUtils.getCookieValueByName(Constant.CommonConst.CART_COOKIE, request);
+        String cartCookie = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
         String[] cartItems = cartCookie.split("/");
         cartCookie = "";
         String[] orderItems = items.split("/");
@@ -196,8 +196,8 @@ public class CheckoutServlet extends HttpServlet {
         cartCookie = cartCookie.substring(0, cartCookie.length() - 1).isBlank()
                 ? "" : cartCookie.substring(0, cartCookie.length() - 1);
 
-        CookieUtils.updateCookieValueByName(Constant.CommonConst.CART_COOKIE, cartCookie, request, response);
-        CookieUtils.updateCookieValueByName(Constant.CommonConst.ITEMS_NUMBER_CART_COOKIE, cartCookie.split("/").length + "", request, response);
+        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, cartCookie, request, response);
+        CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE, cartCookie.split("/").length + "", request, response);
     }
 
 }
