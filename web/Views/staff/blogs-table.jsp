@@ -38,28 +38,57 @@
                             <div class="row mb-3">
                                 <!-- Filters and search -->
                                 <div class="col-md-4">
-                                    <input type="text" id="searchTitle" class="form-control" placeholder="Search by Blog Title">
+                                    <form action="${pageContext.request.contextPath}/staff/blog" method="get" class="input-group">
+                                    <input type="text" id="searchTitle" name="search" class="form-control" placeholder="Search by Blog Title"
+                                           value="<c:if test='${not empty searchTitle}'>${searchTitle}</c:if>">
+                                           <div class="input-group-append">
+                                               <button class="btn btn-outline-secondary" type="submit" id="searchButton">
+                                                   Search
+                                               </button>
+                                           </div>
+                                    </form>
                                 </div>
+
                                 <div class="col-md-2">
-                                    <select id="filterStatus" class="form-control">
+                                    <form action="${pageContext.request.contextPath}/staff/blog" method="get" class="input-group">
+                                    <select id="filterStatus" name="filterStatus" class="form-control" onchange="this.form.submit()">
                                         <option value="">Filter by Status</option>
+                                        <option value="all">All</option>
                                         <option value="true">Active</option>
-                                        <option value="true">Hidden</option>
                                         <option value="false">Pending</option>
+                                        <option value="false">Hidden</option>
                                     </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <select id="filterBlogType" class="form-control">
-                                        <option value="">Filter by Blog Type</option>
-                                        <option value="1">Type 1</option>
-                                        <option value="2">Type 2</option>
-                                    </select>
-                                </div>
-                               
+                                </form>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <a href="${pageContext.request.contextPath}/staff/blog?action=add" class="btn btn-primary float-right">Add New Blog</a>
+
+                            <div class="col-md-2">
+                                <form action="${pageContext.request.contextPath}/staff/blog" method="get" class="input-group">
+                                    <select id="filterBlogType" name="filterBlogType" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Filter by Blog Type</option>
+                                        <option value="all">All</option>
+                                        <c:forEach var="blogType" items="${blogTypes}">
+                                            <option value="${blogType.blogTypeId}">
+                                                ${blogType.name}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </form>
+                            </div>
+
+                            <div class="col-md-2">
+                                <form action="${pageContext.request.contextPath}/staff/blog" method="get" class="input-group">
+                                    <select id="sortDate" name="sortDate" class="form-control" onchange="this.form.submit()">
+                                        <option value="">Sort by Date</option>
+                                        <option value="desc">Newest First</option>
+                                        <option value="asc">Oldest First</option>
+                                    </select>
+                                </form>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <a href="${pageContext.request.contextPath}/staff/blog?action=add" class="btn btn-primary float-right">Add New Blog</a>
                             </div>
                         </div>
 
@@ -67,7 +96,7 @@
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>#</th>
                                     <th>Title</th>
                                     <th>Image</th>
                                     <th>Blog Type</th>
@@ -77,9 +106,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="blog" items="${blogs}">
+                                <c:forEach var="blog" items="${blogs}" varStatus="loop">
                                     <tr>
-                                        <td>${blog.blogId}</td>
+                                        <td>${loop.index + 1}</td>
                                         <td>${blog.title}</td>
                                         <td>
                                             <img src="${blog.image}" name="image" alt="Blog Image" style="width: 50px; height: 50px;">
@@ -101,14 +130,14 @@
                                         </td>
                                         <td class="d-flex">
                                             <button class="btn btn-warning btn-sm text-white " style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
-                                           
+
                                             <c:if test="${blog.status == false}">
                                                 <form action="blog?action=delete" method="post" >
-                                                      <input name="blogId" value="${blog.blogId}" hidden="" />
+                                                    <input name="blogId" value="${blog.blogId}" hidden="" />
                                                     <button onclick="this.closest('form').submit()" class="btn btn-danger btn-sm">Delete</button>
                                                 </form>
                                             </c:if>
-                                                
+
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -120,6 +149,7 @@
                 <jsp:include page="../common/staff/footer.jsp"></jsp:include>
                 </div>
             </div>
+
 
 
             <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>

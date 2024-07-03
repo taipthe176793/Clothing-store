@@ -99,7 +99,6 @@ public class BlogDAO extends DBContext {
                 stm.setString(2, blog.getBody());
                 stm.setString(3, blog.getImage());
                 stm.setInt(4, blog.getBlogTypeId());
-                
 
                 stm.executeUpdate();
             }
@@ -190,6 +189,189 @@ public class BlogDAO extends DBContext {
             }
         }
         return null;
+    }
+
+    public List<Blog> searchBlogsByTitle(String title) throws SQLException, ClassNotFoundException {
+        List<Blog> blogList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT * FROM [dbo].[blog] WHERE title LIKE ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + title + "%");
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setBlogId(rs.getInt("blog_id"));
+                    blog.setTitle(rs.getString("title"));
+                    blog.setBody(rs.getString("body"));
+                    blog.setImage(rs.getString("image"));
+                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blog.setStatus(rs.getBoolean("status"));
+                    blog.setCreatedAt(rs.getDate("created_at"));
+                    blogList.add(blog);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogList;
+    }
+
+    public List<Blog> filterBlogsByStatus(boolean status) throws SQLException {
+        List<Blog> blogList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT * FROM [dbo].[blog] WHERE status = ?";
+                stm = con.prepareStatement(sql);
+                stm.setBoolean(1, status);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setBlogId(rs.getInt("blog_id"));
+                    blog.setTitle(rs.getString("title"));
+                    blog.setBody(rs.getString("body"));
+                    blog.setImage(rs.getString("image"));
+                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blog.setStatus(rs.getBoolean("status"));
+                    blog.setCreatedAt(rs.getDate("created_at"));
+                    blogList.add(blog);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogList;
+    }
+
+    public List<Blog> filterBlogsByBlogType(int blogTypeId) throws SQLException {
+        List<Blog> blogList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT * FROM [dbo].[blog] WHERE blog_type_id = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, blogTypeId);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setBlogId(rs.getInt("blog_id"));
+                    blog.setTitle(rs.getString("title"));
+                    blog.setBody(rs.getString("body"));
+                    blog.setImage(rs.getString("image"));
+                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blog.setStatus(rs.getBoolean("status"));
+                    blog.setCreatedAt(rs.getDate("created_at"));
+                    blogList.add(blog);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogList;
+    }
+
+    public List<Blog> getBlogsSortedByDateDescending() throws SQLException {
+        List<Blog> blogList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT * FROM [dbo].[blog] ORDER BY created_at DESC";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setBlogId(rs.getInt("blog_id"));
+                    blog.setTitle(rs.getString("title"));
+                    blog.setBody(rs.getString("body"));
+                    blog.setImage(rs.getString("image"));
+                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blog.setStatus(rs.getBoolean("status"));
+                    blog.setCreatedAt(rs.getDate("created_at"));
+                    blogList.add(blog);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogList;
+    }
+
+    public List<Blog> getBlogsSortedByDateAscending() throws SQLException {
+        List<Blog> blogList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT * FROM [dbo].[blog] ORDER BY created_at ASC";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setBlogId(rs.getInt("blog_id"));
+                    blog.setTitle(rs.getString("title"));
+                    blog.setBody(rs.getString("body"));
+                    blog.setImage(rs.getString("image"));
+                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blog.setStatus(rs.getBoolean("status"));
+                    blog.setCreatedAt(rs.getDate("created_at"));
+                    blogList.add(blog);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogList;
     }
 
 }

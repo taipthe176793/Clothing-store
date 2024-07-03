@@ -41,7 +41,7 @@
                 <div class="main-panel">
                 <jsp:include page="../common/staff/header.jsp"></jsp:include>
                     <div class="content">
-                        <div class="container mt-5">
+                        <div class="container mt">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
                                     <a href="./dashboard">Dashboard</a>
