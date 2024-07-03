@@ -57,24 +57,23 @@
                 <div class="row">
                     <div class="col-md-8 col-lg-9 p-b-80">
                         <div class="p-r-45 p-r-0-lg">
+                            
                             <!-- item blog -->
-                            <div class="p-b-63">
+                            <c:forEach items="${blogs}" var="i">
+                                <div class="p-b-63">
                                 <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
                                     <img src="${pageContext.request.contextPath}/images/blog/blog-04.jpg" alt="IMG-BLOG">
-
-
                                 </a>
 
                                 <div class="p-t-32">
                                     <h4 class="p-b-15">
                                         <a href="blog-detail.jsp" class="ltext-108 cl2 hov-cl1 trans-04">
-                                            What is Streetwear?
+                                            ${i.title}
                                         </a>
                                     </h4>
 
                                     <p class="stext-117 cl6">
-
-                                        Streetwear is a style of fashion characterized by a gritty, urban aesthetic that showcases the "cool" and "edgy" personality of young people. Streetwear enthusiasts are typically those who appreciate street culture and the vibrant, dynamic urban lifestyle. This trend is marked by its energetic, individualistic, youthful, and heavily sports-influenced qualities. It also represents a statement of freedom and liberality in fashion, with its unconventional mix-and-match approach and gender-fluid appeal.
+                                            ${i.body}
                                     <div class="flex-w flex-sb-m p-t-18">
 
 
@@ -86,64 +85,8 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- item blog -->
-                            <div class="p-b-63">
-                                <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
-                                    <img src="${pageContext.request.contextPath}/images/blog/blog-05.jpg" alt="IMG-BLOG">
-
-                                </a>
-
-                                <div class="p-t-32">
-                                    <h4 class="p-b-15">
-                                        <a href="blog-detail.jsp" class="ltext-108 cl2 hov-cl1 trans-04">
-                                            Coordinate streetwear style clothes
-                                        </a>
-                                    </h4>
-
-                                    <p class="stext-117 cl6">
-                                        Streetwear styling draws inspiration from both hip-hop culture and skateboarding fashion. Followers of the latest street fashion trends, known as hypebeasts, spend a lot of time acquiring items such as baseball caps, hoodies, and limited edition designer sneakers.
-                                    <div class="flex-w flex-sb-m p-t-18">
-
-
-                                        <a href="blog-detail.jsp" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
-                                            Continue Reading
-
-                                            <i class="fa fa-long-arrow-right m-l-9"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- item blog -->
-                            <div class="p-b-63">
-                                <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
-                                    <img src="${pageContext.request.contextPath}/images/blog/blog-06.jpg" alt="IMG-BLOG">
-
-
-                                </a>
-
-                                <div class="p-t-32">
-                                    <h4 class="p-b-15">
-                                        <a href="blog-detail.jsp" class="ltext-108 cl2 hov-cl1 trans-04">
-                                            Ultimate Tips for Mixing and Matching Dynamic and Stylish Outfits
-
-                                        </a>
-                                    </h4>
-
-                                    <p class="stext-117 cl6">
-                                        For a dynamic and comfortable outfit, you can't go wrong with pairing an oversized t-shirt with high-waisted, wide-leg jeans that enhance your figure. By simply tucking the shirt into the jeans, you achieve a youthful look that subtly highlights a slim waist while the high-waisted jeans create an elongating effect for your legs.
-                                    <div class="flex-w flex-sb-m p-t-18">
-
-
-                                        <a href="blog-detail.jsp" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
-                                            Continue Reading
-
-                                            <i class="fa fa-long-arrow-right m-l-9"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            </c:forEach>
+                           
 
                             <!-- Pagination -->
                             <div class="flex-l-m flex-w w-full p-t-10 m-lr--7">

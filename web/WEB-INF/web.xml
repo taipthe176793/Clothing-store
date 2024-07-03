@@ -104,6 +104,10 @@
         <servlet-name>BlogControllers</servlet-name>
         <servlet-class>Controllers.staff.BlogControllers</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OrderController</servlet-name>
+        <servlet-class>Controllers.customer.OrderController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -146,7 +150,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ContentsSerlvet</servlet-name>
-        <url-pattern>/contents</url-pattern>
+        <url-pattern>/blogs</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AboutServlet</servlet-name>
@@ -191,6 +195,10 @@
     <servlet-mapping>
         <servlet-name>BlogControllers</servlet-name>
         <url-pattern>/staff/blog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderController</servlet-name>
+        <url-pattern>/OrderController</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

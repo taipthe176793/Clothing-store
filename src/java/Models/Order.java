@@ -6,6 +6,7 @@ package Models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class Order {
     private double totalAmount;
     private double discount;
     private boolean isPaid;
-    private Timestamp createdAt;
+    private Date createdAt;
     private String status;
     private String trackingCode;
     private String email;
@@ -31,7 +32,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
+    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Date createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
         this.customerId = customerId;
         this.totalAmount = totalAmount;
         this.discount = discount;
@@ -45,7 +46,7 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Timestamp createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
+    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Date createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.totalAmount = totalAmount;
@@ -100,11 +101,11 @@ public class Order {
         this.isPaid = isPaid;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
