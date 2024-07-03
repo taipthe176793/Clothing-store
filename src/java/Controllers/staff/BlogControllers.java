@@ -74,13 +74,7 @@ public class BlogControllers extends HttpServlet {
             List<BlogType> blogTypes = blogTypeDAO.getAllBlogTypes();
 
             String searchTitle = request.getParameter("search");
-            if (searchTitle != null && !searchTitle.isEmpty()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("searchTitle", searchTitle);
-            } else {
-                HttpSession session = request.getSession();
-                searchTitle = (String) session.getAttribute("searchTitle");
-            }
+            
 
             if ("edit".equals(action)) {
                 int blogId = Integer.parseInt(request.getParameter("blogId"));
@@ -105,36 +99,22 @@ public class BlogControllers extends HttpServlet {
                     blogs = blogDAO.getBlogs();
                 }
 
-                // Xử lý filter theo Status
                 if (filterStatus != null && !filterStatus.isEmpty() && !filterStatus.equals("all")) {
                     boolean status = Boolean.parseBoolean(filterStatus);
                     blogs = blogDAO.filterBlogsByStatus(status);
                 }
 
-                // Xử lý filter theo Blog Type
                 if (filterBlogType != null && !filterBlogType.isEmpty() && !filterBlogType.equals("all")) {
                     int blogTypeId = Integer.parseInt(filterBlogType);
                     blogs = blogDAO.filterBlogsByBlogType(blogTypeId);
                 }
 
-                // Xử lý sắp xếp theo ngày
                 if ("desc".equals(sortDate)) {
                     blogs = blogDAO.getBlogsSortedByDateDescending();
                 } else if ("asc".equals(sortDate)) {
                     blogs = blogDAO.getBlogsSortedByDateAscending();
                 }
 
-//                if ("desc".equals(sortDate)) {
-//                    blogs = blogDAO.getBlogsSortedByDateDescending();
-//                } else if ("asc".equals(sortDate)) {
-//                    blogs = blogDAO.getBlogsSortedByDateAscending();
-//                } else {
-//                    if (searchTitle != null && !searchTitle.isEmpty()) {
-//                        blogs = blogDAO.searchBlogsByTitle(searchTitle);
-//                    } else {
-//                        blogs = blogDAO.getBlogs();
-//                    }
-//                }
                 request.setAttribute("blogs", blogs);
                 request.setAttribute("blogTypes", blogTypes);
                 request.getRequestDispatcher("/Views/staff/blogs-table.jsp").forward(request, response);
