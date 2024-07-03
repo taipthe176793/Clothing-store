@@ -68,7 +68,7 @@
 
 
                         <li>
-                            <a href="${pageContext.request.contextPath}/contents">Blog</a>
+                            <a href="${pageContext.request.contextPath}/blogs">Blog</a>
                         </li>
 
                         <li>

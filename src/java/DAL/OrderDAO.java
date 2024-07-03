@@ -10,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -86,6 +89,54 @@ public class OrderDAO extends DBContext {
             }
         }
         return -1;
+    }
+
+    public List<Order> getUserOrders(int customerId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Order> orderList = new ArrayList<>();
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT *\n"
+                        + "  FROM [dbo].[order]\n"
+                        + "  WHERE [customer_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, customerId);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+
+                    Order c = new Order();
+
+                    c.setOrderId(rs.getInt("order_id"));
+                    c.setCustomerId(rs.getInt("customer_id"));
+                    c.setTotalAmount(rs.getDouble("total_amount"));
+                    c.setDiscount(rs.getDouble("discount"));
+                    c.setIsPaid(rs.getBoolean("is_paid"));
+                    c.setStatus(rs.getString("status"));
+                    c.setTrackingCode(rs.getString("tracking_code"));
+                    c.setEmail(rs.getString("email"));
+                    c.setFullname(rs.getString("fullname"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setDeliveryAddress(rs.getString("delivery_address"));
+                    c.setCreatedAt(rs.getDate("created_at"));
+
+                    orderList.add(c);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return orderList;
     }
 
 }

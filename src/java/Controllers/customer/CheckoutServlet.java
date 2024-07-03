@@ -193,8 +193,7 @@ public class CheckoutServlet extends HttpServlet {
                 }
             }
         }
-        cartCookie = cartCookie.substring(0, cartCookie.length() - 1).isBlank()
-                ? "" : cartCookie.substring(0, cartCookie.length() - 1);
+        cartCookie = cartCookie.isBlank() ? "" : cartCookie.substring(0, cartCookie.length() - 1);
 
         CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, cartCookie, request, response);
         CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE, cartCookie.split("/").length + "", request, response);
