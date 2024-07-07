@@ -4,8 +4,10 @@
  */
 package Controllers;
 
+import DAL.FeedbackDAO;
 import DAL.ProductDAO;
 import DAL.ProductVariantDAO;
+import Models.Feedback;
 import Models.Product;
 import Models.ProductVariant;
 import java.io.IOException;
@@ -82,6 +84,10 @@ public class ProductDetailControllers extends HttpServlet {
 
             ProductVariantDAO pvDao = new ProductVariantDAO();
             product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
+            
+            FeedbackDAO feedbackDAO = new FeedbackDAO();
+            List<Feedback> feedbackList = feedbackDAO.getFeedbacksByProductId(productId);
+            request.setAttribute("feedbackList", feedbackList);
 
             for (ProductVariant pv : product.getVariantList()) {
                 //Get sizesOfColor

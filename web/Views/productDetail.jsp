@@ -243,6 +243,20 @@
                 </div>
                 <div class="row mt-3">
                     <h3>Feedback</h3>
+                    <c:if test="${not empty feedbackList}">
+                        <c:forEach var="feedback" items="${feedbackList}">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Rating: ${feedback.rating} / 5</h5>
+                                    <p class="card-text">${feedback.comment}</p>
+                                    <p class="card-text"><small class="text-muted">Posted on: ${feedback.createdAt}</small></p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:if>
+                    <c:if test="${empty feedbackList}">
+                        <p>No feedback available for this product.</p>
+                    </c:if>
                 </div>
                 <div class="row">
                     <div>
