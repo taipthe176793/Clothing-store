@@ -90,6 +90,8 @@ public class CartControllers extends HttpServlet {
             }
             request.setAttribute("allProduct", products);
             request.setAttribute("allVariant", variants);
+            
+            GeneratorUtils.getNotification(request);
 
             AccountDAO aDAO = new AccountDAO();
             Account account = null;

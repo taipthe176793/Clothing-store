@@ -68,9 +68,14 @@
         </c:if>
         <div class="bg0 p-t-40 p-b-85">
 
-            <div id="alert" class="alert-box alert-box-danger">
+            <div id="alert-select-product" class="alert-box alert-box-danger">
                 Please select at least one item before proceeding to checkout.
             </div>
+            <c:if test="${notification ne null}">
+                <div id="alert" class="alert-box ${type}">
+                    ${notification}
+                </div>
+            </c:if>
 
             <c:if test="${!cart.isEmpty()}">
                 <div class="container">
@@ -121,10 +126,12 @@
                                                         </td>
                                                         <td class="">
                                                             <div class="" style="padding: 0">
-                                                                <img src="${p.getImg1()}" style="margin: 0 10px 0 0; height: 60px; width: 60px" alt="IMG">
+                                                                <img src="${p.getImg1()}" style="margin: 0 10px 0 0; height: 60px; width: 60px" alt="IMG" 
+                                                                     onclick="location.href = '${pageContext.request.contextPath}/product?id=${p.getProductId()}&color=${v.getColor()}&size=${v.getSize()}'">
                                                             </div>
                                                         </td>
-                                                        <td class="column-2">
+                                                        <td class="column-2"
+                                                            onclick="location.href = '${pageContext.request.contextPath}/product?id=${p.getProductId()}&color=${v.getColor()}&size=${v.getSize()}'">
                                                             <p style="font-weight: 700; font-size: 15px;">${p.getName()}</p>
                                                             <p style="font-size: 10px">${v.getColor()}, ${v.getSize()}</p>
                                                         </td>
@@ -207,10 +214,12 @@
                                                         </td>
                                                         <td class="">
                                                             <div class="">
-                                                                <img src="${p.getImg1()}" style="margin: 0 5px; height: 60px; width: 60px" alt="IMG">
+                                                                <img src="${p.getImg1()}" style="margin: 0 5px; height: 60px; width: 60px" alt="IMG"
+                                                                     onclick="location.href = '${pageContext.request.contextPath}/product?id=${p.getProductId()}&color=${v.getColor()}&size=${v.getSize()}'">
                                                             </div>
                                                         </td>
-                                                        <td class="column-2">
+                                                        <td class="column-2"
+                                                            onclick="location.href = '${pageContext.request.contextPath}/product?id=${p.getProductId()}&color=${v.getColor()}&size=${v.getSize()}'">
                                                             <p style="font-weight: 700">${p.getName()}</p>
                                                             <p style="font-size: 10px">${v.getColor()}, ${v.getSize()}</p>
                                                         </td>
@@ -520,6 +529,21 @@
                                                 }
                                             }
 
+                                            const alert = document.querySelector('#alert');
+
+                                            if (alert) {
+                                                alert.style.display = 'block';
+                                                alert.style.opacity = '1';
+
+                                                setTimeout(function () {
+                                                    alert.style.opacity = '0';
+
+                                                    setTimeout(function () {
+                                                        alert.classList.add('show');
+                                                    }, 500);
+                                                }, 3500);
+                                            }
+
                                         });
 
                                         function changeQuantity(e) {
@@ -576,7 +600,7 @@
                                                 }
                                             });
 
-                                            let alertBox = document.getElementById('alert');
+                                            let alertBox = document.getElementById('alert-select-product');
 
                                             if (!checked) {
                                                 alertBox.style.display = 'block';
