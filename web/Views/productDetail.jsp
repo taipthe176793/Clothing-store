@@ -42,6 +42,7 @@
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/feedback.css">
 
         <!--===============================================================================================-->
         <style>
@@ -241,16 +242,51 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <h3>Feedback</h3>
+            </div>
+            <!-- Feedback -->
+            <div class="feedback-section">
+                <h3>Feedback</h3>
+                <div class="rating-summary">
+                    <span class="rating-score">0 / 5</span>
+                    <div class="stars">
+                        <!-- Display stars dynamically based on average rating -->
+                        <span>★★★★★</span> <!-- Replace with dynamic star rating -->
+                        <span>(0 feedback)</span>
+                    </div>
+                </div>
+
+                <div class="user-rating">
+                    <div class="stars-input">
+                        <!-- Add input elements for user to rate the product -->
+                        <input type="radio" name="star" id="star1"><label for="star1">★</label>
+                        <input type="radio" name="star" id="star2"><label for="star2">★</label>
+                        <input type="radio" name="star" id="star3"><label for="star3">★</label>
+                        <input type="radio" name="star" id="star4"><label for="star4">★</label>
+                        <input type="radio" name="star" id="star5"><label for="star5">★</label>
+                    </div>
+                    <textarea placeholder="Please write your feedback here..."></textarea>
+                    <button type="submit">Send feedback</button>
+                </div>
+
+                <div class="filter-options">
+                    <span>Newest</span>
+                    <span>5*</span>
+                    <span>4*</span>
+                    <span>3*</span>
+                    <span>2*</span>
+                    <span>1*</span>
+                </div>
+
+                <div class="feedback-list">
                     <c:if test="${not empty feedbackList}">
                         <c:forEach var="feedback" items="${feedbackList}">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Rating: ${feedback.rating} / 5</h5>
-                                    <p class="card-text">${feedback.comment}</p>
-                                    <p class="card-text"><small class="text-muted">Posted on: ${feedback.createdAt}</small></p>
+                            <div class="feedback-item">
+                                <div class="feedback-header">
+                                    <span class="feedback-username">${feedback.username}</span>
+                                    <span class="feedback-rating">Rating: ${feedback.rating} / 5</span>
                                 </div>
+                                <p class="feedback-comment">${feedback.comment}</p>
+                                <p class="feedback-date"><small>Posted on: ${feedback.createdAt}</small></p>
                             </div>
                         </c:forEach>
                     </c:if>
@@ -258,78 +294,81 @@
                         <p>No feedback available for this product.</p>
                     </c:if>
                 </div>
-                <div class="row">
-                    <div>
-                        <section class="my-5 bg-light">
-                            <h2 class="text-center cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Products in the same category</h2>
-                            <div class="container">
-                                <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
-                                    <div class="carousel-inner">
-                                        <c:set var="chunkSize" value="3"/>
-                                        <c:forEach var="product" items="${sameCategory}" varStatus="status">
-                                            <c:if test="${status.index % chunkSize == 0}">
-                                                <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                                    <div class="row">
-                                                    </c:if>
-                                                    <div class="col-4 p-1">
-                                                        <div class="card">
-                                                            <img src="${product.getImg1()}" style="height: 350px">
-                                                            <div class="card-body">
-                                                                <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
-                                                                <p class="card-text text-center">$${product.price}</p>
-                                                                <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
-                                                            </div>
+            </div>
+
+
+            <div class="row">
+                <div>
+                    <section class="my-5 bg-light">
+                        <h2 class="text-center cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Products in the same category</h2>
+                        <div class="container">
+                            <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <c:set var="chunkSize" value="3"/>
+                                    <c:forEach var="product" items="${sameCategory}" varStatus="status">
+                                        <c:if test="${status.index % chunkSize == 0}">
+                                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                                <div class="row">
+                                                </c:if>
+                                                <div class="col-4 p-1">
+                                                    <div class="card">
+                                                        <img src="${product.getImg1()}" style="height: 350px">
+                                                        <div class="card-body">
+                                                            <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
+                                                            <p class="card-text text-center">$${product.price}</p>
+                                                            <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
                                                         </div>
                                                     </div>
-                                                    <c:if test="${status.index % chunkSize == chunkSize - 1 || status.last}">
-                                                    </div>
                                                 </div>
-                                            </c:if>
-                                        </c:forEach>
-                                    </div>
-                                    <a class="carousel-control-prev" href="#carouselThreeColumn1" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carouselThreeColumn1" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
+                                                <c:if test="${status.index % chunkSize == chunkSize - 1 || status.last}">
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </c:forEach>
                                 </div>
+                                <a class="carousel-control-prev" href="#carouselThreeColumn1" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselThreeColumn1" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
-                        </section>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
     </div>
-    <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
+</div>
+<jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
 
-        <!--===============================================================================================-->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-        <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
+<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
+<script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
+<script>
                                                         $('.parallax100').parallax100();
-    </script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-    <script>
+</script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<script>
                                                         $('.gallery-lb').each(function () { // the containers for all your galleries
                                                             $(this).magnificPopup({
                                                                 delegate: 'a', // the selector for gallery item
@@ -340,14 +379,14 @@
                                                                 mainClass: 'mfp-fade'
                                                             });
                                                         });
-    </script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script>
+</script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script>
                                                         $('.js-pscroll').each(function () {
                                                             $(this).css('position', 'relative');
                                                             $(this).css('overflow', 'hidden');
@@ -364,11 +403,11 @@
 
 
 
-    </script>
-    <!--===============================================================================================-->
-    <script src="${pageContext.request.contextPath}/js/main.js"></script>
+</script>
+<!--===============================================================================================-->
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
 
-    <script>
+<script>
 
                                                         document.addEventListener('DOMContentLoaded', function () {
                                                             // Get the input element
@@ -422,8 +461,25 @@
 
                                                         });
 
-    </script>
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const stars = document.querySelectorAll('.stars-input label');
+
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.style.color = 'gold';
+                    } else {
+                        s.style.color = 'gray';
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
-
