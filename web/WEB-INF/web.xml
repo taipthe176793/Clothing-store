@@ -108,6 +108,10 @@
         <servlet-name>OrderController</servlet-name>
         <servlet-class>Controllers.customer.OrderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckoutPageServlet</servlet-name>
+        <servlet-class>Controllers.CheckoutPageServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -199,6 +203,10 @@
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
         <url-pattern>/OrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckoutPageServlet</servlet-name>
+        <url-pattern>/checkout-success</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

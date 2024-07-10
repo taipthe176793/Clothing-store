@@ -56,9 +56,13 @@
                     </span>
                 </div>
             </div>
+        <c:if test="${notification ne null}">
+            <div id="alert" class="alert-box ${type}">
+                ${notification}
+            </div>
+        </c:if>
 
-
-            <!-- Shoping Cart -->
+        <!-- Shoping Cart -->
         <c:if test="${cart.isEmpty()}">
             <div class="text-center m-t-100">
                 <img src="${pageContext.request.contextPath}/images/cart/emptycart.png" alt="empty cart image"/>
@@ -71,11 +75,7 @@
             <div id="alert-select-product" class="alert-box alert-box-danger">
                 Please select at least one item before proceeding to checkout.
             </div>
-            <c:if test="${notification ne null}">
-                <div id="alert" class="alert-box ${type}">
-                    ${notification}
-                </div>
-            </c:if>
+
 
             <c:if test="${!cart.isEmpty()}">
                 <div class="container">

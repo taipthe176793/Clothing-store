@@ -156,12 +156,11 @@ public class CheckoutServlet extends HttpServlet {
                     ciDAO.deleteCustomerCartItem(cusId, cartItemId);
                 }
             }
-
-            response.sendRedirect("cart");
+            
+            response.sendRedirect("checkout-success");
 
         } catch (SQLException ex) {
             Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
         }
     }
 
