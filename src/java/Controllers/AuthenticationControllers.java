@@ -30,6 +30,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import javax.mail.Authenticator;
+import static utilities.CommonConst.FROM_EMAIL;
+import static utilities.CommonConst.FROM_PASSWORD;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -357,24 +360,22 @@ public class AuthenticationControllers extends HttpServlet {
             Authenticator auth = new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication("tnfstu555@gmail.com", "wrasolcszamxspai");
+                    return new PasswordAuthentication(FROM_EMAIL, FROM_PASSWORD);
                 }
             };
 
             javax.mail.Session session = javax.mail.Session.getInstance(props, auth);
-            Message message = new MimeMessage(session);
             try {
-                message.setFrom(new InternetAddress("tnfstu555@gmail.com")); // use your email address here
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(FROM_EMAIL));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
                 message.setSubject("Reset Password");
                 message.setText("To reset password, use this OTP: " + otpvalue);
 
                 // Send message
                 Transport.send(message);
-                System.out.println("Reset email sent successfully to " + toEmail);
-                request.setAttribute("message", "OTP is sent to your email id");
+                request.setAttribute("message", "OTP has been sent to your email address!");
             } catch (MessagingException e) {
-                System.out.println("Error happens when sending the email.");
                 e.printStackTrace();
                 request.setAttribute("message", "Failed to send OTP. Please try again.");
             }
@@ -399,8 +400,9 @@ public class AuthenticationControllers extends HttpServlet {
                 boolean success = accountDAO.updatePasswordByEmail((String) session.getAttribute("email"), newPassword);
 
                 if (success) {
-                    request.setAttribute("status", "resetSuccess");
-                    dispatcher = request.getRequestDispatcher("Views/authen/login.jsp");
+                    GeneratorUtils.makeNotification(request, "Change password successful", utilities.CommonConst.NOTI_SUCCESS);
+                    response.sendRedirect("auth?action=login");
+                    
                 } else {
                     request.setAttribute("status", "resetFailed");
                     dispatcher = request.getRequestDispatcher("Views/authen/login.jsp");
@@ -421,7 +423,7 @@ public class AuthenticationControllers extends HttpServlet {
         if (value == otp) {
             request.setAttribute("email", request.getParameter("email"));
             request.setAttribute("status", "success");
-            dispatcher = request.getRequestDispatcher("newPassword.jsp");
+            dispatcher = request.getRequestDispatcher("Views/authen/newPassword.jsp");
             dispatcher.forward(request, response);
 
         } else {
