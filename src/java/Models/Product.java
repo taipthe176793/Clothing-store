@@ -186,4 +186,15 @@ public class Product {
         return "Product{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", price=" + price + ", img1=" + img1 + ", img2=" + img2 + ", img3=" + img3 + ", categoryId=" + categoryId + ", isDelete=" + isDelete + ", rating=" + rating + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Product product = (Product) o;
+        return productId == product.productId;
+    }
 }
