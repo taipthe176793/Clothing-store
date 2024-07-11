@@ -94,9 +94,6 @@
                             <hr>
                         </div>
                         <div class="pt-2">
-                            <div class="row justify-content-center">
-                                <h5>Don't have an Account?<span><a href="auth?action=signup" class="text-primary"> Register Now!</a></span></h5>
-                            </div>
                             <div class="row justify-content-center align-items-center pt-4 pb-5">
                                 <div class="col-4"></div>
                             </div>
