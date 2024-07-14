@@ -393,289 +393,290 @@
                         </div>
                     </div>
 
-
-
-
-
-                    <div class="row">
-                        <div>
-                            <section class="my-5 bg-light">
-                                <h2 class="text-center cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Products in the same category</h2>
-                                <div class="container">
-                                    <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <c:set var="chunkSize" value="3"/>
-                                            <c:forEach var="product" items="${sameCategory}" varStatus="status">
-                                                <c:if test="${status.index % chunkSize == 0}">
-                                                    <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                                        <div class="row">
-                                                        </c:if>
-                                                        <div class="col-4 p-1">
-                                                            <div class="card">
-                                                                <img src="${product.getImg1()}" style="height: 350px">
-                                                                <div class="card-body">
-                                                                    <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
-                                                                    <p class="card-text text-center">$${product.price}</p>
-                                                                    <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <c:if test="${status.index % chunkSize == chunkSize - 1 || status.last}">
-                                                        </div>
-                                                    </div>
-                                                </c:if>
-                                            </c:forEach>
-                                        </div>
-                                        <a class="carousel-control-prev" href="#carouselThreeColumn1" role="button" data-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                        <a class="carousel-control-next" href="#carouselThreeColumn1" role="button" data-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
                 </div>
 
-                <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
-
-                    <!--===============================================================================================-->
-                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-                    <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
-                <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
-                <script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
-                <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
-                <script>
-                                                            $('.parallax100').parallax100();
-                </script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-                <script>
-                                                            $('.gallery-lb').each(function () { // the containers for all your galleries
-                                                                $(this).magnificPopup({
-                                                                    delegate: 'a', // the selector for gallery item
-                                                                    type: 'image',
-                                                                    gallery: {
-                                                                        enabled: true
-                                                                    },
-                                                                    mainClass: 'mfp-fade'
-                                                                });
-                                                            });
-                </script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-                <script>
-                                                            $('.js-pscroll').each(function () {
-                                                                $(this).css('position', 'relative');
-                                                                $(this).css('overflow', 'hidden');
-                                                                var ps = new PerfectScrollbar(this, {
-                                                                    wheelSpeed: 1,
-                                                                    scrollingThreshold: 1000,
-                                                                    wheelPropagation: false,
-                                                                });
-
-                                                                $(window).on('resize', function () {
-                                                                    ps.update();
-                                                                })
-                                                            });
 
 
+                <div class="row">
+                    <div>
+                        <section class="my-5 bg-light">
+                            <h2 class="text-center cl2 p-t-19 p-b-10 respon1" style="font-size: 30px">Products in the same category</h2>
+                            <div class="container">
+                                <div id="carouselThreeColumn1" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <c:set var="chunkSize" value="3"/>
+                                        <c:forEach var="product" items="${sameCategory}" varStatus="status">
+                                            <c:if test="${status.index % chunkSize == 0}">
+                                                <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
+                                                    <div class="row">
+                                                    </c:if>
+                                                    <div class="col-4 p-1">
+                                                        <div class="card">
+                                                            <img src="${product.getImg1()}" style="height: 350px">
+                                                            <div class="card-body">
+                                                                <h5 class="text-center card-title mtext-105 cl2 js-name-detail" style="font-size: 20px">${product.name}</h5>
+                                                                <p class="card-text text-center">$${product.price}</p>
+                                                                <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="btn btn-outline-success w-100">Shop Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <c:if test="${status.index % chunkSize == chunkSize - 1 || status.last}">
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselThreeColumn1" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselThreeColumn1" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
 
-                </script>
-                <!--===============================================================================================-->
-                <script src="${pageContext.request.contextPath}/js/main.js"></script>
+</div>
+            <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
+            
+            <!--===============================================================================================-->
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+            <script src="${pageContext.request.contextPath}/vendor/jquery/jquery-3.2.1.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/animsition/js/animsition.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/popper.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/select2/select2.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/daterangepicker/moment.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/slick/slick.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
+        <script>
+                                                    $('.parallax100').parallax100();
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+        <script>
+                                                    $('.gallery-lb').each(function () { // the containers for all your galleries
+                                                        $(this).magnificPopup({
+                                                            delegate: 'a', // the selector for gallery item
+                                                            type: 'image',
+                                                            gallery: {
+                                                                enabled: true
+                                                            },
+                                                            mainClass: 'mfp-fade'
+                                                        });
+                                                    });
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/sweetalert/sweetalert.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script>
+                                                    $('.js-pscroll').each(function () {
+                                                        $(this).css('position', 'relative');
+                                                        $(this).css('overflow', 'hidden');
+                                                        var ps = new PerfectScrollbar(this, {
+                                                            wheelSpeed: 1,
+                                                            scrollingThreshold: 1000,
+                                                            wheelPropagation: false,
+                                                        });
 
-                <script>
+                                                        $(window).on('resize', function () {
+                                                            ps.update();
+                                                        })
+                                                    });
 
-                                                            document.addEventListener('DOMContentLoaded', function () {
-                                                                // Get the input element
-                                                                const input = document.querySelector('input[id="num-product"]');
-                                                                const maxValue = parseInt(input.max);
 
-                                                                if (input) {
-                                                                    input.addEventListener('input', function () {
-                                                                        let currentValue = parseInt(input.value);
 
-                                                                        if (isNaN(currentValue) || input.value.trim() === "") {
-                                                                            input.value = 1;
-                                                                        } else {
-                                                                            if (currentValue < 1) {
-                                                                                input.value = 1;
-                                                                            } else if (currentValue > maxValue) {
-                                                                                input.value = maxValue;
-                                                                            }
-                                                                        }
-                                                                    });
+        </script>
+        <!--===============================================================================================-->
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
 
-                                                                    document.querySelector('.btn-num-product-up').addEventListener('click', function () {
-                                                                        let currentValue = parseInt(input.value);
-                                                                        if (currentValue < maxValue) {
-                                                                            input.value = currentValue + 1;
-                                                                        }
-                                                                    });
+        <script>
 
-                                                                    document.querySelector('.btn-num-product-down').addEventListener('click', function () {
-                                                                        let currentValue = parseInt(input.value);
-                                                                        if (currentValue > 1) {
-                                                                            input.value = currentValue - 1;
-                                                                        }
-                                                                    });
+                                                    document.addEventListener('DOMContentLoaded', function () {
+                                                        // Get the input element
+                                                        const input = document.querySelector('input[id="num-product"]');
+                                                        const maxValue = parseInt(input.max);
+
+                                                        if (input) {
+                                                            input.addEventListener('input', function () {
+                                                                let currentValue = parseInt(input.value);
+
+                                                                if (isNaN(currentValue) || input.value.trim() === "") {
+                                                                    input.value = 1;
+                                                                } else {
+                                                                    if (currentValue < 1) {
+                                                                        input.value = 1;
+                                                                    } else if (currentValue > maxValue) {
+                                                                        input.value = maxValue;
+                                                                    }
                                                                 }
-
-                                                                const alert = document.querySelector('#alert');
-
-                                                                if (alert) {
-                                                                    alert.style.display = 'block';
-                                                                    alert.style.opacity = '1';
-
-                                                                    setTimeout(function () {
-                                                                        alert.style.opacity = '0';
-
-                                                                        setTimeout(function () {
-                                                                            alert.classList.add('show');
-                                                                        }, 500);
-                                                                    }, 3500);
-                                                                }
-
                                                             });
 
-                </script>
+                                                            document.querySelector('.btn-num-product-up').addEventListener('click', function () {
+                                                                let currentValue = parseInt(input.value);
+                                                                if (currentValue < maxValue) {
+                                                                    input.value = currentValue + 1;
+                                                                }
+                                                            });
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', (event) => {
-                        const stars = document.querySelectorAll('.stars-input label');
+                                                            document.querySelector('.btn-num-product-down').addEventListener('click', function () {
+                                                                let currentValue = parseInt(input.value);
+                                                                if (currentValue > 1) {
+                                                                    input.value = currentValue - 1;
+                                                                }
+                                                            });
+                                                        }
 
-                        // Set initial star rating to 4 and check the corresponding radio button
-                        stars.forEach((star, index) => {
-                            if (index < 4) {
-                                star.style.color = 'gold';
+                                                        const alert = document.querySelector('#alert');
+
+                                                        if (alert) {
+                                                            alert.style.display = 'block';
+                                                            alert.style.opacity = '1';
+
+                                                            setTimeout(function () {
+                                                                alert.style.opacity = '0';
+
+                                                                setTimeout(function () {
+                                                                    alert.classList.add('show');
+                                                                }, 500);
+                                                            }, 3500);
+                                                        }
+
+                                                    });
+
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const stars = document.querySelectorAll('.stars-input label');
+
+                // Set initial star rating to 4 and check the corresponding radio button
+                stars.forEach((star, index) => {
+                    if (index < 4) {
+                        star.style.color = 'gold';
+                    } else {
+                        star.style.color = 'gray';
+                    }
+                });
+
+                // Check the radio button corresponding to 4 stars
+                const star4Input = document.querySelector('#star4');
+                if (star4Input) {
+                    star4Input.checked = true;
+                }
+
+                // Handle star click events
+                stars.forEach((star, index) => {
+                    star.addEventListener('click', () => {
+                        stars.forEach((s, i) => {
+                            if (i <= index) {
+                                s.style.color = 'gold';
                             } else {
-                                star.style.color = 'gray';
+                                s.style.color = 'gray';
                             }
                         });
-
-                        // Check the radio button corresponding to 4 stars
-                        const star4Input = document.querySelector('#star4');
-                        if (star4Input) {
-                            star4Input.checked = true;
-                        }
-
-                        // Handle star click events
-                        stars.forEach((star, index) => {
-                            star.addEventListener('click', () => {
-                                stars.forEach((s, i) => {
-                                    if (i <= index) {
-                                        s.style.color = 'gold';
-                                    } else {
-                                        s.style.color = 'gray';
-                                    }
-                                });
-                            });
-                        });
                     });
-                </script>
-                <script>
-                    // Update average rating and total feedback count based on backend data or initial values
-                    var averageRatingValue = ${averageRating}; // Replace with actual average rating value
-                    var totalFeedbackCountValue = ${totalFeedbackCount}; // Replace with actual total feedback count value
+                });
+            });
+        </script>
+        <script>
+            // Update average rating and total feedback count based on backend data or initial values
+            var averageRatingValue = ${averageRating}; // Replace with actual average rating value
+            var totalFeedbackCountValue = ${totalFeedbackCount}; // Replace with actual total feedback count value
 
-                    document.getElementById('averageRating').innerText = averageRatingValue + ' / 5';
-                    document.querySelector('.rating-score').innerText = averageRatingValue.toFixed(1) + ' / 5';
-                    document.querySelector('.stars').innerHTML = getStarsHtml(averageRatingValue); // Function to generate star icons based on average rating
+            document.getElementById('averageRating').innerText = averageRatingValue + ' / 5';
+            document.querySelector('.rating-score').innerText = averageRatingValue.toFixed(1) + ' / 5';
+            document.querySelector('.stars').innerHTML = getStarsHtml(averageRatingValue); // Function to generate star icons based on average rating
 
-                    function getStarsHtml(rating) {
-                        var fullStars = Math.floor(rating);
-                        var halfStar = (rating % 1 !== 0) ? '<span>★</span>' : '';
-                        var emptyStars = 5 - Math.ceil(rating);
+            function getStarsHtml(rating) {
+                var fullStars = Math.floor(rating);
+                var halfStar = (rating % 1 !== 0) ? '<span>★</span>' : '';
+                var emptyStars = 5 - Math.ceil(rating);
 
-                        var starsHtml = '';
-                        for (var i = 0; i < fullStars; i++) {
-                            starsHtml += '<span>★</span>';
+                var starsHtml = '';
+                for (var i = 0; i < fullStars; i++) {
+                    starsHtml += '<span>★</span>';
+                }
+                starsHtml += halfStar;
+                for (var j = 0; j < emptyStars; j++) {
+                    starsHtml += '<span>☆</span>';
+                }
+
+                return starsHtml;
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                // Set up modal for updating feedback
+                $('#updateFeedbackModal').on('show.bs.modal', function (event) {
+                    var triggerElement = $(event.relatedTarget); // Element that triggered the modal
+                    var feedbackId = triggerElement.data('feedback-id'); // Feedback ID to update
+                    var rating = triggerElement.data('rating'); // Current rating
+                    var comment = triggerElement.data('comment'); // Current comment
+
+                    // Set modal fields with current feedback data
+                    $('#updateFeedbackModal').find('#updateFeedbackId').val(feedbackId);
+                    $('#updateFeedbackModal').find('#updateComment').val(comment);
+
+                    // Set rating stars based on current rating
+                    setStarRating(rating);
+
+                    // Set the checked attribute for the correct radio button
+                    $('#updateFeedbackModal').find('input[name="rating"][value="' + rating + '"]').prop('checked', true);
+                });
+
+                // Function to handle form submission
+                $('#updateFeedbackForm').submit(function (event) {
+                    // Prevent default form submission
+                    event.preventDefault();
+
+                    // Perform form submission via AJAX or standard form submit
+                    $(this).unbind('submit').submit();
+                });
+
+                // Function to set the star rating
+                function setStarRating(rating) {
+                    const stars = document.querySelectorAll('#updateFeedbackModal .stars-input label');
+                    stars.forEach((star, index) => {
+                        if (index < rating) {
+                            star.style.color = 'gold';
+                        } else {
+                            star.style.color = 'gray';
                         }
-                        starsHtml += halfStar;
-                        for (var j = 0; j < emptyStars; j++) {
-                            starsHtml += '<span>☆</span>';
-                        }
-
-                        return starsHtml;
-                    }
-                </script>
-                <script>
-                    $(document).ready(function () {
-                        // Set up modal for updating feedback
-                        $('#updateFeedbackModal').on('show.bs.modal', function (event) {
-                            var triggerElement = $(event.relatedTarget); // Element that triggered the modal
-                            var feedbackId = triggerElement.data('feedback-id'); // Feedback ID to update
-                            var rating = triggerElement.data('rating'); // Current rating
-                            var comment = triggerElement.data('comment'); // Current comment
-
-                            // Set modal fields with current feedback data
-                            $('#updateFeedbackModal').find('#updateFeedbackId').val(feedbackId);
-                            $('#updateFeedbackModal').find('#updateComment').val(comment);
-
-                            // Set rating stars based on current rating
-                            setStarRating(rating);
-
-                            // Set the checked attribute for the correct radio button
-                            $('#updateFeedbackModal').find('input[name="rating"][value="' + rating + '"]').prop('checked', true);
-                        });
-
-                        // Function to handle form submission
-                        $('#updateFeedbackForm').submit(function (event) {
-                            // Prevent default form submission
-                            event.preventDefault();
-
-                            // Perform form submission via AJAX or standard form submit
-                            $(this).unbind('submit').submit();
-                        });
-
-                        // Function to set the star rating
-                        function setStarRating(rating) {
-                            const stars = document.querySelectorAll('#updateFeedbackModal .stars-input label');
-                            stars.forEach((star, index) => {
-                                if (index < rating) {
-                                    star.style.color = 'gold';
-                                } else {
-                                    star.style.color = 'gray';
-                                }
-                            });
-                        }
-
-                        // Handle star click events
-                        $('#updateFeedbackModal .stars-input label').click(function () {
-                            // Lấy giá trị rating từ input phía trước label được click
-                            const rating = $(this).prev('input').val();
-                            setStarRating(rating); // Gọi hàm setStarRating để cập nhật giao diện
-
-                            // Đánh dấu input radio tương ứng là checked
-                            $(this).prev('input').prop('checked', true);
-
-                        });
-
                     });
-                </script>
+                }
+
+                // Handle star click events
+                $('#updateFeedbackModal .stars-input label').click(function () {
+                    // Lấy giá trị rating từ input phía trước label được click
+                    const rating = $(this).prev('input').val();
+                    setStarRating(rating); // Gọi hàm setStarRating để cập nhật giao diện
+
+                    // Đánh dấu input radio tương ứng là checked
+                    $(this).prev('input').prop('checked', true);
+
+                });
+
+            });
+        </script>
 
 
-                </body>
-                </html>
+    </body>
+</html>
