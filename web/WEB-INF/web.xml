@@ -115,6 +115,7 @@
     <servlet>
         <servlet-name>FeedbackCusController</servlet-name>
         <servlet-class>Controllers.customer.FeedbackCusController</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>CheckoutPageServlet</servlet-name>
         <servlet-class>Controllers.CheckoutPageServlet</servlet-class>
