@@ -21,6 +21,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import static utilities.CommonConst.USER_ID_COOKIE;
+import utilities.CookieUtils;
 import utilities.GeneratorUtils;
 
 /**
@@ -69,9 +71,9 @@ public class ProductDetailControllers extends HttpServlet {
             throws ServletException, IOException {
         try {
 
-            HttpSession session = request.getSession();
-
             int productId = Integer.parseInt(request.getParameter("id"));
+            int customerId = Integer.parseInt(CookieUtils.getCookieValueByName(USER_ID_COOKIE, request));
+
             String color = request.getParameter("color") == null ? "" : request.getParameter("color");
             String size = request.getParameter("size") == null ? "" : request.getParameter("size");
             List<String> sizesOfColor = new ArrayList<>();
@@ -81,13 +83,12 @@ public class ProductDetailControllers extends HttpServlet {
             Product product = pDAO.findProductById(productId);
 
             List<Product> sameCategory = pDAO.getSameCategoryProducts(product.getCategoryId());
-
+            FeedbackDAO feedbackDAO = new FeedbackDAO();
             ProductVariantDAO pvDao = new ProductVariantDAO();
             product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
-            
-            FeedbackDAO feedbackDAO = new FeedbackDAO();
-            List<Feedback> feedbackList = feedbackDAO.getFeedbacksByProductId(productId);
-            request.setAttribute("feedbackList", feedbackList);
+
+            boolean previousFeedback = feedbackDAO.hasCustomerGivenFeedback(customerId, productId);
+            double averageRating = feedbackDAO.getAverageRating(productId);
 
             for (ProductVariant pv : product.getVariantList()) {
                 //Get sizesOfColor
@@ -110,9 +111,26 @@ public class ProductDetailControllers extends HttpServlet {
                         + product.getFirstInStock().getColor() + "&size=" + product.getFirstInStock().getSize());
 
             } else {
+                if (request.getSession().getAttribute("feedbackList") != null) {
+
+                    request.setAttribute("feedbackList",
+                            request.getSession().getAttribute("feedbackList"));
+
+                    request.setAttribute("starFilter",
+                            request.getSession().getAttribute("starFilter"));
+                    if (request.getSession().getAttribute(utilities.CommonConst.NOTIFICATION) == null) {
+                        request.getSession().invalidate();
+                    }
+
+                } else {
+
+                    List<Feedback> feedbackList = feedbackDAO.getFeedbacksByProductId(productId);
+                    request.setAttribute("feedbackList", feedbackList);
+                }
 
                 GeneratorUtils.getNotification(request);
-
+                request.setAttribute("previousFeedback", previousFeedback);
+                request.setAttribute("averageRating", averageRating);
                 request.setAttribute("color", color);
                 request.setAttribute("size", size);
                 request.setAttribute("sizesOfColor", sizesOfColor);
@@ -121,9 +139,11 @@ public class ProductDetailControllers extends HttpServlet {
                 request.setAttribute("sameCategory", sameCategory);
                 request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
             }
-        } catch (SQLException ex) {
-        } catch (ClassNotFoundException ex) {
-        }
+        } catch (SQLException | ClassNotFoundException ex ) {
+            PrintWriter pw = response.getWriter();
+            String mess = "<html> "+ex.getMessage()+"  </html>";
+            pw.print(mess);
+        } 
     }
 
     /**

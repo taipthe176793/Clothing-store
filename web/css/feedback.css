@@ -7,8 +7,9 @@
 }
 
 .rating-summary {
+    margin-top: 10px;
     display: flex;
-    align-items: center;
+/*    align-items: center;*/
 }
 
 .rating-score {
@@ -23,7 +24,7 @@
 }
 
 .user-rating {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .stars-input {
@@ -36,7 +37,7 @@
 }
 
 .stars-input label {
-    font-size: 24px;
+    font-size: 20px;
     color: gold;
     cursor: pointer;
 }
@@ -61,7 +62,7 @@ button {
 .filter-options {
     margin-top: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .feedback-list {

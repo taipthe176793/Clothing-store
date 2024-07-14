@@ -108,6 +108,14 @@
         <servlet-name>OrderController</servlet-name>
         <servlet-class>Controllers.customer.OrderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FeedbackControllers</servlet-name>
+        <servlet-class>Controllers.staff.FeedbackControllers</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackCusController</servlet-name>
+        <servlet-class>Controllers.customer.FeedbackCusController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -199,6 +207,14 @@
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
         <url-pattern>/OrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackControllers</servlet-name>
+        <url-pattern>/staff/feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackCusController</servlet-name>
+        <url-pattern>/customer/feedback</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

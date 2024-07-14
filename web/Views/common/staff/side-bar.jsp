@@ -21,7 +21,7 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link" href="">
+                <a class="nav-link"  href="${pageContext.request.contextPath}/staff/feedback">
                     <i class="nc-icon nc-app"></i>
                     <p>Manage Feedbacks</p>
                 </a>
