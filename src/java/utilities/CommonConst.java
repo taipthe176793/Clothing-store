@@ -46,6 +46,6 @@ public class CommonConst {
     public static final String CART_COOKIE = "cart";
     public static final String ITEMS_NUMBER_CART_COOKIE = "cin";
     
-    public static final String USER_ID_COOKIE = "userId";
+    public static final String USER_ID_COOKIE = "userId";    
 
 }

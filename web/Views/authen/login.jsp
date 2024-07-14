@@ -54,7 +54,7 @@
                         <input name="pass" type="password" class="form-control" placeholder="Password" required>
                         <i class="zmdi zmdi-lock"></i>
                     </div>
-                    <div> <a style="text-decoration: none" href="auth?action=resetPass">Forget password?</a></div>
+                    <div> <a style="text-decoration: none" href="auth?action=forgotPassword">Forgot password?</a></div>
                     <div style="color: red; margin-top: 10px;">${error}</div>
                     <button type="submit">Login
                         <i class="zmdi zmdi-arrow-right"></i>
@@ -147,6 +147,16 @@
                             }
 
                         });
+        </script>
+        
+        <script type="text/javascript">
+            var status = document.getElementById("status").value;
+            if (status === "resetSuccess") {
+                swal("Congrats", "Password Reset Successful", "success");
+            }
+            else if (status === "resetFailed") {
+                swal("Sorry", "Password Reset Failed", "error");
+            }
         </script>
 
 

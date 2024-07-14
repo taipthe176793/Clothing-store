@@ -408,7 +408,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            
+
         }
     }
 
@@ -427,7 +427,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-          
+
         }
     }
 
@@ -444,7 +444,7 @@ public class AccountDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-           
+
         }
     }
 
@@ -768,7 +768,7 @@ public class AccountDAO extends DBContext {
     }
 
     public List<Account> getAllStaff() throws SQLException {
-         Connection con = null;
+        Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
         List<Account> accountList = new ArrayList<>();
@@ -810,4 +810,21 @@ public class AccountDAO extends DBContext {
         return accountList;
     }
 
+    public boolean updatePasswordByEmail(String email, String newPassword) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            con = connect;
+            String sql = "UPDATE Account SET password = ? WHERE email = ?";
+            stm = con.prepareStatement(sql);
+            stm.setString(1, newPassword);
+            stm.setString(2, email);
+            int rowsUpdated = stm.executeUpdate();
+            return rowsUpdated > 0;
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+    }
 }

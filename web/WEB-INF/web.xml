@@ -115,6 +115,9 @@
     <servlet>
         <servlet-name>FeedbackCusController</servlet-name>
         <servlet-class>Controllers.customer.FeedbackCusController</servlet-class>
+    <servlet>
+        <servlet-name>CheckoutPageServlet</servlet-name>
+        <servlet-class>Controllers.CheckoutPageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
@@ -215,6 +218,10 @@
     <servlet-mapping>
         <servlet-name>FeedbackCusController</servlet-name>
         <url-pattern>/customer/feedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckoutPageServlet</servlet-name>
+        <url-pattern>/checkout-success</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

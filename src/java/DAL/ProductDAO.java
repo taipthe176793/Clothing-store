@@ -286,7 +286,7 @@ public class ProductDAO extends DBContext {
                 String sql = "SELECT * \n"
                         + "FROM [dbo].[product]\n"
                         + "WHERE [is_deleted] = 0\n"
-                        + "ORDER BY [product_id]\n"
+                        + "ORDER BY [product_id] DESC\n"
                         + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
@@ -479,4 +479,278 @@ public class ProductDAO extends DBContext {
         }
         return products;
     }
+
+    public List<Product> getProductsByFilterAndPage(String category, String price, String size, String color, String sort, String search, int pageNumber) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> productList = new ArrayList<>();
+        int paramIndex = 1;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                StringBuilder query = new StringBuilder();
+
+                boolean filterByVariants = !size.equals("all") || !color.equals("all");
+
+                if (filterByVariants && !size.isBlank() && !color.isBlank()) {
+                    query.append("SELECT p.*, v.size, v.color FROM [dbo].[product] p \n")
+                            .append("JOIN [dbo].[product_variants] v \n")
+                            .append("ON p.product_id = v.product_id\n")
+                            .append("WHERE p.is_deleted = 0");
+                } else {
+                    query.append("SELECT p.* FROM [dbo].[product] p \n")
+                            .append("WHERE p.is_deleted = 0");
+                }
+
+                if (!category.isBlank() && !category.equals("0")) {
+                    query.append(" AND p.category_id = ?");
+                }
+                if (!price.isBlank() && !price.equals("all")) {
+                    switch (price) {
+                        case "0-15":
+                            query.append(" AND p.price BETWEEN 0 AND 15");
+                            break;
+                        case "15-25":
+                            query.append(" AND p.price BETWEEN 15 AND 25");
+                            break;
+                        case "25-50":
+                            query.append(" AND p.price BETWEEN 25 AND 50");
+                            break;
+                        case "50-999":
+                            query.append(" AND p.price > 50");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!size.isBlank() && !size.equals("all")) {
+                    query.append(" AND v.size = ?");
+                }
+                if (!color.isBlank() && !color.equals("all")) {
+                    query.append(" AND v.color = ?");
+                }
+
+                if (!search.isBlank()) {
+                    query.append(" AND p.name LIKE ?");
+                }
+
+                if (!sort.isBlank()) {
+                    switch (sort) {
+                        case "name-asc":
+                            query.append(" ORDER BY p.name ASC");
+                            break;
+                        case "name-desc":
+                            query.append(" ORDER BY p.name DESC");
+                            break;
+                        case "price-asc":
+                            query.append(" ORDER BY p.price ASC");
+                            break;
+                        case "price-desc":
+                            query.append(" ORDER BY p.price DESC");
+                            break;
+                        default:
+                            query.append(" ORDER BY p.product_id DESC");
+                            break;
+                    }
+                }
+
+                if (sort.isBlank()) {
+                    query.append(" ORDER BY p.product_id DESC");
+                }
+
+                query.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+                //3. Create Statement
+                stm = con.prepareStatement(query.toString());
+
+                if (!category.isBlank() && !category.equals("0")) {
+                    stm.setInt(paramIndex++, Integer.parseInt(category));
+                }
+                if (!size.isBlank() && !size.equals("all")) {
+                    stm.setString(paramIndex++, size);
+                }
+                if (!color.isBlank() && !color.equals("all")) {
+                    stm.setString(paramIndex++, color);
+                }
+
+                if (!search.isBlank()) {
+                    stm.setString(paramIndex++, "%" + search + "%");
+                }
+
+                stm.setInt(paramIndex++, (pageNumber - 1) * PRODUCTS_PER_PAGE);
+                stm.setInt(paramIndex++, PRODUCTS_PER_PAGE);
+                //4. Execute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    ProductVariantDAO pDAO = new ProductVariantDAO();
+
+                    p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
+
+                    productList.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return productList;
+    }
+
+    public List<Product> getProductsByFilter(String category, String price, String size, String color, String sort, String search) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> productList = new ArrayList<>();
+        int paramIndex = 1;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                StringBuilder query = new StringBuilder();
+
+                boolean filterByVariants = !size.equals("all") || !color.equals("all");
+
+                if (filterByVariants && !size.isBlank() && !color.isBlank()) {
+                    query.append("SELECT p.*, v.size, v.color FROM [dbo].[product] p \n")
+                            .append("JOIN [dbo].[product_variants] v \n")
+                            .append("ON p.product_id = v.product_id\n")
+                            .append("WHERE p.is_deleted = 0");
+                } else {
+                    query.append("SELECT p.* FROM [dbo].[product] p \n")
+                            .append("WHERE p.is_deleted = 0");
+                }
+
+                if (!category.isBlank() && !category.equals("0")) {
+                    query.append(" AND p.category_id = ?");
+                }
+                if (!price.isBlank() && !price.equals("all")) {
+                    switch (price) {
+                        case "0-15":
+                            query.append(" AND p.price BETWEEN 0 AND 15");
+                            break;
+                        case "15-25":
+                            query.append(" AND p.price BETWEEN 15 AND 25");
+                            break;
+                        case "25-50":
+                            query.append(" AND p.price BETWEEN 25 AND 50");
+                            break;
+                        case "50-999":
+                            query.append(" AND p.price > 50");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!size.isBlank() && !size.equals("all")) {
+                    query.append(" AND v.size = ?");
+                }
+                if (!color.isBlank() && !color.equals("all")) {
+                    query.append(" AND v.color = ?");
+                }
+
+                if (!search.isBlank()) {
+                    query.append(" AND p.name LIKE ?");
+                }
+
+                if (!sort.isBlank()) {
+                    switch (sort) {
+                        case "name-asc":
+                            query.append(" ORDER BY p.name ASC");
+                            break;
+                        case "name-desc":
+                            query.append(" ORDER BY p.name DESC");
+                            break;
+                        case "price-asc":
+                            query.append(" ORDER BY p.price ASC");
+                            break;
+                        case "price-desc":
+                            query.append(" ORDER BY p.price DESC");
+                            break;
+                        default:
+                            query.append(" ORDER BY p.product_id DESC");
+                            break;
+                    }
+                }
+
+                if (sort.isBlank()) {
+                    query.append(" ORDER BY p.product_id DESC");
+                }
+
+                //3. Create Statement
+                stm = con.prepareStatement(query.toString());
+
+                if (!category.isBlank() && !category.equals("0")) {
+                    stm.setInt(paramIndex++, Integer.parseInt(category));
+                }
+                if (!size.isBlank() && !size.equals("all")) {
+                    stm.setString(paramIndex++, size);
+                }
+                if (!color.isBlank() && !color.equals("all")) {
+                    stm.setString(paramIndex++, color);
+                }
+
+                if (!search.isBlank()) {
+                    String searchQuery = "%" + search + "%";
+                    stm.setString(paramIndex++, searchQuery);
+                }
+
+                //4. Execute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    ProductVariantDAO pDAO = new ProductVariantDAO();
+
+                    p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
+                    productList.add(p);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return productList;
+    }
+
 }

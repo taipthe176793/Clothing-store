@@ -71,7 +71,34 @@ public class PublicProductsControllers extends HttpServlet {
 
             int numOfProductPerPage = 8;
             int currentPage = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+
+            String category = request.getParameter("category") == null ? "" : request.getParameter("category");
+            String price = request.getParameter("price") == null ? "" : request.getParameter("price");
+            String size = request.getParameter("size") == null ? "" : request.getParameter("size");
+            String color = request.getParameter("color") == null ? "" : request.getParameter("color");
+            String sort = request.getParameter("sort") == null ? "" : request.getParameter("sort");
+            String search = request.getParameter("search") == null ? "" : request.getParameter("search");
+
+            String query = "";
+            if (!category.isBlank()) {
+                query = "category=" + category + "&price=" + price + "&size=" + size + "&color=" + color + "&sort=" + sort;
+            }
+            if (!search.isBlank()) {
+                query += "&search=" + search;
+            }
+
+            List<Category> categoryList = cDao.getAllCategories();
+
+            List<Product> productList;
             int numOfProduct = pDao.getAllProducts().size();
+
+            if (!category.isBlank() || !search.isBlank()) {
+                productList = pDao.getProductsByFilterAndPage(category, price, size, color, sort, search, currentPage);
+                numOfProduct = pDao.getProductsByFilter(category, price, size, color, sort, search).size();
+            } else {
+                productList = pDao.getProductByPage(currentPage);
+            }
+
             int totalPageNumber = numOfProduct / numOfProductPerPage;
 
             int numOfProductEndPage = numOfProduct % numOfProductPerPage;
@@ -79,10 +106,8 @@ public class PublicProductsControllers extends HttpServlet {
                 totalPageNumber++;
             }
 
-            List<Category> categoryList = cDao.getAllCategories();
-
-            List<Product> productList = pDao.getProductByPage(currentPage);
             request.setAttribute("categoryList", categoryList);
+            request.setAttribute("query", query);
 
             request.setAttribute("productList", productList);
             request.setAttribute("totalPageNumber", totalPageNumber);

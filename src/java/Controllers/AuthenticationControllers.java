@@ -8,16 +8,21 @@ import Controllers.customer.CartControllers;
 import DAL.AccountDAO;
 import Models.Account;
 import Models.GoogleAccount;
+
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import utilities.EmailUtils;
 
 /**
  *
@@ -112,6 +117,15 @@ public class AuthenticationControllers extends HttpServlet {
                         request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                     }
                     break;
+                case "forgotPassword":
+                    request.getRequestDispatcher("Views/authen/forgotPassword.jsp").forward(request, response);
+                    break;
+                case "newPassword":
+                    request.getRequestDispatcher("Views/authen/newPassword.jsp").forward(request, response);
+                    break;
+                case "validateOtp":
+                    request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+                    break;
                 default:
                     throw new AssertionError();
             }
@@ -193,6 +207,15 @@ public class AuthenticationControllers extends HttpServlet {
                         request.setAttribute("user", userInput);
                         request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                     }
+                    break;
+                case "forgotPassword":
+                    forgotPassword(request, response);
+                    break;
+                case "newPassword":
+                    newPassword(request, response);
+                    break;
+                case "validateOtp":
+                    validateOtp(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -304,4 +327,126 @@ public class AuthenticationControllers extends HttpServlet {
         return username != null && !username.contains(" ")
                 && password != null && !password.contains(" ");
     }
+
+    private void forgotPassword(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String email = request.getParameter("email");
+
+        AccountDAO aDAO = new AccountDAO();
+
+        try {
+            if (!aDAO.checkEmailExist(email)) {
+                request.setAttribute("error", "Email does not exist in our system.");
+                request.getRequestDispatcher("Views/authen/forgotPassword.jsp").forward(request, response);
+                return;
+            }
+
+            // Generate OTP
+            Random rd = new Random();
+            int otp = rd.nextInt(900000) + 100000;
+
+            // Send OTP via email
+            String subject = "Reset Password";
+            String content = "Your OTP code is: " + otp;
+            EmailUtils.sendEmail(email, subject, content);
+
+            // Store OTP and email in session
+            HttpSession session = request.getSession();
+            session.setAttribute("otp", otp);
+            session.setAttribute("email", email);
+
+            // Redirect to validate OTP page
+            response.sendRedirect("auth?action=validateOtp");
+
+        } catch (SQLException | ClassNotFoundException e) {
+            request.setAttribute("error", "Internal error occurred. Please try again later.");
+            request.getRequestDispatcher("Views/authen/forgotPassword.jsp").forward(request, response);
+        }
+    }
+
+    private void newPassword(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String password = request.getParameter("password");
+        String confPassword = request.getParameter("confPassword");
+        String email = (String) request.getSession().getAttribute("email");
+
+        // Validate password fields
+        if (password == null || password.trim().isEmpty()
+                || confPassword == null || confPassword.trim().isEmpty()) {
+            request.setAttribute("message", "Password fields cannot be empty.");
+            request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+            return;
+        }
+
+        // Validate passwords match
+        if (!password.equals(confPassword)) {
+            request.setAttribute("message", "Passwords do not match.");
+            request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+            return;
+        }
+
+        // Assuming OTP validation succeeds and email is set in session
+        // Process password reset here
+        try {
+            // Convert email to accountId (if needed), assuming AccountDAO is used
+            AccountDAO accountDAO = new AccountDAO();
+            Account account = accountDAO.getAccountByEmail(email);
+            if (account != null) {
+                // Update password in database for the account
+                account.setPassword(password); // Set new password (you might need to hash it)
+                boolean updateResult = accountDAO.updatePassword(account);
+
+                if (updateResult) {
+                    request.setAttribute("message", "Password updated successfully.");
+                    response.sendRedirect("auth?action=login");
+                } else {
+                    request.setAttribute("message", "Failed to update password.");
+                    request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+                }
+            } else {
+                request.setAttribute("message", "Account not found.");
+                request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            request.setAttribute("message", "Error updating password: " + ex.getMessage());
+            request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+        }
+    }
+
+    private void validateOtp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int value = Integer.parseInt(request.getParameter("otp"));
+            HttpSession session = request.getSession();
+            Integer otp = (Integer) session.getAttribute("otp"); // Use Integer to handle null values
+
+            if (otp == null) {
+                request.setAttribute("message", "Session expired. Please try again.");
+                request.getRequestDispatcher("Views/authen/forgotPassword.jsp").forward(request, response);
+                return;
+            }
+
+            RequestDispatcher dispatcher = null;
+            if (value == otp) {
+                String email = (String) session.getAttribute("email");
+                if (email != null) {
+                    request.setAttribute("email", email);
+                    request.setAttribute("status", "success");
+                    request.getRequestDispatcher("Views/authen/newPassword.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("message", "Email not found in session.");
+                    request.getRequestDispatcher("Views/authen/forgotPassword.jsp").forward(request, response);
+                }
+            } else {
+                request.setAttribute("message", "Wrong OTP!");
+                request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("message", "Invalid OTP value.");
+            request.getRequestDispatcher("Views/authen/enterOtp.jsp").forward(request, response);
+        }
+    }
+
 }
