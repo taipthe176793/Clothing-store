@@ -604,7 +604,9 @@ public class ProductDAO extends DBContext {
 
                     p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
 
-                    productList.add(p);
+                    if (!productList.contains(p)) {
+                        productList.add(p);
+                    }
 
                 }
             }
@@ -739,7 +741,9 @@ public class ProductDAO extends DBContext {
                     ProductVariantDAO pDAO = new ProductVariantDAO();
 
                     p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
-                    productList.add(p);
+                    if (!productList.contains(p)) {
+                        productList.add(p);
+                    }
                 }
             }
         } finally {

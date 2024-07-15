@@ -72,7 +72,10 @@ public class ProductDetailControllers extends HttpServlet {
         try {
 
             int productId = Integer.parseInt(request.getParameter("id"));
-            int customerId = Integer.parseInt(CookieUtils.getCookieValueByName(USER_ID_COOKIE, request));
+            int customerId = 2;
+            if (!CookieUtils.getCookieValueByName(USER_ID_COOKIE, request).isBlank()) {
+                customerId = Integer.parseInt(CookieUtils.getCookieValueByName(USER_ID_COOKIE, request));
+            }
 
             String color = request.getParameter("color") == null ? "" : request.getParameter("color");
             String size = request.getParameter("size") == null ? "" : request.getParameter("size");
@@ -139,11 +142,11 @@ public class ProductDetailControllers extends HttpServlet {
                 request.setAttribute("sameCategory", sameCategory);
                 request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
             }
-        } catch (SQLException | ClassNotFoundException ex ) {
+        } catch (SQLException | ClassNotFoundException ex) {
             PrintWriter pw = response.getWriter();
-            String mess = "<html> "+ex.getMessage()+"  </html>";
+            String mess = "<html> " + ex.getMessage() + "  </html>";
             pw.print(mess);
-        } 
+        }
     }
 
     /**
