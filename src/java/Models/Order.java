@@ -22,7 +22,7 @@ public class Order {
     private boolean isPaid;
     private Date createdAt;
     private String status;
-    private String trackingCode;
+    private String orderCode;
     private String email;
     private String fullname;
     private String phone;
@@ -32,21 +32,21 @@ public class Order {
     public Order() {
     }
 
-    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Date createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
+    public Order(int customerId, int totalAmount, int discount, boolean isPaid, Date createdAt, String status, String orderCode, String email, String fullname, String phone, String deliveryAddress) {
         this.customerId = customerId;
         this.totalAmount = totalAmount;
         this.discount = discount;
         this.isPaid = isPaid;
         this.createdAt = createdAt;
         this.status = status;
-        this.trackingCode = trackingCode;
+        this.orderCode = orderCode;
         this.email = email;
         this.fullname = fullname;
         this.phone = phone;
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Date createdAt, String status, String trackingCode, String email, String fullname, String phone, String deliveryAddress) {
+    public Order(int orderId, int customerId, int totalAmount, int discount, boolean isPaid, Date createdAt, String status, String orderCode, String email, String fullname, String phone, String deliveryAddress) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.totalAmount = totalAmount;
@@ -54,7 +54,7 @@ public class Order {
         this.isPaid = isPaid;
         this.createdAt = createdAt;
         this.status = status;
-        this.trackingCode = trackingCode;
+        this.orderCode = orderCode;
         this.email = email;
         this.fullname = fullname;
         this.phone = phone;
@@ -125,12 +125,12 @@ public class Order {
         this.status = status;
     }
 
-    public String getTrackingCode() {
-        return trackingCode;
+    public String getOrderCode() {
+        return orderCode;
     }
 
-    public void setTrackingCode(String trackingCode) {
-        this.trackingCode = trackingCode;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getEmail() {
@@ -167,7 +167,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", discount=" + discount + ", isPaid=" + isPaid + ", createdAt=" + createdAt + ", status=" + status + ", trackingCode=" + trackingCode + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", deliveryAddress=" + deliveryAddress + ", listOrderDetails=" + listOrderDetails + '}';
+        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", totalAmount=" + totalAmount + ", discount=" + discount + ", isPaid=" + isPaid + ", createdAt=" + createdAt + ", status=" + status + ", orderCode=" + orderCode + ", email=" + email + ", fullname=" + fullname + ", phone=" + phone + ", deliveryAddress=" + deliveryAddress + ", listOrderDetails=" + listOrderDetails + '}';
     }
 
 }

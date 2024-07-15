@@ -15,27 +15,27 @@ import java.util.Random;
  */
 public class GeneratorUtils {
 
-    public static String generateOrderTrackingCode() throws SQLException {
+    public static String generateOrderCode() throws SQLException {
 
-        StringBuilder trackingCodeBuilder;
-        String trackingCode = "";
+        StringBuilder orderCodeBuilder;
+        String orderCode = "";
         OrderDAO orderDAO = new OrderDAO();
 
         do {
 
-            trackingCodeBuilder = new StringBuilder();
+            orderCodeBuilder = new StringBuilder();
             String characters = "0123456789";
             Random random = new Random();
 
-            for (int i = 0; i < utilities.CommonConst.TRACKING_CODE_LENGTH; i++) {
-                trackingCodeBuilder.append(characters.charAt(random.nextInt(characters.length())));
+            for (int i = 0; i < utilities.CommonConst.ORDER_CODE_LENGTH; i++) {
+                orderCodeBuilder.append(characters.charAt(random.nextInt(characters.length())));
             }
 
-            trackingCode = "TKC" + trackingCodeBuilder.toString() + "VN";
+            orderCode = "ORDER" + orderCodeBuilder.toString() + "VN";
 
-        } while (orderDAO.isTrackingCodeExist(trackingCode));
+        } while (orderDAO.isOrderCodeExist(orderCode));
 
-        return trackingCode;
+        return orderCode;
     }
 
     public static void makeNotification(HttpServletRequest request, String message, String type) {
