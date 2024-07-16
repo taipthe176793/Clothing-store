@@ -54,8 +54,8 @@
                                     <select id="filterStatus" name="filterStatus" class="form-control" onchange="this.form.submit()">
                                         <option value="">Filter by Status</option>
                                         <option value="all">All</option>
-                                        <option value="true">Approved</option>
-                                        <option value="false">Pending</option>
+                                        <option value="true">Public</option>
+                                        <option value="false">Hidden</option>
                                     </select>
                                 </form>
                             </div>
@@ -78,8 +78,8 @@
                                 <form action="${pageContext.request.contextPath}/staff/blog" method="get" class="input-group">
                                     <select id="sortDate" name="sortDate" class="form-control" onchange="this.form.submit()">
                                         <option value="">Sort by Date</option>
-                                        <option value="desc">Newest First</option>
-                                        <option value="asc">Oldest First</option>
+                                        <option value="desc">Newest</option>
+                                        <option value="asc">Oldest</option>
                                     </select>
                                 </form>
                             </div>
@@ -122,8 +122,8 @@
                                         <td>${blog.createdAt}</td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${blog.status == false}">Pending</c:when>
-                                                <c:when test="${blog.status == true && blog.status != 'Pending'}">Approved</c:when>
+                                                <c:when test="${blog.status == false}">Hidden</c:when>
+                                                <c:when test="${blog.status == true && blog.status != 'Pending'}">Public</c:when>
                                             </c:choose>
                                         </td>
                                         <td class="d-flex">

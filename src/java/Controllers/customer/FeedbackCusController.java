@@ -70,7 +70,7 @@ public class FeedbackCusController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
-
+            
             FeedbackDAO feedbackDAO = new FeedbackDAO();
             List<Feedback> feedbackList;
 
@@ -81,9 +81,12 @@ public class FeedbackCusController extends HttpServlet {
                 int starFilter = Integer.parseInt(starFilterParam);
                 feedbackList = feedbackDAO.getFeedbacksByProductIdAndRating(productId, starFilter);
             }
+            
+
             request.getSession().setAttribute("feedbackList", feedbackList);
             request.getSession().setAttribute("starFilter", starFilterParam);
-            response.sendRedirect("../product?id=" + productId);
+            
+            response.sendRedirect(request.getServletContext().getContextPath() + "/product?id=" + productId);
 
         } catch (NumberFormatException | SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -94,14 +97,14 @@ public class FeedbackCusController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String action = request.getParameter("action");
-             int productId = Integer.parseInt(request.getParameter("productId"));
+            int productId = Integer.parseInt(request.getParameter("productId"));
             int feedbackId = request.getParameter("feedbackId") != null ? Integer.parseInt(request.getParameter("feedbackId")) : 0;
 
             FeedbackDAO feedbackDAO = new FeedbackDAO();
 
             if ("report".equals(action) && feedbackId > 0) {
                 feedbackDAO.reportFeedback(feedbackId);
-                 GeneratorUtils.makeNotification(request, "Report success", utilities.CommonConst.NOTI_SUCCESS);
+                GeneratorUtils.makeNotification(request, "Report success", utilities.CommonConst.NOTI_SUCCESS);
             } else {
                 int customerId = 0;
                 String cusId = CookieUtils.getCookieValueByName(USER_ID_COOKIE, request);
@@ -109,7 +112,6 @@ public class FeedbackCusController extends HttpServlet {
                     customerId = Integer.parseInt(cusId);
                 }
 
-               
                 String comment = request.getParameter("comment");
                 double rating = Double.parseDouble(request.getParameter("rating"));
 
@@ -128,7 +130,7 @@ public class FeedbackCusController extends HttpServlet {
                 }
 
             }
-            response.sendRedirect(request.getContextPath() + "/product?id=" + productId);
+            response.sendRedirect(request.getServletContext().getContextPath() + "/product?id=" + productId);
         } catch (NumberFormatException | SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }

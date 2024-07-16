@@ -72,7 +72,8 @@ public class ProductDetailControllers extends HttpServlet {
         try {
 
             int productId = Integer.parseInt(request.getParameter("id"));
-            int customerId = 2;
+          
+            int customerId = 0;
             if (!CookieUtils.getCookieValueByName(USER_ID_COOKIE, request).isBlank()) {
                 customerId = Integer.parseInt(CookieUtils.getCookieValueByName(USER_ID_COOKIE, request));
             }
@@ -92,6 +93,9 @@ public class ProductDetailControllers extends HttpServlet {
 
             boolean previousFeedback = feedbackDAO.hasCustomerGivenFeedback(customerId, productId);
             double averageRating = feedbackDAO.getAverageRating(productId);
+            boolean hasPurchased = feedbackDAO.checkIfCustomerPurchasedProduct(customerId, productId);
+            request.setAttribute("previousFeedback", previousFeedback);
+            request.setAttribute("purchased", hasPurchased);
 
             for (ProductVariant pv : product.getVariantList()) {
                 //Get sizesOfColor
@@ -114,10 +118,12 @@ public class ProductDetailControllers extends HttpServlet {
                         + product.getFirstInStock().getColor() + "&size=" + product.getFirstInStock().getSize());
 
             } else {
+                List<Feedback> feedbackList = feedbackDAO.getFeedbacksByProductId(productId);
+                request.setAttribute("numberOfFeedback", feedbackList.size());
+
                 if (request.getSession().getAttribute("feedbackList") != null) {
 
-                    request.setAttribute("feedbackList",
-                            request.getSession().getAttribute("feedbackList"));
+                    feedbackList = (List<Feedback>) request.getSession().getAttribute("feedbackList");
 
                     request.setAttribute("starFilter",
                             request.getSession().getAttribute("starFilter"));
@@ -125,14 +131,10 @@ public class ProductDetailControllers extends HttpServlet {
                         request.getSession().invalidate();
                     }
 
-                } else {
-
-                    List<Feedback> feedbackList = feedbackDAO.getFeedbacksByProductId(productId);
-                    request.setAttribute("feedbackList", feedbackList);
                 }
-
+                
+                request.setAttribute("feedbackList", feedbackList);
                 GeneratorUtils.getNotification(request);
-                request.setAttribute("previousFeedback", previousFeedback);
                 request.setAttribute("averageRating", averageRating);
                 request.setAttribute("color", color);
                 request.setAttribute("size", size);

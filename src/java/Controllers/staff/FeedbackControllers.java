@@ -66,22 +66,37 @@ public class FeedbackControllers extends HttpServlet {
             FeedbackDAO feedbackDAO = new FeedbackDAO();
             ProductDAO productDAO = new ProductDAO();
             List<Product> products = productDAO.getAllProducts();
-            
-            List<Feedback> feedbacks = feedbackDAO.getAllFeedbacks();
-            List<Feedback> reportedFeedbacks = feedbackDAO.getReportedFeedbacks(); 
-            
 
-            request.setAttribute("feedbacks", feedbacks);
-            request.setAttribute("reportedFeedbacks", reportedFeedbacks);
-            request.setAttribute("products", products);
+            String search = request.getParameter("search");
+            String sortDate = request.getParameter("sortDate");
+
+            List<Feedback> feedbacks;
+     
+
+            if (search != null && !search.isEmpty()) {
+                feedbacks = feedbackDAO.searchFeedbacksByProduct(search);           
+            } else {
+                feedbacks = feedbackDAO.getAllFeedbacks();              
+            }
             
+              if ("desc".equals(sortDate)) {
+            feedbacks = feedbackDAO.getFeedbacksSortedByDateDescending();
+         
+        } else if ("asc".equals(sortDate)) {
+            feedbacks = feedbackDAO.getFeedbacksSortedByDateAscending();
+            
+        }
+
+            request.setAttribute("search", search);
+            request.setAttribute("sortDate", sortDate);
+            request.setAttribute("feedbacks", feedbacks);  
+            request.setAttribute("products", products);
+
             request.getRequestDispatcher("/Views/staff/feedback-table.jsp").forward(request, response);
 
         } catch (NumberFormatException | SQLException | ClassNotFoundException ex) {
-          
-//            response.sendRedirect("404");
             PrintWriter pw = response.getWriter();
-            String mess = "<html> "+ex.getMessage()+"  </html>";
+            String mess = "<html> " + ex.getMessage() + "  </html>";
             pw.print(mess);
         }
     }
@@ -110,6 +125,8 @@ public class FeedbackControllers extends HttpServlet {
 
                 } else if ("active".equals(action)) {
                     feedbackDAO.updateFeedbackStatus(feedbackId, false);
+                } else if ("cancel".equals(action)) {
+                    feedbackDAO.cancelReport(feedbackId);
                 }
             }
             response.sendRedirect("feedback");

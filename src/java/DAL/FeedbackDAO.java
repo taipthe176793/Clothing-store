@@ -20,7 +20,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT f.*,a.username FROM feedback f join account a on f.customer_id = a.account_id WHERE product_id = ?  ";
+                String sql = "SELECT f.*,a.fullname FROM feedback f join account a on f.customer_id = a.account_id WHERE product_id = ?  ";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, productId);
 
@@ -33,7 +33,7 @@ public class FeedbackDAO extends DBContext {
                     feedback.setComment(rs.getString("comment"));
                     feedback.setRating(rs.getDouble("rating"));
                     feedback.setCreatedAt(rs.getDate("created_at"));
-                    feedback.setUsername(rs.getString("username"));
+                    feedback.setUsername(rs.getString("fullname"));
                     feedback.setIsDeleted(rs.getBoolean("is_deleted"));
 
                     feedbackList.add(feedback);
@@ -128,7 +128,7 @@ public class FeedbackDAO extends DBContext {
         List<Feedback> feedbackList = new ArrayList<>();
 
         try {
-            con = connect; // Assuming `connect` is your established database connection
+            con = connect;
             if (con != null) {
                 String sql = "SELECT f.*, a.username "
                         + "FROM feedback f "
@@ -216,7 +216,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "UPDATE feedback SET is_deleted = ? WHERE feedback_id = ?";
+                String sql = "UPDATE feedback SET is_deleted = ?, is_reported = 0 WHERE feedback_id = ?";
                 stm = con.prepareStatement(sql);
                 stm.setBoolean(1, isHidden);
                 stm.setInt(2, feedbackId);
@@ -307,6 +307,27 @@ public class FeedbackDAO extends DBContext {
                 stm.setDouble(2, feedback.getRating());
                 stm.setDate(3, new java.sql.Date(feedback.getCreatedAt().getTime()));
                 stm.setInt(4, feedback.getFeedbackId());
+
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+    }
+
+    public void cancelReport(int feedbackId) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "UPDATE feedback SET is_reported = 0 WHERE feedback_id = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, feedbackId);
 
                 stm.executeUpdate();
             }
@@ -432,6 +453,171 @@ public class FeedbackDAO extends DBContext {
 
         }
         return feedbackList;
+    }
+
+    public List<Feedback> searchFeedbacksByProduct(String productName) throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Feedback> feedbackList = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT f.*, a.username, p.name as product_name FROM feedback f "
+                        + "JOIN account a ON f.customer_id = a.account_id "
+                        + "JOIN product p ON f.product_id = p.product_id "
+                        + "WHERE p.name LIKE ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + productName + "%");
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Feedback feedback = new Feedback();
+                    feedback.setFeedbackId(rs.getInt("feedback_id"));
+                    feedback.setCustomerId(rs.getInt("customer_id"));
+                    feedback.setProductId(rs.getInt("product_id"));
+                    feedback.setComment(rs.getString("comment"));
+                    feedback.setRating(rs.getDouble("rating"));
+                    feedback.setCreatedAt(rs.getDate("created_at"));
+                    feedback.setUsername(rs.getString("username"));
+                    feedback.setIsDeleted(rs.getBoolean("is_deleted"));
+
+                    feedbackList.add(feedback);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return feedbackList;
+    }
+
+    public List<Feedback> getFeedbacksSortedByDateDescending() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Feedback> feedbackList = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT f.*, a.username, p.name as product_name FROM feedback f "
+                        + "JOIN account a ON f.customer_id = a.account_id "
+                        + "JOIN product p ON f.product_id = p.product_id "
+                        + "ORDER BY f.created_at DESC";
+                stm = con.prepareStatement(sql);
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Feedback feedback = new Feedback();
+                    feedback.setFeedbackId(rs.getInt("feedback_id"));
+                    feedback.setCustomerId(rs.getInt("customer_id"));
+                    feedback.setProductId(rs.getInt("product_id"));
+                    feedback.setComment(rs.getString("comment"));
+                    feedback.setRating(rs.getDouble("rating"));
+                    feedback.setCreatedAt(rs.getDate("created_at"));
+                    feedback.setUsername(rs.getString("username"));
+                    feedback.setIsDeleted(rs.getBoolean("is_deleted"));
+
+                    feedbackList.add(feedback);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return feedbackList;
+    }
+
+    public List<Feedback> getFeedbacksSortedByDateAscending() throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Feedback> feedbackList = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT f.*, a.username, p.name as product_name FROM feedback f "
+                        + "JOIN account a ON f.customer_id = a.account_id "
+                        + "JOIN product p ON f.product_id = p.product_id "
+                        + "ORDER BY f.created_at ASC";
+                stm = con.prepareStatement(sql);
+
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Feedback feedback = new Feedback();
+                    feedback.setFeedbackId(rs.getInt("feedback_id"));
+                    feedback.setCustomerId(rs.getInt("customer_id"));
+                    feedback.setProductId(rs.getInt("product_id"));
+                    feedback.setComment(rs.getString("comment"));
+                    feedback.setRating(rs.getDouble("rating"));
+                    feedback.setCreatedAt(rs.getDate("created_at"));
+                    feedback.setUsername(rs.getString("username"));
+                    feedback.setIsDeleted(rs.getBoolean("is_deleted"));
+
+                    feedbackList.add(feedback);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return feedbackList;
+    }
+
+    public boolean checkIfCustomerPurchasedProduct(int customerId, int productId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT od.order_id FROM [order] od\n"
+                        + "JOIN order_detail o\n"
+                        + "ON od.order_id = o.order_id\n"
+                        + "JOIN product_variants v \n"
+                        + "ON o.product_variant_id = v.product_variant_id\n"
+                        + "JOIN product p ON v.product_id = p.product_id\n"
+                        + "JOIN account a ON od.customer_id = a.account_id\n"
+                        + "WHERE a.account_id = ?\n"
+                        + "AND p.product_id = ? AND a.role_id != 2";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, customerId);
+                stm.setInt(2, productId);
+                rs = stm.executeQuery();
+
+                if (rs.next()) {
+                    return true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return false;
     }
 
 }
