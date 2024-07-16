@@ -121,7 +121,7 @@ public class CheckoutServlet extends HttpServlet {
             order.setDiscount(discount);
             order.setTotalAmount(totalAmount);
             order.setIsPaid(!paymentMethod.equals(utilities.CommonConst.COD_METHOD));
-            order.setTrackingCode(GeneratorUtils.generateOrderTrackingCode());
+            order.setOrderCode(GeneratorUtils.generateOrderCode());
 
             //Insert order to database
             OrderDAO orderDAO = new OrderDAO();

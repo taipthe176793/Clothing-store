@@ -38,7 +38,7 @@ public class CommonConst {
     public static final String COD_METHOD = "cod";
     public static final String VNPAY_METHOD = "vnpay";
 
-    public static final int TRACKING_CODE_LENGTH = 10;
+    public static final int ORDER_CODE_LENGTH = 10;
 
     public static final char OPERATION_DESCREASE = '-';
     public static final char OPERATION_INCREASE = '+';

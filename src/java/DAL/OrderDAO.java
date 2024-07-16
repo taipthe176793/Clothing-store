@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -20,7 +19,7 @@ import java.util.Set;
  */
 public class OrderDAO extends DBContext {
 
-    public boolean isTrackingCodeExist(String trackingCode) throws SQLException {
+    public boolean isOrderCodeExist(String orderCode) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -28,11 +27,11 @@ public class OrderDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT [tracking_code]\n"
+                String sql = "SELECT [order_code]\n"
                         + "  FROM [dbo].[order]\n"
-                        + "  WHERE [tracking_code] = ?";
+                        + "  WHERE [order_code] = ?";
                 stm = con.prepareStatement(sql);
-                stm.setString(1, trackingCode);
+                stm.setString(1, orderCode);
 
                 rs = stm.executeQuery();
                 if (rs.next()) {
@@ -60,7 +59,7 @@ public class OrderDAO extends DBContext {
             if (con != null) {
                 String sql = "INSERT INTO [dbo].[order] \n"
                         + "([customer_id], [total_amount], [discount], [is_paid], [status], "
-                        + "[tracking_code], [email], [fullname], [phone], [delivery_address], [created_at]) "
+                        + "[order_code], [email], [fullname], [phone], [delivery_address], [created_at]) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
                 stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stm.setInt(1, order.getCustomerId());
@@ -68,7 +67,7 @@ public class OrderDAO extends DBContext {
                 stm.setDouble(3, order.getDiscount());
                 stm.setBoolean(4, order.isIsPaid());
                 stm.setString(5, order.getStatus());
-                stm.setString(6, order.getTrackingCode());
+                stm.setString(6, order.getOrderCode());
                 stm.setString(7, order.getEmail());
                 stm.setString(8, order.getFullname());
                 stm.setString(9, order.getPhone());
@@ -117,7 +116,7 @@ public class OrderDAO extends DBContext {
                     c.setDiscount(rs.getDouble("discount"));
                     c.setIsPaid(rs.getBoolean("is_paid"));
                     c.setStatus(rs.getString("status"));
-                    c.setTrackingCode(rs.getString("tracking_code"));
+                    c.setOrderCode(rs.getString("order_code"));
                     c.setEmail(rs.getString("email"));
                     c.setFullname(rs.getString("fullname"));
                     c.setPhone(rs.getString("phone"));

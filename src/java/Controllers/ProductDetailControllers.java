@@ -72,6 +72,7 @@ public class ProductDetailControllers extends HttpServlet {
         try {
 
             int productId = Integer.parseInt(request.getParameter("id"));
+          
             int customerId = 0;
             if (!CookieUtils.getCookieValueByName(USER_ID_COOKIE, request).isBlank()) {
                 customerId = Integer.parseInt(CookieUtils.getCookieValueByName(USER_ID_COOKIE, request));

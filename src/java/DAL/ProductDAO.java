@@ -35,7 +35,7 @@ public class ProductDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM [dbo].[product]";
+                String sql = "SELECT * FROM [dbo].[product] WHERE [is_deleted] = 0";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
 
@@ -604,7 +604,9 @@ public class ProductDAO extends DBContext {
 
                     p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
 
-                    productList.add(p);
+                    if (!productList.contains(p)) {
+                        productList.add(p);
+                    }
 
                 }
             }
@@ -739,7 +741,9 @@ public class ProductDAO extends DBContext {
                     ProductVariantDAO pDAO = new ProductVariantDAO();
 
                     p.setVariantList(pDAO.getAllVariantsOfAProduct(p.getProductId()));
-                    productList.add(p);
+                    if (!productList.contains(p)) {
+                        productList.add(p);
+                    }
                 }
             }
         } finally {

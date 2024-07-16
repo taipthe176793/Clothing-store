@@ -111,6 +111,7 @@ public class PublicProductsControllers extends HttpServlet {
 
             request.setAttribute("productList", productList);
             request.setAttribute("totalPageNumber", totalPageNumber);
+            request.setAttribute("numOfProduct", numOfProduct);
 
         } catch (SQLException ex) {
         } catch (ClassNotFoundException ex) {

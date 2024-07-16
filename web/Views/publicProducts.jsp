@@ -130,6 +130,9 @@
             <div class="container">
                 <div class="flex-w flex-sb-m p-b-52 d-flex justify-content-end">
                     <div class="flex-w flex-c-m m-tb-10">
+                        <div class="flex-c-m stext-106 m-r-15">
+                            ${numOfProduct} Items
+                        </div>
                         <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
                             <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
                             <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i> Filter
@@ -334,63 +337,73 @@
                             </div>
                         </div>
                     </div>
-
-
+                <c:if test="${numOfProduct == 0}">
+                    <div class="row d-flex justify-content-center">
+<!--                        <img style="width: 500px" src="${pageContext.request.contextPath}/images/cart/product-not-found.jpg" alt="Not found" />-->
+                        <img style="width: 100%" src="${pageContext.request.contextPath}/images/cart/no-product-found.jpg" alt="Not found" />
+                    </div>
+                    <div class="row d-flex justify-content-center">
+                        <button class="col-2 btn text-center text-white" style="background-color: orange"
+                                onclick="location.href='shop'">Go back</button>
+                    </div>
+                </c:if>
+                <c:if test="${numOfProduct > 0}">
                     <div class="row isotope-grid">
-                    <c:forEach items="${productList}" var="product">
-                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-                            <div class="block2">
-                                <div class="block2-pic hov-img0">
-                                    <c:set var="variant" value="${product.getFirstInStock()}"></c:set>
-                                    <c:if test="${variant ne null}">
-                                        <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}&color=${variant.getColor()}&size=${variant.getSize()}">
-                                        </c:if>
-                                        <c:if test="${variant eq null}">
-                                            <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}">
+                        <c:forEach items="${productList}" var="product">
+                            <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                                <div class="block2">
+                                    <div class="block2-pic hov-img0">
+                                        <c:set var="variant" value="${product.getFirstInStock()}"></c:set>
+                                        <c:if test="${variant ne null}">
+                                            <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}&color=${variant.getColor()}&size=${variant.getSize()}">
                                             </c:if>
-                                            <img src="${product.getImg1()}" style="height: 250px; width: 250px;" alt="IMG-PRODUCT">
-                                        </a>
-                                </div>
-                                <div class="block2-txt flex-w flex-t p-t-14">
-                                    <div class="block2-txt-child1 flex-col-l">
-                                        <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                            ${product.getName()}
-                                        </a>
-                                        <span class="stext-105 cl3">
-                                            $${product.getPrice()}
-                                        </span>
-                                        <div class="flex-m p-r-10 m-r-11">
-                                            <form action="${pageContext.request.contextPath}/customer/wishlist" method="post">
-                                                <input type="hidden" name="productId" value="${product.getProductId()}">
-                                                <input type="hidden" name="action" value="add">
-                                                <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                                    <i class="zmdi zmdi-favorite"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                            <c:if test="${variant eq null}">
+                                                <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}">
+                                                </c:if>
+                                                <img src="${product.getImg1()}" style="height: 250px; width: 250px;" alt="IMG-PRODUCT">
+                                            </a>
+                                    </div>
+                                    <div class="block2-txt flex-w flex-t p-t-14">
+                                        <div class="block2-txt-child1 flex-col-l">
+                                            <a href="${pageContext.request.contextPath}/product?id=${product.getProductId()}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                ${product.getName()}
+                                            </a>
+                                            <span class="stext-105 cl3">
+                                                $${product.getPrice()}
+                                            </span>
+                                            <div class="flex-m p-r-10 m-r-11">
+                                                <form action="${pageContext.request.contextPath}/customer/wishlist" method="post">
+                                                    <input type="hidden" name="productId" value="${product.getProductId()}">
+                                                    <input type="hidden" name="action" value="add">
+                                                    <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                                        <i class="zmdi zmdi-favorite"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
-                </div>
+                        </c:forEach>
+                    </div>
 
 
-                <div class="row d-flex justify-content-center">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
+                    <div class="row d-flex justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
 
 
-                            <c:forEach begin="1" end="${totalPageNumber}" var="page">
-                                <li class="page-item"><a class="page-link" href="shop?${query}&page=${page}">${page}</a></li>
-                                </c:forEach>
+                                <c:forEach begin="1" end="${totalPageNumber}" var="page">
+                                    <li class="page-item"><a class="page-link" href="shop?${query}&page=${page}">${page}</a></li>
+                                    </c:forEach>
 
 
 
-                        </ul>
-                    </nav>
-                </div>
+                            </ul>
+                        </nav>
+                    </div>
+                </c:if>
 
 
             </div>
