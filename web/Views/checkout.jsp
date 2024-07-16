@@ -100,7 +100,8 @@
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Total amount</span>
                                 <strong>$ ${totalAmount}</strong>
-                                <input hidden value="${totalAmount}" name="totalAmount"/>
+                                <input hidden value="${totalAmount}" id="usd-total" name="totalAmount"/>
+                                <input hidden value="0" id="vnd-total" name="vnd" />
                             </li>
                         </ul>
                         <form></form>
@@ -414,6 +415,37 @@
                                                         }
                                                     });
                                                 });
+
+                                                //Convert use to vnd
+                                                const amount = document.querySelector("#usd-total").value;
+                                                console.log(amount);
+
+                                                const fromCurrency = 'USD';
+                                                const toCurrency = 'VND';
+                                                const apiKey = 'dca5383d5d3aa9ba3637fdc9';
+                                                const apiUrl = "https://v6.exchangerate-api.com/v6/" + apiKey + "/latest/" + fromCurrency;
+
+                                                fetch(apiUrl)
+                                                        .then(response => {
+                                                            if (!response.ok) {
+                                                                throw new Error('Network response was not ok');
+                                                            }
+                                                            return response.json();
+                                                        })
+                                                        .then(data => {
+                                                            if (data.result === 'success') {
+                                                                const exchangeRate = data.conversion_rates[toCurrency];
+                                                                const convertedAmount = amount * exchangeRate;
+                                                                document.querySelector('#vnd-total').value = convertedAmount;
+                                                                console.log(convertedAmount);
+                                                            } else {
+                                                                console.log('Error fetching exchange rate');
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            console.error('Error:', error);
+                                                        });
+
 
                                             });
 

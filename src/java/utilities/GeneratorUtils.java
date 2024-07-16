@@ -31,7 +31,7 @@ public class GeneratorUtils {
                 orderCodeBuilder.append(characters.charAt(random.nextInt(characters.length())));
             }
 
-            orderCode = "ORDER" + orderCodeBuilder.toString() + "VN";
+            orderCode = "ORD" + orderCodeBuilder.toString() + "VN";
 
         } while (orderDAO.isOrderCodeExist(orderCode));
 
