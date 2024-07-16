@@ -46,6 +46,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 
+
         <!--===============================================================================================-->
         <style>
             .star {
@@ -55,6 +56,18 @@
             .modal-lg {
                 max-width: 100%;
                 margin-top: 60px
+            }
+            .checked {
+                color: gold;
+                font-size: 24px; /* Increase the size of the stars */
+            }
+            .fa-star, .fa-star-half-alt {
+                color: gold;
+                font-size: 24px; /* Increase the size of the stars */
+            }
+            .fa-star-o {
+                color: gray;
+                font-size: 24px; /* Increase the size of the stars */
             }
 
         </style>
@@ -253,18 +266,19 @@
                     <div><h3>Feedback</h3></div>
                     <div class="row">
                         <div class="rating-summary col-4">
-                            <span class="rating-score">${averageRating} / 5</span>
-                            <div class="stars">
-                                <span>★★★★★</span>
-                                <span>(${feedbackList.size()} feedback)</span>
+                            <span class="rating-score" id="averageRating">${averageRating} / 5</span>
+                            <div class="starsRatingOfProduct" id="productRating">
                             </div>
+                            <span>(${numberOfFeedback} feedback)</span>
                         </div>
 
-                        <div class="user-rating col-8">
-                            <c:if test="${!previousFeedback}">
+
+
+                        <div class="user-rating col-8" >
+
+                            <c:if test="${purchased && !previousFeedback}">
                                 <form action="${pageContext.request.contextPath}/customer/feedback" method="post">
                                     <div class="stars-input">
-                                        <!-- Add input elements for user to rate the product -->
                                         <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
                                         <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
                                         <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
@@ -282,6 +296,9 @@
                             </c:if>
 
                         </div>
+
+
+
 
 
                         <form action="${pageContext.request.contextPath}/customer/feedback" method="get" id="filterForm">
@@ -305,7 +322,6 @@
 
 
 
-
                         <div class="feedback-list">
                             <c:if test="${not empty feedbackList}">
                                 <c:forEach var="feedback" items="${feedbackList}">
@@ -313,14 +329,14 @@
                                         <div class="feedback-header">
                                             <span class="feedback-username">${feedback.username}</span>
                                             <div class="d-flex justify-content-end">
-                                                <c:if test="${!feedback.isIsDeleted() && feedback.customerId == Integer.parseInt(cookie.userId.value)}">
+                                                <c:if test="${!feedback.isIsDeleted() && feedback.customerId == Integer.parseInt(cookie.userId.value eq null ? 0 : cookie.userId.value)}">
                                                     <a href="#" class="edit-feedback" data-toggle="modal" data-target="#updateFeedbackModal" 
                                                        data-feedback-id="${feedback.feedbackId}" data-rating="${feedback.rating}" data-comment="${feedback.comment}">
                                                         <i class="fas fa-pencil-alt" style="margin-right: 10px; color: black"></i>
                                                     </a>
                                                 </c:if>
 
-                                                <c:if test="${!feedback.isIsDeleted() && feedback.getCustomerId() != Integer.parseInt(cookie.userId.value)}">
+                                                <c:if test="${!feedback.isIsDeleted() && feedback.getCustomerId() != Integer.parseInt(cookie.userId.value eq null ? 0 : cookie.userId.value)}">
                                                     <form action="${pageContext.request.contextPath}/customer/feedback" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
                                                         <input type="hidden" name="action" value="report">
@@ -386,7 +402,7 @@
                                         </div>
                                         <input type="hidden" id="updateProductId" name="productId" value="${product.productId}">
                                         <input type="hidden" id="updateFeedbackId" name="feedbackId" value="">
-                                        <button type="submit" class="btn btn-primary">Update Feedback</button>
+                                        <button type="submit" class="btn btn-dark">Update Feedback</button>
                                     </form>
                                 </div>
                             </div>
@@ -441,9 +457,9 @@
                 </div>
             </div>
 
-</div>
-            <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
-            
+        </div>
+        <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
+
             <!--===============================================================================================-->
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
@@ -464,21 +480,21 @@
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/parallax100/parallax100.js"></script>
         <script>
-                                                    $('.parallax100').parallax100();
+                                                            $('.parallax100').parallax100();
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
         <script>
-                                                    $('.gallery-lb').each(function () { // the containers for all your galleries
-                                                        $(this).magnificPopup({
-                                                            delegate: 'a', // the selector for gallery item
-                                                            type: 'image',
-                                                            gallery: {
-                                                                enabled: true
-                                                            },
-                                                            mainClass: 'mfp-fade'
-                                                        });
-                                                    });
+                                                            $('.gallery-lb').each(function () { // the containers for all your galleries
+                                                                $(this).magnificPopup({
+                                                                    delegate: 'a', // the selector for gallery item
+                                                                    type: 'image',
+                                                                    gallery: {
+                                                                        enabled: true
+                                                                    },
+                                                                    mainClass: 'mfp-fade'
+                                                                });
+                                                            });
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/isotope/isotope.pkgd.min.js"></script>
@@ -487,19 +503,19 @@
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
         <script>
-                                                    $('.js-pscroll').each(function () {
-                                                        $(this).css('position', 'relative');
-                                                        $(this).css('overflow', 'hidden');
-                                                        var ps = new PerfectScrollbar(this, {
-                                                            wheelSpeed: 1,
-                                                            scrollingThreshold: 1000,
-                                                            wheelPropagation: false,
-                                                        });
+                                                            $('.js-pscroll').each(function () {
+                                                                $(this).css('position', 'relative');
+                                                                $(this).css('overflow', 'hidden');
+                                                                var ps = new PerfectScrollbar(this, {
+                                                                    wheelSpeed: 1,
+                                                                    scrollingThreshold: 1000,
+                                                                    wheelPropagation: false,
+                                                                });
 
-                                                        $(window).on('resize', function () {
-                                                            ps.update();
-                                                        })
-                                                    });
+                                                                $(window).on('resize', function () {
+                                                                    ps.update();
+                                                                })
+                                                            });
 
 
 
@@ -509,119 +525,117 @@
 
         <script>
 
-                                                    document.addEventListener('DOMContentLoaded', function () {
-                                                        // Get the input element
-                                                        const input = document.querySelector('input[id="num-product"]');
-                                                        const maxValue = parseInt(input.max);
+                                                            document.addEventListener('DOMContentLoaded', function () {
+                                                                // Get the input element
+                                                                const input = document.querySelector('input[id="num-product"]');
+                                                                const maxValue = parseInt(input.max);
 
-                                                        if (input) {
-                                                            input.addEventListener('input', function () {
-                                                                let currentValue = parseInt(input.value);
+                                                                if (input) {
+                                                                    input.addEventListener('input', function () {
+                                                                        let currentValue = parseInt(input.value);
 
-                                                                if (isNaN(currentValue) || input.value.trim() === "") {
-                                                                    input.value = 1;
-                                                                } else {
-                                                                    if (currentValue < 1) {
-                                                                        input.value = 1;
-                                                                    } else if (currentValue > maxValue) {
-                                                                        input.value = maxValue;
+                                                                        if (isNaN(currentValue) || input.value.trim() === "") {
+                                                                            input.value = 1;
+                                                                        } else {
+                                                                            if (currentValue < 1) {
+                                                                                input.value = 1;
+                                                                            } else if (currentValue > maxValue) {
+                                                                                input.value = maxValue;
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                    document.querySelector('.btn-num-product-up').addEventListener('click', function () {
+                                                                        let currentValue = parseInt(input.value);
+                                                                        if (currentValue < maxValue) {
+                                                                            input.value = currentValue + 1;
+                                                                        }
+                                                                    });
+
+                                                                    document.querySelector('.btn-num-product-down').addEventListener('click', function () {
+                                                                        let currentValue = parseInt(input.value);
+                                                                        if (currentValue > 1) {
+                                                                            input.value = currentValue - 1;
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                const alert = document.querySelector('#alert');
+
+                                                                if (alert) {
+                                                                    alert.style.display = 'block';
+                                                                    alert.style.opacity = '1';
+
+                                                                    setTimeout(function () {
+                                                                        alert.style.opacity = '0';
+
+                                                                        setTimeout(function () {
+                                                                            alert.classList.add('show');
+                                                                        }, 500);
+                                                                    }, 3500);
+                                                                }
+
+                                                                const stars = document.querySelectorAll('.stars-input label');
+
+                                                                // Set initial star rating to 4 and check the corresponding radio button
+                                                                stars.forEach((star, index) => {
+                                                                    if (index < 4) {
+                                                                        star.style.color = 'gold';
+                                                                    } else {
+                                                                        star.style.color = 'gray';
                                                                     }
+                                                                });
+
+                                                                // Check the radio button corresponding to 4 stars
+                                                                const star4Input = document.querySelector('#star4');
+                                                                if (star4Input) {
+                                                                    star4Input.checked = true;
                                                                 }
+
+                                                                // Handle star click events
+                                                                stars.forEach((star, index) => {
+                                                                    star.addEventListener('click', () => {
+                                                                        stars.forEach((s, i) => {
+                                                                            if (i <= index) {
+                                                                                s.style.color = 'gold';
+                                                                            } else {
+                                                                                s.style.color = 'gray';
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                });
+
                                                             });
-
-                                                            document.querySelector('.btn-num-product-up').addEventListener('click', function () {
-                                                                let currentValue = parseInt(input.value);
-                                                                if (currentValue < maxValue) {
-                                                                    input.value = currentValue + 1;
-                                                                }
-                                                            });
-
-                                                            document.querySelector('.btn-num-product-down').addEventListener('click', function () {
-                                                                let currentValue = parseInt(input.value);
-                                                                if (currentValue > 1) {
-                                                                    input.value = currentValue - 1;
-                                                                }
-                                                            });
-                                                        }
-
-                                                        const alert = document.querySelector('#alert');
-
-                                                        if (alert) {
-                                                            alert.style.display = 'block';
-                                                            alert.style.opacity = '1';
-
-                                                            setTimeout(function () {
-                                                                alert.style.opacity = '0';
-
-                                                                setTimeout(function () {
-                                                                    alert.classList.add('show');
-                                                                }, 500);
-                                                            }, 3500);
-                                                        }
-
-                                                    });
 
         </script>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', (event) => {
-                const stars = document.querySelectorAll('.stars-input label');
-
-                // Set initial star rating to 4 and check the corresponding radio button
-                stars.forEach((star, index) => {
-                    if (index < 4) {
-                        star.style.color = 'gold';
-                    } else {
-                        star.style.color = 'gray';
-                    }
-                });
-
-                // Check the radio button corresponding to 4 stars
-                const star4Input = document.querySelector('#star4');
-                if (star4Input) {
-                    star4Input.checked = true;
-                }
-
-                // Handle star click events
-                stars.forEach((star, index) => {
-                    star.addEventListener('click', () => {
-                        stars.forEach((s, i) => {
-                            if (i <= index) {
-                                s.style.color = 'gold';
-                            } else {
-                                s.style.color = 'gray';
-                            }
-                        });
-                    });
-                });
-            });
-        </script>
         <script>
             // Update average rating and total feedback count based on backend data or initial values
             var averageRatingValue = ${averageRating}; // Replace with actual average rating value
-            var totalFeedbackCountValue = ${totalFeedbackCount}; // Replace with actual total feedback count value
+            var totalFeedbackCountValue = ${numberOfFeedback}; // Replace with actual total feedback count value
 
-            document.getElementById('averageRating').innerText = averageRatingValue + ' / 5';
+            document.getElementById('averageRating').innerText = averageRatingValue.toFixed(1) + ' / 5';
             document.querySelector('.rating-score').innerText = averageRatingValue.toFixed(1) + ' / 5';
-            document.querySelector('.stars').innerHTML = getStarsHtml(averageRatingValue); // Function to generate star icons based on average rating
+            document.getElementById('productRating').innerHTML = getStarsHtml(averageRatingValue); // Function to generate star icons based on average rating
 
             function getStarsHtml(rating) {
                 var fullStars = Math.floor(rating);
-                var halfStar = (rating % 1 !== 0) ? '<span>★</span>' : '';
-                var emptyStars = 5 - Math.ceil(rating);
+                var halfStar = (rating % 1 !== 0) ? '<span class="fa fa-star-half-alt checked"></span>' : '';
+                var emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
                 var starsHtml = '';
                 for (var i = 0; i < fullStars; i++) {
-                    starsHtml += '<span>★</span>';
+                    starsHtml += '<span class="fa fa-star checked"></span>';
                 }
                 starsHtml += halfStar;
                 for (var j = 0; j < emptyStars; j++) {
-                    starsHtml += '<span>☆</span>';
+                    starsHtml += '<span class="far fa-star"></span>';
                 }
 
                 return starsHtml;
             }
         </script>
+
         <script>
             $(document).ready(function () {
                 // Set up modal for updating feedback

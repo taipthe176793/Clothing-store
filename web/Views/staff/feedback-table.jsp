@@ -53,8 +53,8 @@
                                 <form action="${pageContext.request.contextPath}/staff/feedback" method="get" class="input-group">
                                     <select id="sortDate" name="sortDate" class="form-control" onchange="this.form.submit()">
                                         <option value="">Sort by Date</option>
-                                        <option value="desc" ${sortDate == 'desc' ? 'selected' : ''}>Newest First</option>
-                                        <option value="asc" ${sortDate == 'asc' ? 'selected' : ''}>Oldest First</option>
+                                        <option value="desc" ${sortDate == 'desc' ? 'selected' : ''}>Newest</option>
+                                        <option value="asc" ${sortDate == 'asc' ? 'selected' : ''}>Oldest</option>
                                     </select>
                                 </form>
                             </div>
@@ -101,15 +101,11 @@
                                                 <td>${feedback.rating}</td>
                                                 <td>${feedback.createdAt}</td>
                                                 <td>
-                                                    <c:if test="${feedback.isIsDeleted()}">
-                                                        Hidden
-                                                    </c:if>
-                                                    <c:if test="${!feedback.isIsDeleted()}">
-                                                        Active
-                                                    </c:if>
-                                                </td>
-                                                <td>
-                                                    <form action="${pageContext.request.contextPath}/staff/feedback" method="post">
+                                                    <c:if test="${feedback.isIsDeleted()}">Hidden</c:if>
+                                                    <c:if test="${!feedback.isIsDeleted()}">Active</c:if>
+                                                    </td>
+                                                    <td>
+                                                        <form action="${pageContext.request.contextPath}/staff/feedback" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
                                                         <input type="hidden" name="action" value="${feedback.isIsDeleted() ? 'active' : 'hidden'}">
                                                         <button type="submit" class="btn btn-sm ${feedback.isIsDeleted() ? 'btn-success' : 'btn-danger'}">
@@ -141,7 +137,6 @@
                                     <tbody>
                                         <c:forEach var="feedback" items="${reportedFeedbacks}" varStatus="loop">
                                             <tr id="feedback-${feedback.feedbackId}" class="${feedback.isReported ? 'reported' : ''}">
-
                                                 <td>${loop.index + 1}</td>
                                                 <td>${feedback.username}</td>
                                                 <td>
@@ -155,20 +150,19 @@
                                                 <td>${feedback.rating}</td>
                                                 <td>${feedback.createdAt}</td>
                                                 <td>
-                                                    <c:if test="${feedback.isIsDeleted()}">
-                                                        Hidden
-                                                    </c:if>
-                                                    <c:if test="${!feedback.isIsDeleted()}">
-                                                        Active
-                                                    </c:if>
-                                                </td>
-                                                <td>
+                                                    <c:if test="${feedback.isIsDeleted()}">Hidden</c:if>
+                                                    <c:if test="${!feedback.isIsDeleted()}">Active</c:if>
+                                                    </td>
+                                                    <td>
+                                                        <form action="${pageContext.request.contextPath}/staff/feedback" method="post">
+                                                        <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
+                                                        <input type="hidden" name="action" value="hidden">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Hide</button>
+                                                    </form>
                                                     <form action="${pageContext.request.contextPath}/staff/feedback" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
-                                                        <input type="hidden" name="action" value="${feedback.isIsDeleted() ? 'active' : 'hidden'}">
-                                                        <button type="submit" class="btn btn-sm ${feedback.isIsDeleted() ? 'btn-success' : 'btn-danger'}">
-                                                            ${feedback.isIsDeleted() ? 'Show' : 'Hide'}
-                                                        </button>
+                                                        <input type="hidden" name="action" value="cancel">
+                                                        <button type="submit" class="btn btn-sm btn-secondary">Cancel</button>
                                                     </form>
                                                 </td>
                                             </tr>

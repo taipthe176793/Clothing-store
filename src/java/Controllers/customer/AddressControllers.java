@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -67,8 +68,11 @@ public class AddressControllers extends HttpServlet {
             showAddresses(request, response);
         } else {
             switch (action) {
+                
                 case "view":
+                    
                     showAddresses(request, response);
+                    
                     break;
                 default:
                     throw new AssertionError();
@@ -141,6 +145,8 @@ public class AddressControllers extends HttpServlet {
             List<CustomerAddress> addresses = accountDAO.fetchAddressesForAccount(customerId);
 
             request.setAttribute("addresses", addresses);
+                    GeneratorUtils.getNotification(request);
+
             request.getRequestDispatcher("/Views/user/address.jsp").forward(request, response);
         } catch (SQLException e) {
             throw new ServletException("Error fetching addresses", e);
@@ -179,7 +185,7 @@ public class AddressControllers extends HttpServlet {
             String district = request.getParameter("district");
             String ward = request.getParameter("ward");
             String stAddress = request.getParameter("stAddress");
-            
+
             String address = city + ", " + district + ", " + ward + ", " + stAddress;
 
             CustomerAddress newAddress = new CustomerAddress();
@@ -188,6 +194,7 @@ public class AddressControllers extends HttpServlet {
             newAddress.setAddress(address);
 
             accountDAO.addAddress(newAddress);
+            GeneratorUtils.makeNotification(request, "Add success", utilities.CommonConst.NOTI_SUCCESS);
 
             response.sendRedirect(request.getContextPath() + "/customer/address");
         } catch (SQLException e) {
@@ -204,7 +211,7 @@ public class AddressControllers extends HttpServlet {
             String district = request.getParameter("district");
             String ward = request.getParameter("ward");
             String stAddress = request.getParameter("stAddress");
-            
+
             String address = city + ", " + district + ", " + ward + ", " + stAddress;
 
             CustomerAddress updatedAddress = new CustomerAddress();
@@ -214,7 +221,7 @@ public class AddressControllers extends HttpServlet {
 
             AccountDAO accountDAO = new AccountDAO();
             accountDAO.updateAddress(updatedAddress);
-
+            GeneratorUtils.makeNotification(request, "Update success", utilities.CommonConst.NOTI_SUCCESS);
             response.sendRedirect(request.getContextPath() + "/customer/address");
         } catch (SQLException e) {
             throw new ServletException("Error updating address", e);
