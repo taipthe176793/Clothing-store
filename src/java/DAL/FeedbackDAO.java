@@ -175,7 +175,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT f.*, a.username FROM feedback f join account a on f.customer_id = a.account_id\n"
+                String sql = "SELECT f.*, a.fullname FROM feedback f join account a on f.customer_id = a.account_id\n"
                         + "WHERE is_reported = 1";
 
                 stm = con.prepareStatement(sql);
@@ -184,7 +184,7 @@ public class FeedbackDAO extends DBContext {
                     Feedback feedback = new Feedback();
                     feedback.setFeedbackId(rs.getInt("feedback_id"));
                     feedback.setCustomerId(rs.getInt("customer_id"));
-                    feedback.setUsername(rs.getString("username"));
+                    feedback.setUsername(rs.getString("fullname"));
                     feedback.setProductId(rs.getInt("product_id"));
                     feedback.setComment(rs.getString("comment"));
                     feedback.setRating(rs.getDouble("rating"));
@@ -464,7 +464,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT f.*, a.username, p.name as product_name FROM feedback f "
+                String sql = "SELECT f.*, a.fullname, p.name as product_name FROM feedback f "
                         + "JOIN account a ON f.customer_id = a.account_id "
                         + "JOIN product p ON f.product_id = p.product_id "
                         + "WHERE p.name LIKE ?";
@@ -480,7 +480,7 @@ public class FeedbackDAO extends DBContext {
                     feedback.setComment(rs.getString("comment"));
                     feedback.setRating(rs.getDouble("rating"));
                     feedback.setCreatedAt(rs.getDate("created_at"));
-                    feedback.setUsername(rs.getString("username"));
+                    feedback.setUsername(rs.getString("fullname"));
                     feedback.setIsDeleted(rs.getBoolean("is_deleted"));
 
                     feedbackList.add(feedback);
@@ -507,7 +507,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT f.*, a.username, p.name as product_name FROM feedback f "
+                String sql = "SELECT f.*, a.fullname, p.name as product_name FROM feedback f "
                         + "JOIN account a ON f.customer_id = a.account_id "
                         + "JOIN product p ON f.product_id = p.product_id "
                         + "ORDER BY f.created_at DESC";
@@ -522,7 +522,7 @@ public class FeedbackDAO extends DBContext {
                     feedback.setComment(rs.getString("comment"));
                     feedback.setRating(rs.getDouble("rating"));
                     feedback.setCreatedAt(rs.getDate("created_at"));
-                    feedback.setUsername(rs.getString("username"));
+                    feedback.setUsername(rs.getString("fullname"));
                     feedback.setIsDeleted(rs.getBoolean("is_deleted"));
 
                     feedbackList.add(feedback);
@@ -549,7 +549,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT f.*, a.username, p.name as product_name FROM feedback f "
+                String sql = "SELECT f.*, a.fullname, p.name as product_name FROM feedback f "
                         + "JOIN account a ON f.customer_id = a.account_id "
                         + "JOIN product p ON f.product_id = p.product_id "
                         + "ORDER BY f.created_at ASC";
@@ -564,7 +564,7 @@ public class FeedbackDAO extends DBContext {
                     feedback.setComment(rs.getString("comment"));
                     feedback.setRating(rs.getDouble("rating"));
                     feedback.setCreatedAt(rs.getDate("created_at"));
-                    feedback.setUsername(rs.getString("username"));
+                    feedback.setUsername(rs.getString("fullname"));
                     feedback.setIsDeleted(rs.getBoolean("is_deleted"));
 
                     feedbackList.add(feedback);

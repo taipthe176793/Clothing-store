@@ -71,26 +71,27 @@ public class FeedbackControllers extends HttpServlet {
             String sortDate = request.getParameter("sortDate");
 
             List<Feedback> feedbacks;
-     
+            List<Feedback> reportedFeedbacks = feedbackDAO.getReportedFeedbacks();
 
             if (search != null && !search.isEmpty()) {
-                feedbacks = feedbackDAO.searchFeedbacksByProduct(search);           
+                feedbacks = feedbackDAO.searchFeedbacksByProduct(search);
             } else {
-                feedbacks = feedbackDAO.getAllFeedbacks();              
+                feedbacks = feedbackDAO.getAllFeedbacks();
             }
-            
-              if ("desc".equals(sortDate)) {
-            feedbacks = feedbackDAO.getFeedbacksSortedByDateDescending();
-         
-        } else if ("asc".equals(sortDate)) {
-            feedbacks = feedbackDAO.getFeedbacksSortedByDateAscending();
-            
-        }
+
+            if ("desc".equals(sortDate)) {
+                feedbacks = feedbackDAO.getFeedbacksSortedByDateDescending();
+
+            } else if ("asc".equals(sortDate)) {
+                feedbacks = feedbackDAO.getFeedbacksSortedByDateAscending();
+
+            }
 
             request.setAttribute("search", search);
             request.setAttribute("sortDate", sortDate);
-            request.setAttribute("feedbacks", feedbacks);  
+            request.setAttribute("feedbacks", feedbacks);
             request.setAttribute("products", products);
+            request.setAttribute("reportedFeedbacks", reportedFeedbacks);  
 
             request.getRequestDispatcher("/Views/staff/feedback-table.jsp").forward(request, response);
 

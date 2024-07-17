@@ -88,7 +88,7 @@
                             
                    
 
-                    <button type="submit" class="btn btn-primary">Add Blog</button>
+                    <button type="submit" class="btn btn-dark">Add Blog</button>
                     <a href="${pageContext.request.contextPath}/staff/blog" class="btn btn-secondary">Cancel</a>
                     </form>
                      </div>

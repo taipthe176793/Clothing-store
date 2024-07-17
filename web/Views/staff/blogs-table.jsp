@@ -110,7 +110,7 @@
                                         <td>${loop.index + 1}</td>
                                         <td>${blog.title}</td>
                                         <td>
-                                            <img src="${blog.image}" name="image" alt="Blog Image" style="width: 50px; height: 50px;">
+                                            <img src="${blog.image}" name="image" alt="Blog Image" style="width: 150px; height: 100px;">
                                         </td>
                                         <td>
                                             <c:forEach var="blogType" items="${blogTypes}">
