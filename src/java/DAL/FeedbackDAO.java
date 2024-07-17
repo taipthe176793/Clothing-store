@@ -130,7 +130,7 @@ public class FeedbackDAO extends DBContext {
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT f.*, a.username "
+                String sql = "SELECT f.*, a.fullname "
                         + "FROM feedback f "
                         + "JOIN account a ON f.customer_id = a.account_id";
                 stm = con.prepareStatement(sql);
@@ -144,7 +144,7 @@ public class FeedbackDAO extends DBContext {
                     feedback.setComment(rs.getString("comment"));
                     feedback.setRating(rs.getDouble("rating"));
                     feedback.setCreatedAt(rs.getDate("created_at"));
-                    feedback.setUsername(rs.getString("username"));
+                    feedback.setUsername(rs.getString("fullname"));
                     feedback.setIsDeleted(rs.getBoolean("is_deleted"));
                     feedback.setIsReported(rs.getBoolean("is_reported"));
 

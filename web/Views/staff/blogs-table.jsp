@@ -87,7 +87,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <a href="${pageContext.request.contextPath}/staff/blog?action=add" class="btn btn-primary float-right">Add New Blog</a>
+                                <a href="${pageContext.request.contextPath}/staff/blog?action=add" class="btn btn-dark  float-right">Add New Blog</a>
                             </div>
                         </div>
 
@@ -127,7 +127,7 @@
                                             </c:choose>
                                         </td>
                                         <td class="d-flex">
-                                            <button class="btn btn-warning btn-sm text-white " style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
+                                            <button class="btn btn-secondary btn-sm text-white " style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
 
                                             <c:if test="${blog.status == false}">
                                                 <form action="blog?action=delete" method="post" >

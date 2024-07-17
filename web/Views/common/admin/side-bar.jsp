@@ -1,4 +1,4 @@
-<div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
+<div class="sidebar"  data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
 
     <div class="sidebar-wrapper">
         <ul class="nav">

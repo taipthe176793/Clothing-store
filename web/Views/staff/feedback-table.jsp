@@ -108,7 +108,7 @@
                                                         <form action="${pageContext.request.contextPath}/staff/feedback" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
                                                         <input type="hidden" name="action" value="${feedback.isIsDeleted() ? 'active' : 'hidden'}">
-                                                        <button type="submit" class="btn btn-sm ${feedback.isIsDeleted() ? 'btn-success' : 'btn-danger'}">
+                                                        <button type="submit" class="btn btn-sm ${feedback.isIsDeleted() ? 'btn-dark' : 'btn-danger'}">
                                                             ${feedback.isIsDeleted() ? 'Show' : 'Hide'}
                                                         </button>
                                                     </form>
@@ -162,7 +162,7 @@
                                                     <form action="${pageContext.request.contextPath}/staff/feedback" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
                                                         <input type="hidden" name="action" value="cancel">
-                                                        <button type="submit" class="btn btn-sm btn-secondary">Cancel</button>
+                                                        <button type="submit" class="btn btn-sm btn-dark">Cancel</button>
                                                     </form>
                                                 </td>
                                             </tr>
