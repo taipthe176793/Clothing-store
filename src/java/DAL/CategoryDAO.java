@@ -197,4 +197,42 @@ public class CategoryDAO extends DBContext {
         return category;
     }
 
+    public String getAllCategoriesName() throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        StringBuilder lables = new StringBuilder("[");
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[category]";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    lables.append("\"").append(rs.getString("name")).append("\"");
+                    lables.append(",");
+                }
+                lables.deleteCharAt(lables.lastIndexOf(","));
+                lables.append("]");
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return lables.toString();
+    }
+
 }

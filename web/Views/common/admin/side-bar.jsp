@@ -5,7 +5,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">
                     <i class="nc-icon nc-tablet-2"></i>
-                    <p>Dashboard</p>
+                    <p>Overview</p>
                 </a>
             </li>
             <li>
@@ -30,12 +30,6 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/admin/coupon">
                     <i class="nc-icon nc-tag-content"></i>
                     <p>Manage Coupons</p>
-                </a>
-            </li>
-            <li>
-                <a class="nav-link" href="#">
-                    <i class=" nc-icon nc-chart-pie-35"></i>
-                    <p>Statistics</p>
                 </a>
             </li>
         </ul>

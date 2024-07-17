@@ -374,4 +374,37 @@ public class BlogDAO extends DBContext {
         return blogList;
     }
 
+    public int getNoOfNewBlogsThisMonth() throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        int blogs = 0;
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT\n"
+                        + "    COUNT(blog_id) AS NewBlogCount\n"
+                        + "FROM [dbo].[blog]\n"
+                        + "WHERE DATEPART(YEAR, created_at) = DATEPART(YEAR, GETDATE())\n"
+                        + "  AND DATEPART(MONTH, created_at) = DATEPART(MONTH, GETDATE());";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    blogs = rs.getInt("NewBlogCount");
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return blogs;
+    }
+
 }

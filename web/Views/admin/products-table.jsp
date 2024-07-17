@@ -38,13 +38,12 @@
 
     </head>
 
-    <body>
+    <body>            
+
 
         <div class="wrapper">
-            <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
-
-            </div>
             <jsp:include page="../common/admin/side-bar.jsp"></jsp:include>
+
                 <div class="main-panel">
 
                 <jsp:include page="../common/admin/header.jsp"></jsp:include>
@@ -78,12 +77,12 @@
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
-                                                    <th>Name</th>
-                                                    <th>Description</th>
+                                                    <th style="width: 10%">Name</th>
+                                                    <th>Image</th>
+                                                    <th style="width: 30%">Description</th>
                                                     <th>Price</th>
-                                                    <th>Image 1</th>
-                                                    <th>Image 2</th>
-                                                    <th>Image 3</th>
+                                                    <th hidden>Image 2</th>
+                                                    <th hidden>Image 3</th>
                                                     <th>Category</th>
                                                     <th>Variants</th>
                                                     <th>Action</th>
@@ -93,11 +92,11 @@
                                             <tr>
                                                 <td name="id">${product.getProductId()}</td>
                                                 <td name="name">${product.getName()}</td>
+                                                <td name="img1"><img style="height: 100px" src="${product.getImg1()}" alt="img1" /></td>
                                                 <td name="description">${product.getDescription()}</td>
                                                 <td name="price">$${product.getPrice()}</td>
-                                                <td name="img1"><img style="height: 100px" src="${product.getImg1()}" alt="img1" /></td>
-                                                <td name="img2"><img style="height: 100px" src="${product.getImg2()}" alt="img2" /></td>
-                                                <td name="img3"><img style="height: 100px" src="${product.getImg3()}" alt="img3" /></td>
+                                                <td name="img2" hidden><img  src="${product.getImg2()}" alt="img2" /></td>
+                                                <td name="img3" hidden><img  src="${product.getImg3()}" alt="img3" /></td>
                                                     <c:forEach items="${categoryList}" var="category">
                                                         <c:if test="${product.getCategoryId() == category.getCategoryId()}">
                                                         <td name="category">${category.getName()}</td>
@@ -124,11 +123,12 @@
                         </div>
 
                     </div>
+
                 </div>
+
                 <jsp:include page="../common/admin/footer.jsp"></jsp:include>
 
                 </div>
-
             </div>
 
 
@@ -144,17 +144,19 @@
                         </div>
                         <div class="modal-body">
                             <form id="addProductForm" action="product?action=add" method="post" enctype="multipart/form-data">
-                                <!--Name-->
-                                <div class="form-group">
-                                    <label for="name">Name:</label>
-                                    <input type="text" class="form-control" id="nameInput" name="name">
-                                    <div id="nameError" class="error"></div>
-                                </div>
-                                <!--Price-->
-                                <div class="form-group">
-                                    <label for="price">Price:</label>
-                                    <input type="text" class="form-control" id="priceInput" name="price">
-                                    <div id="priceError" class="error"></div>
+                                <div class="row"> 
+                                    <!--Name-->
+                                    <div class="form-group col-6">
+                                        <label for="name">Name:</label>
+                                        <input type="text" class="form-control" id="nameInput" name="name">
+                                        <div id="nameError" class="error"></div>
+                                    </div>
+                                    <!--Price-->
+                                    <div class="form-group col-6">
+                                        <label for="price">Price:</label>
+                                        <input type="text" class="form-control" id="priceInput" name="price">
+                                        <div id="priceError" class="error"></div>
+                                    </div>
                                 </div>
                                 <!--Category-->
                                 <div class="form-group">
@@ -183,7 +185,7 @@
                                     </div>
                                 </div>
                                 <img id="previewImage1" src="#" alt="Preview"
-                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                     style="display: none; max-width: 100px; max-height: 100px;">
 
                             </div>
                             <!--Image 2-->
@@ -199,7 +201,7 @@
                                     </div>
                                 </div>
                                 <img id="previewImage2" src="#" alt="Preview"
-                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                     style="display: none; max-width: 100px; max-height: 100px;">
 
                             </div>
                             <!--Image 3-->
@@ -215,13 +217,13 @@
                                     </div>
                                 </div>
                                 <img id="previewImage3" src="#" alt="Preview"
-                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                     style="display: none; max-width: 100px; max-height: 100px;">
 
                             </div>
                             <!--Description-->
                             <div class="form-group">
                                 <label for="description">Description:</label>
-                                <textarea class="form-control" name="description"></textarea>
+                                <textarea class="form-control" rows="4" name="description"></textarea>
                             </div>
                         </form>
                     </div>
@@ -248,15 +250,17 @@
                             <div class="form-group" style="display: none">
                                 <input type="text" class="form-control" id="idEditInput" name="id">
                             </div>
-                            <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="nameEditInput" name="name">
-                                <div id="nameEditError" class="error"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="price">Price:</label>
-                                <input type="text" class="form-control" id="priceEditInput" name="price">
-                                <div id="priceEditError" class="error"></div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="nameEditInput" name="name">
+                                    <div id="nameEditError" class="error"></div>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label for="price">Price:</label>
+                                    <input type="text" class="form-control" id="priceEditInput" name="price">
+                                    <div id="priceEditError" class="error"></div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="category">Category: </label>
@@ -285,7 +289,7 @@
                                     </div>
                                 </div>
                                 <img id="previewImageU1" src="#" alt="Preview"
-                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                     style="display: none; max-width: 100px; max-height: 100px;">
                                 <input type="hidden" id="currentImage1" name="currentImage1" value="">
                             </div>
                             <!-- img2 -->
@@ -302,7 +306,7 @@
                                     </div>
                                 </div>
                                 <img id="previewImageU2" src="#" alt="Preview"
-                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                     style="display: none; max-width: 100px; max-height: 100px;">
                                 <input type="hidden" id="currentImage2" name="currentImage2" value="">
                             </div>
                             <!-- img3 -->
@@ -319,12 +323,12 @@
                                     </div>
                                 </div>
                                 <img id="previewImageU3" src="#" alt="Preview"
-                                     style="display: none; max-width: 300px; max-height: 300px;">
+                                     style="display: none; max-width: 100px; max-height: 100px;">
                                 <input type="hidden" id="currentImage3" name="currentImage3" value="">
                             </div>
                             <div class="form-group">
                                 <label for="descriptionEditInput">Description:</label>
-                                <textarea class="form-control" id="descriptionEdit" name="description"></textarea>
+                                <textarea rows="4" class="form-control" id="descriptionEdit" name="description"></textarea>
                             </div>
                         </form>
                     </div>
@@ -384,7 +388,7 @@
         </div>
 
     </body>
-    
+
     <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
