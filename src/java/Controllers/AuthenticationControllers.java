@@ -132,6 +132,8 @@ public class AuthenticationControllers extends HttpServlet {
 
         } catch (SQLException ex) {
             response.sendRedirect("404");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -223,6 +225,8 @@ public class AuthenticationControllers extends HttpServlet {
 
         } catch (SQLException ex) {
             response.sendRedirect("404");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

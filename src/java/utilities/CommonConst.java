@@ -16,6 +16,11 @@ public class CommonConst {
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
     public static final String GOOGLE_LINK_GET_TOKEN = "https://accounts.google.com/o/oauth2/token";
     public static final String GOOGLE_LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
+    
+    public static final String TMN_ID = "91EJA4HU";
+    public static final String VNPAY_KEY = "WJZ4PLJNY6VJNNL0XPEYI7IDCJAL9EMO";
+    public static final String VNPAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    public static final String VNPAY_RETURN_URL = "http://localhost:8080/SWP391_SE1817/vnpayReturn";
 
     public static final int ROLE_ADMIN = 1;
     public static final int ROLE_STAFF = 2;
@@ -50,5 +55,9 @@ public class CommonConst {
 
     public static String ORDER_CONFIRMATION_TITLE = "Order Confirmation - Urban Vibes";
     public static String ORDER_CONFIRMATION_SUBTITLE = "Thank you for ordering!";
+    public static String ORDER_PAYMENT_FAILED_TITLE = "Order Payment Failed";
+    
+    public static int IS_PAID = 1;
+    public static int UN_PAID = 0;
 
 }

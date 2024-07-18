@@ -8,20 +8,18 @@ import DAL.AccountDAO;
 import DAL.CartItemDAO;
 import DAL.CouponDAO;
 import DAL.OrderDAO;
-import DAL.OrderDetailsDAO;
-import DAL.ProductDAO;
-import DAL.ProductVariantDAO;
 import Models.CartItem;
 import Models.CustomerAddress;
 import Models.Order;
 import Models.OrderDetails;
-import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,9 +28,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utilities.CommonConst;
+import static utilities.CommonConst.VNPAY_RETURN_URL;
 import utilities.CookieUtils;
 import utilities.EmailUtils;
 import utilities.GeneratorUtils;
+import utilities.VNPayUtils;
 
 /**
  *
@@ -91,7 +91,7 @@ public class CheckoutServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, UnsupportedEncodingException {
         try {
             int customerId = Integer.parseInt(request.getParameter("accId") == null ? "2" : request.getParameter("accId"));
             String customerName = request.getParameter("fullname");
@@ -100,6 +100,7 @@ public class CheckoutServlet extends HttpServlet {
             String phone = "";
             String code = request.getParameter("code");
             String customerAddress = request.getParameter("address") == null ? "" : request.getParameter("address");
+            double totalVND = Double.parseDouble(request.getParameter("vnd"));
 
             // Process customer address if provided
             if (!customerAddress.isBlank()) {
@@ -132,11 +133,11 @@ public class CheckoutServlet extends HttpServlet {
             order.setEmail(customerEmail);
             order.setPhone(phone);
             order.setDeliveryAddress(address);
-            order.setStatus(CommonConst.ORDER_PENDING_STATUS); 
+            order.setStatus(CommonConst.ORDER_PENDING_STATUS);
             order.setDiscount(discount);
             order.setTotalAmount(totalAmount);
-            order.setIsPaid(!paymentMethod.equals(CommonConst.COD_METHOD)); 
-            order.setOrderCode(GeneratorUtils.generateOrderCode()); 
+            order.setIsPaid(!paymentMethod.equals(CommonConst.COD_METHOD));
+            order.setOrderCode(GeneratorUtils.generateOrderCode());
 
             // Retrieve ordered items details
             String[] itemsId = request.getParameterValues("vId");
@@ -150,13 +151,13 @@ public class CheckoutServlet extends HttpServlet {
             }
 
             // Place order with stock check
-            OrderDAO orderDAO = new OrderDAO(); 
+            OrderDAO orderDAO = new OrderDAO();
             int orderId = orderDAO.placeOrderWithStockCheck(order, orderDetailsList);
 
             if (orderId != -1) {
                 // Handle coupon usage if provided
                 if (!code.isBlank()) {
-                    CouponDAO couponDAO = new CouponDAO(); 
+                    CouponDAO couponDAO = new CouponDAO();
                     int couponId = couponDAO.getCouponByCode(code).getCouponId();
                     couponDAO.addCouponToUsedCouponHistory(customerId, couponId);
                 }
@@ -170,25 +171,31 @@ public class CheckoutServlet extends HttpServlet {
 
                 // Delete customer cart items if not guest customer
                 if (customerId != 2) {
-                    CartItemDAO cartItemDAO = new CartItemDAO(); 
+                    CartItemDAO cartItemDAO = new CartItemDAO();
                     for (String vId : itemsId) {
                         int cartItemId = cartItemDAO.getCartItemId(new CartItem(customerId, Integer.parseInt(vId)));
                         cartItemDAO.deleteCustomerCartItem(customerId, cartItemId);
                     }
                 }
 
-                
-                order = orderDAO.getOrderByOrderId(orderId); 
-                String content = EmailUtils.generateOrderEmailContent(order, CommonConst.ORDER_CONFIRMATION_SUBTITLE);
-                EmailUtils.sendEmail(order.getEmail(), CommonConst.ORDER_CONFIRMATION_TITLE, content);
-
-                
-                response.sendRedirect("checkout-success");
+                order = orderDAO.getOrderByOrderId(orderId);
+                if (paymentMethod.equals("vnpay")) {
+                    // Generate VNPay Payment URL
+                    String paymentUrl = VNPayUtils.generatePaymentUrl(String.valueOf(orderId), totalVND,
+                            "Payment for Order " + order.getOrderCode(),
+                            VNPAY_RETURN_URL, request);
+                    response.sendRedirect(paymentUrl);
+                } else {
+                    // Handle COD Method
+                    String content = EmailUtils.generateOrderEmailContent(order, CommonConst.ORDER_CONFIRMATION_SUBTITLE);
+                    EmailUtils.sendEmail(order.getEmail(), CommonConst.ORDER_CONFIRMATION_TITLE, content);
+                    response.sendRedirect("checkout-success");
+                }
             } else {
                 response.sendRedirect("checkout-failed");
             }
 
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException | NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

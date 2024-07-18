@@ -586,7 +586,7 @@ public class OrderDAO extends DBContext {
         return orderId;
     }
 
-    public Order getUserOrdersById(int customerId, int orderId) throws SQLException {
+    public Order getUserOrdersById(int customerId, int orderId) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -632,7 +632,7 @@ public class OrderDAO extends DBContext {
         return null;
     }
 
-    public Order getUserOrdersById(int orderId) throws SQLException {
+    public Order getUserOrdersById(int orderId) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -760,7 +760,7 @@ public class OrderDAO extends DBContext {
         }
         return orderList;
     }
-    
+
     public int updateOrderStatus(int orderId, String newStatus) {
         String query = "UPDATE [order] SET status = ? WHERE order_id = ?";
         try (PreparedStatement stmt = connect.prepareStatement(query)) {
@@ -771,6 +771,56 @@ public class OrderDAO extends DBContext {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public void updateOrderPaymentStatus(int orderId, int paymentStatus) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "UPDATE [dbo].[order]\n"
+                        + "   SET [is_paid] = ?\n"
+                        + " WHERE [order_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, paymentStatus);
+                stm.setInt(2, orderId);
+                stm.executeUpdate();
+
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+    }
+
+    public void updateVariationQuantityOfCancelledOrder(OrderDetails orderDetails) throws SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "UPDATE [dbo].[product_variants]\n"
+                        + "   SET [quantity] = [quantity] + ?\n"
+                        + " WHERE [product_variant_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, orderDetails.getQuantity());
+                stm.setInt(2, orderDetails.getProductVariantId());
+                stm.executeUpdate();
+
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
     }
 
 }

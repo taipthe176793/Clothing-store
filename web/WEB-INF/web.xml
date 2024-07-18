@@ -128,6 +128,10 @@
         <servlet-name>CheckOutFailedServlet</servlet-name>
         <servlet-class>Controllers.CheckOutFailedServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VNPAYReturnServlet</servlet-name>
+        <servlet-class>Controllers.VNPAYReturnServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -239,6 +243,10 @@
     <servlet-mapping>
         <servlet-name>CheckOutFailedServlet</servlet-name>
         <url-pattern>/checkout-failed</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VNPAYReturnServlet</servlet-name>
+        <url-pattern>/vnpayReturn</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
