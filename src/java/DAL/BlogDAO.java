@@ -54,6 +54,42 @@ public class BlogDAO extends DBContext {
 
         return blogList;
     }
+    
+    public List<Blog> gePublictBlogs() throws SQLException, ClassNotFoundException {
+        List<Blog> blogList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT * FROM [dbo].[blog] WHERE [status] = 0";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Blog blog = new Blog();
+                    blog.setBlogId(rs.getInt("blog_id"));
+                    blog.setTitle(rs.getString("title"));
+                    blog.setBody(rs.getString("body"));
+                    blog.setImage(rs.getString("image"));
+                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
+                    blog.setStatus(rs.getBoolean("status"));
+                    blog.setCreatedAt(rs.getDate("created_at"));
+                    blogList.add(blog);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return blogList;
+    }
 
     public List<BlogType> getAllBlogTypes() throws SQLException {
         List<BlogType> blogTypes = new ArrayList<>();

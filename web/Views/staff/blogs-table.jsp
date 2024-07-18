@@ -122,14 +122,14 @@
                                         <td>${blog.createdAt}</td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${blog.status == false}">Hidden</c:when>
-                                                <c:when test="${blog.status == true && blog.status != 'Pending'}">Public</c:when>
+                                                <c:when test="${blog.status}">Hidden</c:when>
+                                                <c:when test="${!blog.status}">Public</c:when>
                                             </c:choose>
                                         </td>
                                         <td class="d-flex">
                                             <button class="btn btn-secondary btn-sm text-white " style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
 
-                                            <c:if test="${blog.status == false}">
+                                            <c:if test="${blog.status}">
                                                 <form action="blog?action=delete" method="post" >
                                                     <input name="blogId" value="${blog.blogId}" hidden="" />
                                                     <button onclick="this.closest('form').submit()" class="btn btn-danger btn-sm">Delete</button>

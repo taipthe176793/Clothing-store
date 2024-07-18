@@ -1,4 +1,4 @@
-<%-- 
+``<%-- 
     Document   : blog
     Created on : May 19, 2024, 3:17:18 PM
     Author     : admin
@@ -62,7 +62,7 @@
                             <c:forEach items="${blogs}" var="i">
                                 <div class="p-b-63">
                                 <a href="blog-detail?id=${i.blogId}" class="hov-img0 how-pos5-parent">
-                                    <img src="${pageContext.request.contextPath}/images/blog/blog-04.jpg" alt="IMG-BLOG">
+                                    <img src="${i.image}" alt="IMG-BLOG">
                                 </a>
 
                                 <div class="p-t-32">
@@ -73,9 +73,9 @@
                                     </h4>
 
                                     <p class="stext-117 cl6">
-                                            ${i.body}
+                                          
                                     <div class="flex-w flex-sb-m p-t-18">
-
+                                    
 
                                         <a href="blog-detail?id=${i.blogId}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
                                             Continue Reading

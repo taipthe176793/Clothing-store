@@ -57,10 +57,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h2 class="mt-4">${blog.title}</h2>
-                        <img src="${pageContext.request.contextPath}/images/blog/blog-04.jpg" alt="Blog Image" class="img-fluid mt-3">
+                        <img src="${blog.image}" class="img-fluid mt-3">
                         <p class="mt-3">${blog.body}</p>
                         <p><strong>Created At:</strong> ${blog.createdAt}</p>
-                        <p><strong>Status:</strong> <c:if test="${blog.status}">Published</c:if><c:if test="${!blog.status}">Draft</c:if></p>
                         </div>
                     </div>
                 </div>
