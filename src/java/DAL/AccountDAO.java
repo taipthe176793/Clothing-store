@@ -6,6 +6,7 @@ package DAL;
 
 import Models.Account;
 import Models.CartItem;
+import Models.Coupon;
 import Models.CustomerAddress;
 import Models.Product;
 import java.sql.Connection;
@@ -393,6 +394,38 @@ public class AccountDAO extends DBContext {
         return addresses;
     }
 
+//    public List<Coupon> getCoupons(int customerId) throws SQLException {
+//        Connection con = null;
+//        PreparedStatement stm = null;
+//        ResultSet rs = null;
+//        List<Coupon> coupons = new ArrayList<>();
+//        try {
+//            con = connect;
+//            String sql = "SELECT * FROM [dbo].[customer_address] WHERE [customer_id] = ? ORDER BY [is_default] desc";
+//            stm = con.prepareStatement(sql);
+//            stm.setInt(1, customerId);
+//
+//            rs = stm.executeQuery();
+//            while (rs.next()) {
+//                CustomerAddress address = new CustomerAddress();
+//                address.setAddressId(rs.getInt("address_id"));
+//                address.setCustomerId(rs.getInt("customer_id"));
+//                address.setPhone(rs.getString("phone"));
+//                address.setAddress(rs.getString("address"));
+//                address.setIsDefault(rs.getBoolean("is_default"));
+//                coupons.add(address);
+//            }
+//        } finally {
+//            if (rs != null) {
+//                rs.close();
+//            }
+//            if (stm != null) {
+//                stm.close();
+//            }
+//        }
+//        return addresses;
+//    }
+    
     public void addAddress(CustomerAddress address) throws SQLException {
         Connection con = null;
         PreparedStatement stm = null;

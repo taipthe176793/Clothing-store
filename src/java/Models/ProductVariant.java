@@ -16,6 +16,7 @@ public class ProductVariant {
     private String size;
     private int quantity;
     private boolean isDeleted;
+        private Product product;
 
     public ProductVariant() {
     }
@@ -88,5 +89,15 @@ public class ProductVariant {
     public String toString() {
         return "ProductVariant{" + "productVariantId=" + productVariantId + ", productId=" + productId + ", color=" + color + ", size=" + size + ", quantity=" + quantity + ", isDeleted=" + isDeleted + '}';
     }
+    
+    
+    public Product getProduct() {
+        return product;
+    }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }
+
+

@@ -2,27 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.customer;
+package Controllers;
 
-import DAL.AccountDAO;
-import Models.Account;
-import Models.CustomerAddress;
+import DAL.BlogDAO;
+import Models.Blog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
  *
- * @author Admin
+ * @author HP
  */
-public class OrderController extends HttpServlet {
+@WebServlet(name = "BlogDetailController", urlPatterns = {"/blog-detail"})
+public class BlogDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +38,10 @@ public class OrderController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OrderController</title>");            
+            out.println("<title>Servlet BlogDetailController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OrderController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet BlogDetailController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,7 +59,16 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            int blogId = Integer.parseInt(request.getParameter("id"));
+            BlogDAO blogDao = new BlogDAO();
+            Blog blog = blogDao.findBlogById(blogId);
+            request.setAttribute("blog", blog);
+            request.getRequestDispatcher("./Views/detail-blog.jsp").forward(request, response);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            response.sendRedirect("blogs");
+        }
     }
 
     /**

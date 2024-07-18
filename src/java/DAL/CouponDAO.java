@@ -312,5 +312,55 @@ public class CouponDAO extends DBContext {
 
         }
     }
+    
+     public List<Coupon> getAllCouponsByCustomer(int customerId)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Coupon> couponList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "select C.*, ch.used_at from coupon as C\n"
+                        + "join coupon_history as CH on CH.coupon_id = C.coupon_id\n"
+                        + "where CH.customer_id = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, customerId);
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+
+                    Coupon c = new Coupon();
+
+                    c.setCouponId(rs.getInt("coupon_id"));
+                    c.setCode(rs.getString("code"));
+                    c.setDescription(rs.getString("description"));
+                    c.setDiscount(rs.getInt("discount"));
+                    c.setExpiresAt(rs.getDate("expires_at"));
+                    c.setStartAt(rs.getDate("starts_at"));
+                    c.setQuantity(rs.getInt("quantity"));
+                    c.setUsedAt(rs.getDate("used_at"));
+                    couponList.add(c);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return couponList;
+    }
 
 }

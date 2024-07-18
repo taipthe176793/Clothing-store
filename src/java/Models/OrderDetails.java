@@ -13,6 +13,7 @@ public class OrderDetails {
     private int orderId;
     private int productVariantId;
     private int quantity;
+    private ProductVariant variant;
 
     public OrderDetails() {
     }
@@ -60,6 +61,12 @@ public class OrderDetails {
     public String toString() {
         return "OrderDetails{" + "orderDetailId=" + orderDetailId + ", orderId=" + orderId + ", productVariantId=" + productVariantId + ", quantity=" + quantity + '}';
     }
-    
-    
+
+    public ProductVariant getVariant() {
+        return variant;
+    }
+
+    public void setVariant(ProductVariant variant) {
+        this.variant = variant;
+    }
 }

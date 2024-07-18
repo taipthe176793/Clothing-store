@@ -586,4 +586,191 @@ public class OrderDAO extends DBContext {
         return orderId;
     }
 
+    public Order getUserOrdersById(int customerId, int orderId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT *\n"
+                        + "  FROM [dbo].[order]\n"
+                        + "  WHERE [customer_id] = ? and order_id = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, customerId);
+                stm.setInt(2, orderId);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Order c = new Order();
+                    c.setOrderId(rs.getInt("order_id"));
+                    c.setCustomerId(rs.getInt("customer_id"));
+                    c.setTotalAmount(rs.getDouble("total_amount"));
+                    c.setDiscount(rs.getDouble("discount"));
+                    c.setIsPaid(rs.getBoolean("is_paid"));
+                    c.setStatus(rs.getString("status"));
+                    c.setOrderCode(rs.getString("order_code"));
+                    c.setEmail(rs.getString("email"));
+                    c.setFullname(rs.getString("fullname"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setDeliveryAddress(rs.getString("delivery_address"));
+                    c.setCreatedAt(rs.getDate("created_at"));
+                    OrderDetailsDAO orderDetailDao = new OrderDetailsDAO();
+                    c.setListOrderDetails(orderDetailDao.getOrderDetailsByOrderId(orderId));
+                    return c;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return null;
+    }
+
+    public Order getUserOrdersById(int orderId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT *\n"
+                        + "  FROM [dbo].[order]\n"
+                        + "  WHERE order_id = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, orderId);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Order c = new Order();
+                    c.setOrderId(rs.getInt("order_id"));
+                    c.setCustomerId(rs.getInt("customer_id"));
+                    c.setTotalAmount(rs.getDouble("total_amount"));
+                    c.setDiscount(rs.getDouble("discount"));
+                    c.setIsPaid(rs.getBoolean("is_paid"));
+                    c.setStatus(rs.getString("status"));
+                    c.setOrderCode(rs.getString("order_code"));
+                    c.setEmail(rs.getString("email"));
+                    c.setFullname(rs.getString("fullname"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setDeliveryAddress(rs.getString("delivery_address"));
+                    c.setCreatedAt(rs.getDate("created_at"));
+                    OrderDetailsDAO orderDetailDao = new OrderDetailsDAO();
+                    c.setListOrderDetails(orderDetailDao.getOrderDetailsByOrderId(orderId));
+                    return c;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Order> getUserOrdersByStaffReq() throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Order> orderList = new ArrayList<>();
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT *\n"
+                        + "  FROM [dbo].[order] where status = 'Pending'";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Order c = new Order();
+                    c.setOrderId(rs.getInt("order_id"));
+                    c.setCustomerId(rs.getInt("customer_id"));
+                    c.setTotalAmount(rs.getDouble("total_amount"));
+                    c.setDiscount(rs.getDouble("discount"));
+                    c.setIsPaid(rs.getBoolean("is_paid"));
+                    c.setStatus(rs.getString("status"));
+                    c.setOrderCode(rs.getString("order_code"));
+                    c.setEmail(rs.getString("email"));
+                    c.setFullname(rs.getString("fullname"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setDeliveryAddress(rs.getString("delivery_address"));
+                    c.setCreatedAt(rs.getDate("created_at"));
+                    orderList.add(c);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return orderList;
+    }
+
+    public List<Order> getUserOrdersByStaff() throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Order> orderList = new ArrayList<>();
+        try {
+            con = connect;
+
+            if (con != null) {
+                String sql = "SELECT *\n"
+                        + "  FROM [dbo].[order] ";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    Order c = new Order();
+                    c.setOrderId(rs.getInt("order_id"));
+                    c.setCustomerId(rs.getInt("customer_id"));
+                    c.setTotalAmount(rs.getDouble("total_amount"));
+                    c.setDiscount(rs.getDouble("discount"));
+                    c.setIsPaid(rs.getBoolean("is_paid"));
+                    c.setStatus(rs.getString("status"));
+                    c.setOrderCode(rs.getString("order_code"));
+                    c.setEmail(rs.getString("email"));
+                    c.setFullname(rs.getString("fullname"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setDeliveryAddress(rs.getString("delivery_address"));
+                    c.setCreatedAt(rs.getDate("created_at"));
+                    orderList.add(c);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return orderList;
+    }
+    
+    public int updateOrderStatus(int orderId, String newStatus) {
+        String query = "UPDATE [order] SET status = ? WHERE order_id = ?";
+        try (PreparedStatement stmt = connect.prepareStatement(query)) {
+            stmt.setString(1, newStatus);
+            stmt.setInt(2, orderId);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

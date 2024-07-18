@@ -50,13 +50,11 @@
                             <a class="list-group-item list-group-item-action" 
                                href="${pageContext.request.contextPath}/customer/address">My Address</a>
 
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                               href="#account-coupon">My Coupon</a>
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                               href="#account-orders">My Orders</a>
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                               href="#account-orders-history">My Orders History</a>
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
+                           <a class="list-group-item list-group-item-action" 
+                               href="${pageContext.request.contextPath}/my-coupon">My Coupon</a>
+                            <a class="list-group-item list-group-item-action" 
+                               href="${pageContext.request.contextPath}/history-order">My Orders History</a>
+                            <a class="list-group-item list-group-item-action"
                                href="#account-notifications">Notifications</a>
                         </div>
                     </div>
