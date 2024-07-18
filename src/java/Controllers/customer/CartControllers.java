@@ -273,7 +273,7 @@ public class CartControllers extends HttpServlet {
 
     }
 
-    public static void mergeAndSyncCart(HttpServletRequest request, HttpServletResponse response, Account account) throws SQLException {
+    public static void mergeAndSyncCart(HttpServletRequest request, HttpServletResponse response, Account account) throws SQLException, ClassNotFoundException {
 
         String cartTxt = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
         CartItemDAO ciDAO = new CartItemDAO();
