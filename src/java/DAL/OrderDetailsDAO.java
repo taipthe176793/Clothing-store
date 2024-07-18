@@ -131,7 +131,7 @@ public class OrderDetailsDAO extends DBContext {
         return orderDetailList;
     }
     
-     public List<OrderDetails> getOrderDetailsByOrderId(int orderId) {
+     public List<OrderDetails> getOrderDetailsByOrderId(int orderId) throws ClassNotFoundException {
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         String query = "SELECT order_detail_id, order_id, product_variant_id, quantity FROM Order_Detail WHERE order_id = ?";
         

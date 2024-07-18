@@ -75,7 +75,7 @@ public class CartControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            
+
             ProductDAO pDAO = new ProductDAO();
             List<Product> products = pDAO.getAllProducts();
             ProductVariantDAO pvDAO = new ProductVariantDAO();
@@ -87,14 +87,14 @@ public class CartControllers extends HttpServlet {
             }
             request.setAttribute("allProduct", products);
             request.setAttribute("allVariant", variants);
-            
+
             if (request.getSession().getAttribute("discount") != null) {
                 request.setAttribute("discount", request.getSession().getAttribute("discount"));
                 request.getSession().removeAttribute("discount");
                 request.setAttribute("code", request.getSession().getAttribute("code"));
                 request.getSession().removeAttribute("code");
             }
-            
+
             GeneratorUtils.getNotification(request);
 
             AccountDAO aDAO = new AccountDAO();
@@ -136,45 +136,50 @@ public class CartControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
-        String productId = request.getParameter("id") == null ? "" : request.getParameter("id");
-        String color = request.getParameter("color") == null ? "" : request.getParameter("color");
-        String size = request.getParameter("size") == null ? "" : request.getParameter("size");
+        try {
+            String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+            String productId = request.getParameter("id") == null ? "" : request.getParameter("id");
+            String color = request.getParameter("color") == null ? "" : request.getParameter("color");
+            String size = request.getParameter("size") == null ? "" : request.getParameter("size");
 
-        String url = "";
+            String url = "";
 
-        switch (action) {
-            case "addToCart":
-                addToCart(request, response);
-                url = request.getServletContext().getContextPath() + "/product?id=" + productId + "&color=" + color + "&size=" + size;
-                break;
-            case "updateQuantity":
-                //code update cart logic
-                updateCartItemQuantity(request, response);
-                url = request.getServletContext().getContextPath() + "/cart";
-                break;
-            case "delete":
-                //code remove to cart logic
-                deleteCartItem(request, response);
-                url = request.getServletContext().getContextPath() + "/cart";
-                break;
-            case "checkout":
-                HttpSession session = request.getSession();
-                session.invalidate();
-                storeItemsToSession(request);
-                url = request.getServletContext().getContextPath() + "/checkout";
-                break;
-            case "applyCoupon":
-                //code checkout
-                applyCoupon(request);
-                url = request.getServletContext().getContextPath() + "/cart";
-                break;
+            switch (action) {
+                case "addToCart":
+                    addToCart(request, response);
+                    url = request.getServletContext().getContextPath() + "/product?id=" + productId + "&color=" + color + "&size=" + size;
+                    break;
+                case "updateQuantity":
+                    //code update cart logic
+                    updateCartItemQuantity(request, response);
+                    url = request.getServletContext().getContextPath() + "/cart";
+                    break;
+                case "delete":
+                    //code remove to cart logic
+                    deleteCartItem(request, response);
+                    url = request.getServletContext().getContextPath() + "/cart";
+                    break;
+                case "checkout":
+                    HttpSession session = request.getSession();
+                    session.invalidate();
+                    storeItemsToSession(request);
+                    url = request.getServletContext().getContextPath() + "/checkout";
+                    break;
+                case "applyCoupon":
+                    //code checkout
+                    applyCoupon(request);
+                    url = request.getServletContext().getContextPath() + "/cart";
+                    break;
 
-            default:
-                throw new AssertionError();
+                default:
+                    throw new AssertionError();
+            }
+
+            response.sendRedirect(url);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CartControllers.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendRedirect("home");
         }
-
-        response.sendRedirect(url);
     }
 
     /**
@@ -313,7 +318,7 @@ public class CartControllers extends HttpServlet {
         }
     }
 
-    private void deleteCartItem(HttpServletRequest request, HttpServletResponse response) {
+    private void deleteCartItem(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
         try {
 
             int cartItemId = Integer.parseInt(request.getParameter("cItemIdDelete"));
@@ -347,7 +352,7 @@ public class CartControllers extends HttpServlet {
         }
     }
 
-    private String deleteItemInCartCookie(String cartTxt, int variantId) throws SQLException {
+    private String deleteItemInCartCookie(String cartTxt, int variantId) throws SQLException, ClassNotFoundException {
         ProductVariantDAO pvDAO = new ProductVariantDAO();
         ProductVariant pv = pvDAO.findProductVariantById(variantId);
         String[] items = cartTxt.split("/");
@@ -362,7 +367,7 @@ public class CartControllers extends HttpServlet {
         return cartTxt.isBlank() ? "" : cartTxt.substring(0, cartTxt.length() - 1);
     }
 
-    private void updateCartItemQuantity(HttpServletRequest request, HttpServletResponse response) {
+    private void updateCartItemQuantity(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
 
         try {
 
@@ -491,7 +496,7 @@ public class CartControllers extends HttpServlet {
                 GeneratorUtils.makeNotification(request, "Apply coupon successful", utilities.CommonConst.NOTI_SUCCESS);
                 session.setAttribute("discount", (double) coupon.getDiscount());
                 session.setAttribute("code", coupon.getCode());
-                
+
             }
 
         }

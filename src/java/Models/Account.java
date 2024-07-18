@@ -185,7 +185,7 @@ public class Account {
         return txt;
     }
 
-    public static void mergeCart(Account customer, List<CartItem> cookieCart) throws SQLException {
+    public static void mergeCart(Account customer, List<CartItem> cookieCart) throws SQLException, ClassNotFoundException {
 
         if (cookieCart.isEmpty()) {
             return;
