@@ -75,10 +75,7 @@ public class CartControllers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            if (request.getSession().getAttribute("discount") != null) {
-                request.setAttribute("discount", (double) request.getSession().getAttribute("discount"));
-                request.getSession().invalidate();
-            }
+            
             ProductDAO pDAO = new ProductDAO();
             List<Product> products = pDAO.getAllProducts();
             ProductVariantDAO pvDAO = new ProductVariantDAO();
@@ -90,6 +87,13 @@ public class CartControllers extends HttpServlet {
             }
             request.setAttribute("allProduct", products);
             request.setAttribute("allVariant", variants);
+            
+            if (request.getSession().getAttribute("discount") != null) {
+                request.setAttribute("discount", request.getSession().getAttribute("discount"));
+                request.getSession().removeAttribute("discount");
+                request.setAttribute("code", request.getSession().getAttribute("code"));
+                request.getSession().removeAttribute("code");
+            }
             
             GeneratorUtils.getNotification(request);
 
@@ -440,11 +444,13 @@ public class CartControllers extends HttpServlet {
             }
             double discount = Double.parseDouble(request.getParameter("discount").isBlank() ? "0" : request.getParameter("discount"));
             double totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
+            String code = request.getParameter("code");
 
             HttpSession session = request.getSession();
             session.setAttribute("products", products);
             session.setAttribute("variants", variants);
             session.setAttribute("discount", discount);
+            session.setAttribute("code", code);
             session.setAttribute("totalAmount", totalAmount);
             if (account != null) {
                 session.setAttribute("account", account);
@@ -483,8 +489,9 @@ public class CartControllers extends HttpServlet {
             } else {
 
                 GeneratorUtils.makeNotification(request, "Apply coupon successful", utilities.CommonConst.NOTI_SUCCESS);
-                session.setAttribute("discount", coupon.getDiscount());
-
+                session.setAttribute("discount", (double) coupon.getDiscount());
+                session.setAttribute("code", coupon.getCode());
+                
             }
 
         }

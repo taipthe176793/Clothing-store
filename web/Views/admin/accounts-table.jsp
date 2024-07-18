@@ -119,8 +119,8 @@
                     </div>
                 </div>
             </div>
-            <jsp:include page="../common/admin/footer.jsp"></jsp:include>
-            </div>
+                <jsp:include page="../common/admin/footer.jsp"></jsp:include>
+                </div>
 
 
             <!-- Add Modal -->

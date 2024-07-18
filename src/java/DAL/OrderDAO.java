@@ -4,7 +4,9 @@
  */
 package DAL;
 
+import Controllers.customer.CheckoutServlet;
 import Models.Order;
+import Models.OrderDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -413,6 +417,173 @@ public class OrderDAO extends DBContext {
             }
         }
         return orders;
+    }
+
+    public Order getOrderByOrderId(int orderId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        Order order = null;
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT [order_id]\n"
+                        + "      ,[customer_id]\n"
+                        + "      ,[total_amount]\n"
+                        + "      ,[discount]\n"
+                        + "      ,[is_paid]\n"
+                        + "      ,[status]\n"
+                        + "      ,[order_code]\n"
+                        + "      ,[email]\n"
+                        + "      ,[fullname]\n"
+                        + "      ,[phone]\n"
+                        + "      ,[delivery_address]\n"
+                        + "      ,[created_at]\n"
+                        + "  FROM [dbo].[order] WHERE [order_id] = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, orderId);
+                rs = stm.executeQuery();
+
+                if (rs.next()) {
+                    order = new Order();
+                    order.setOrderId(rs.getInt("order_id"));
+                    order.setCustomerId(rs.getInt("customer_id"));
+                    order.setTotalAmount(rs.getDouble("total_amount"));
+                    order.setDiscount(rs.getDouble("discount"));
+                    order.setIsPaid(rs.getBoolean("is_paid"));
+                    order.setStatus(rs.getString("status"));
+                    order.setOrderCode(rs.getString("order_code"));
+                    order.setEmail(rs.getString("email"));
+                    order.setFullname(rs.getString("fullname"));
+                    order.setPhone(rs.getString("phone"));
+                    order.setDeliveryAddress(rs.getString("delivery_address"));
+                    order.setCreatedAt(rs.getDate("created_at"));
+                    OrderDetailsDAO odDao = new OrderDetailsDAO();
+                    order.setListOrderDetails(odDao.getListOrderDetailByOrderId(order.getOrderId()));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+        return order;
+    }
+
+    public int placeOrderWithStockCheck(Order order, List<OrderDetails> orderDetailsList) throws SQLException {
+        Connection con = null;
+        PreparedStatement checkStockStm = null;
+        PreparedStatement updateStockStm = null;
+        PreparedStatement insertOrderStm = null;
+        PreparedStatement insertOrderDetailsStm = null;
+        ResultSet rs = null;
+        int orderId = -1;
+
+        try {
+            con = connect;
+            con.setAutoCommit(false); // Start transaction
+
+            // Insert order
+            String insertOrderSql = "INSERT INTO [dbo].[order] ([customer_id], [total_amount], [discount], [is_paid], [status], "
+                    + "[order_code], [email], [fullname], [phone], [delivery_address], [created_at]) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
+            insertOrderStm = con.prepareStatement(insertOrderSql, Statement.RETURN_GENERATED_KEYS);
+            insertOrderStm.setInt(1, order.getCustomerId());
+            insertOrderStm.setDouble(2, order.getTotalAmount());
+            insertOrderStm.setDouble(3, order.getDiscount());
+            insertOrderStm.setBoolean(4, order.isIsPaid());
+            insertOrderStm.setString(5, order.getStatus());
+            insertOrderStm.setString(6, order.getOrderCode());
+            insertOrderStm.setString(7, order.getEmail());
+            insertOrderStm.setString(8, order.getFullname());
+            insertOrderStm.setString(9, order.getPhone());
+            insertOrderStm.setString(10, order.getDeliveryAddress());
+            insertOrderStm.executeUpdate();
+
+            rs = insertOrderStm.getGeneratedKeys();
+            if (rs.next()) {
+                orderId = rs.getInt(1);
+            } else {
+                throw new SQLException("Failed to retrieve order ID after insert.");
+            }
+
+            // Prepare statements for stock check and update
+            String checkStockSql = "SELECT quantity FROM [dbo].[product_variants] WHERE [product_variant_id] = ?";
+            String updateStockSql = "UPDATE [dbo].[product_variants] SET [quantity] = [quantity] - ? WHERE [product_variant_id] = ?";
+            checkStockStm = con.prepareStatement(checkStockSql);
+            updateStockStm = con.prepareStatement(updateStockSql);
+
+            // Prepare statement for inserting order details
+            String insertOrderDetailsSql = "INSERT INTO [dbo].[order_detail] ([order_id], [product_variant_id], [quantity]) VALUES (?, ?, ?)";
+            insertOrderDetailsStm = con.prepareStatement(insertOrderDetailsSql);
+
+            for (OrderDetails item : orderDetailsList) {
+                int variantId = item.getProductVariantId();
+                int quantity = item.getQuantity();
+
+                // Check stock
+                checkStockStm.setInt(1, variantId);
+                rs = checkStockStm.executeQuery();
+                if (rs.next()) {
+                    int availableQuantity = rs.getInt("quantity");
+                    if (availableQuantity < quantity) {
+                        throw new SQLException("Insufficient stock for product variant ID: " + variantId);
+                    }
+                } else {
+                    throw new SQLException("Product variant ID: " + variantId + " not found.");
+                }
+
+                // Update stock
+                updateStockStm.setInt(1, quantity);
+                updateStockStm.setInt(2, variantId);
+                updateStockStm.executeUpdate();
+
+                // Insert order details
+                insertOrderDetailsStm.setInt(1, orderId);
+                insertOrderDetailsStm.setInt(2, variantId);
+                insertOrderDetailsStm.setInt(3, quantity);
+                insertOrderDetailsStm.executeUpdate();
+            }
+
+            con.commit();
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, null, e);
+            return -1;
+        } finally {
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (checkStockStm != null) {
+                checkStockStm.close();
+            }
+            if (updateStockStm != null) {
+                updateStockStm.close();
+            }
+            if (insertOrderDetailsStm != null) {
+                insertOrderDetailsStm.close();
+            }
+            if (insertOrderStm != null) {
+                insertOrderStm.close();
+            }
+            if (con != null) {
+                con.setAutoCommit(true);
+            }
+        }
+
+        return orderId;
     }
 
 }

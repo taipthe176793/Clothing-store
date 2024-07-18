@@ -6,12 +6,16 @@ package Controllers.customer;
 
 import DAL.AccountDAO;
 import DAL.CartItemDAO;
+import DAL.CouponDAO;
 import DAL.OrderDAO;
 import DAL.OrderDetailsDAO;
+import DAL.ProductDAO;
 import DAL.ProductVariantDAO;
 import Models.CartItem;
 import Models.CustomerAddress;
 import Models.Order;
+import Models.OrderDetails;
+import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,9 +23,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.CommonConst;
 import utilities.CookieUtils;
+import utilities.EmailUtils;
 import utilities.GeneratorUtils;
 
 /**
@@ -83,83 +93,102 @@ public class CheckoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            //Guest is 2
-            int cusId = Integer.parseInt(request.getParameter("accId") == null ? "2" : request.getParameter("accId"));
-            String cusName = request.getParameter("fullname");
-            String cusEmail = request.getParameter("email");
+            int customerId = Integer.parseInt(request.getParameter("accId") == null ? "2" : request.getParameter("accId"));
+            String customerName = request.getParameter("fullname");
+            String customerEmail = request.getParameter("email");
             String address = "";
             String phone = "";
-            String cusAddress = request.getParameter("address") == null ? "" : request.getParameter("address");
-            if (!cusAddress.isBlank()) {
-                String[] addressInfo = cusAddress.split("-");
+            String code = request.getParameter("code");
+            String customerAddress = request.getParameter("address") == null ? "" : request.getParameter("address");
+
+            // Process customer address if provided
+            if (!customerAddress.isBlank()) {
+                String[] addressInfo = customerAddress.split("-");
                 address = addressInfo[0].trim();
                 phone = addressInfo[1].trim();
             } else {
+                // If customer address not provided, construct address from city, district, ward, etc.
                 String city = request.getParameter("city").trim();
                 String district = request.getParameter("district").trim();
                 String ward = request.getParameter("ward").trim();
-                String stAddress = request.getParameter("stAddress");
+                String streetAddress = request.getParameter("stAddress");
                 phone = request.getParameter("phone");
-                address = city + ", " + district + ", " + ward + ", " + stAddress;
-                if (cusId != 2) {
-                    AccountDAO aDAO = new AccountDAO();
-                    aDAO.addAddress(new CustomerAddress(cusId, phone, address));
+                address = city + ", " + district + ", " + ward + ", " + streetAddress;
+
+                // Assuming customerId = 2 means anonymous customer, add address to database
+                if (customerId != 2) {
+                    AccountDAO accountDAO = new AccountDAO();
+                    accountDAO.addAddress(new CustomerAddress(customerId, phone, address));
                 }
             }
+
             double totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
             double discount = Double.parseDouble(request.getParameter("discount"));
             String paymentMethod = request.getParameter("paymentMethod");
 
-            //Construct an order
             Order order = new Order();
-            order.setCustomerId(cusId);
-            order.setFullname(cusName);
-            order.setEmail(cusEmail);
+            order.setCustomerId(customerId);
+            order.setFullname(customerName);
+            order.setEmail(customerEmail);
             order.setPhone(phone);
             order.setDeliveryAddress(address);
-            order.setStatus(utilities.CommonConst.ORDER_PENDING_STATUS);
+            order.setStatus(CommonConst.ORDER_PENDING_STATUS); 
             order.setDiscount(discount);
             order.setTotalAmount(totalAmount);
-            order.setIsPaid(!paymentMethod.equals(utilities.CommonConst.COD_METHOD));
-            order.setOrderCode(GeneratorUtils.generateOrderCode());
+            order.setIsPaid(!paymentMethod.equals(CommonConst.COD_METHOD)); 
+            order.setOrderCode(GeneratorUtils.generateOrderCode()); 
 
-            //Insert order to database
-            OrderDAO orderDAO = new OrderDAO();
-            int orderId = orderDAO.insertOrder(order);
-
-            //Insert Order Details to database
-            OrderDetailsDAO oDetailsDAO = new OrderDetailsDAO();
+            // Retrieve ordered items details
             String[] itemsId = request.getParameterValues("vId");
             String[] itemsQuantities = request.getParameterValues("vQuantity");
+            List<OrderDetails> orderDetailsList = new ArrayList<>();
             for (int i = 0; i < itemsId.length; i++) {
-                oDetailsDAO.insertOrderDetails(orderId, Integer.parseInt(itemsQuantities[i]), Integer.parseInt(itemsId[i]));
+                OrderDetails details = new OrderDetails();
+                details.setProductVariantId(Integer.parseInt(itemsId[i]));
+                details.setQuantity(Integer.parseInt(itemsQuantities[i]));
+                orderDetailsList.add(details);
             }
 
-            //Items for update cart, update variation quantity
-            ProductVariantDAO pvDAO = new ProductVariantDAO();
-            String items = "";
-            for (int i = 0; i < itemsId.length; i++) {
-                items += itemsId[i] + ":" + itemsQuantities[i] + "/";
-                //Update variantion quantity
-                pvDAO.updateVariantQuantity(pvDAO.findProductVariantById(Integer.parseInt(itemsId[i])),
-                        Integer.parseInt(itemsQuantities[i]), utilities.CommonConst.OPERATION_DESCREASE);
-            }
-            //Update cart cookie after placed an order
-            items = items.substring(0, items.length() - 1);
-            updateCartAfterPlacedOrder(items, request, response);
+            // Place order with stock check
+            OrderDAO orderDAO = new OrderDAO(); 
+            int orderId = orderDAO.placeOrderWithStockCheck(order, orderDetailsList);
 
-            //Update customer cart in database
-            if (cusId != 2) {
-                CartItemDAO ciDAO = new CartItemDAO();
-                for (String vId : itemsId) {
-                    int cartItemId = ciDAO.getCartItemId(new CartItem(cusId, Integer.parseInt(vId)));
-                    ciDAO.deleteCustomerCartItem(cusId, cartItemId);
+            if (orderId != -1) {
+                // Handle coupon usage if provided
+                if (!code.isBlank()) {
+                    CouponDAO couponDAO = new CouponDAO(); 
+                    int couponId = couponDAO.getCouponByCode(code).getCouponId();
+                    couponDAO.addCouponToUsedCouponHistory(customerId, couponId);
                 }
-            }
-            
-            response.sendRedirect("checkout-success");
 
-        } catch (SQLException ex) {
+                // Update cart and delete customer cart items
+                String items = "";
+                for (int i = 0; i < itemsId.length; i++) {
+                    items += itemsId[i] + ":" + itemsQuantities[i] + "/";
+                }
+                updateCartAfterPlacedOrder(items.substring(0, items.length() - 1), request, response);
+
+                // Delete customer cart items if not guest customer
+                if (customerId != 2) {
+                    CartItemDAO cartItemDAO = new CartItemDAO(); 
+                    for (String vId : itemsId) {
+                        int cartItemId = cartItemDAO.getCartItemId(new CartItem(customerId, Integer.parseInt(vId)));
+                        cartItemDAO.deleteCustomerCartItem(customerId, cartItemId);
+                    }
+                }
+
+                
+                order = orderDAO.getOrderByOrderId(orderId); 
+                String content = EmailUtils.generateOrderEmailContent(order, CommonConst.ORDER_CONFIRMATION_SUBTITLE);
+                EmailUtils.sendEmail(order.getEmail(), CommonConst.ORDER_CONFIRMATION_TITLE, content);
+
+                
+                response.sendRedirect("checkout-success");
+            } else {
+                response.sendRedirect("checkout-failed");
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(CheckoutServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -176,26 +205,46 @@ public class CheckoutServlet extends HttpServlet {
 
     private void updateCartAfterPlacedOrder(String items, HttpServletRequest request, HttpServletResponse response) {
         String cartCookie = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+        if (cartCookie == null || cartCookie.isEmpty()) {
+            return;
+        }
+
         String[] cartItems = cartCookie.split("/");
-        cartCookie = "";
         String[] orderItems = items.split("/");
-        //Split cart cookie to order Items
-        for (int i = 0; i < orderItems.length; i++) {
-            String[] variation = orderItems[i].split(":");
+        List<String> updatedCartItems = new ArrayList<>();
+
+        Map<String, Integer> orderedItemsMap = new HashMap<>();
+        for (String orderItem : orderItems) {
+            String[] variation = orderItem.split(":");
             String variationId = variation[0];
-            for (String item : cartItems) {
-                String[] variationInCart = item.split(":");
-                String variationIdInCart = variationInCart[0];
-                String variationQuantityInCart = variationInCart[1];
-                if (!variationId.equals(variationIdInCart)) {
-                    cartCookie += variationIdInCart + ":" + variationQuantityInCart + "/";
+            int quantity = Integer.parseInt(variation[1]);
+            orderedItemsMap.put(variationId, quantity);
+        }
+
+        // Update the cart items based on the order
+        for (String cartItem : cartItems) {
+            String[] variationInCart = cartItem.split(":");
+            String variationIdInCart = variationInCart[0];
+            int variationQuantityInCart = Integer.parseInt(variationInCart[1]);
+
+            if (orderedItemsMap.containsKey(variationIdInCart)) {
+                int orderedQuantity = orderedItemsMap.get(variationIdInCart);
+                if (variationQuantityInCart > orderedQuantity) {
+                    // Decrease the quantity in the cart
+                    int newQuantity = variationQuantityInCart - orderedQuantity;
+                    updatedCartItems.add(variationIdInCart + ":" + newQuantity);
                 }
+                // If orderedQuantity >= variationQuantityInCart, this item is fully removed from the cart
+            } else {
+                // This item was not ordered, so keep it in the cart
+                updatedCartItems.add(cartItem);
             }
         }
-        cartCookie = cartCookie.isBlank() ? "" : cartCookie.substring(0, cartCookie.length() - 1);
 
-        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, cartCookie, request, response);
-        CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE, cartCookie.split("/").length + "", request, response);
+        String updatedCartCookie = String.join("/", updatedCartItems);
+
+        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, updatedCartCookie, request, response);
+        CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE, String.valueOf(updatedCartItems.size()), request, response);
     }
 
 }

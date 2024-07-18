@@ -120,6 +120,14 @@
         <servlet-name>CheckoutPageServlet</servlet-name>
         <servlet-class>Controllers.CheckoutPageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendMessageServlet</servlet-name>
+        <servlet-class>Controllers.SendMessageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckOutFailedServlet</servlet-name>
+        <servlet-class>Controllers.CheckOutFailedServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -223,6 +231,14 @@
     <servlet-mapping>
         <servlet-name>CheckoutPageServlet</servlet-name>
         <url-pattern>/checkout-success</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendMessageServlet</servlet-name>
+        <url-pattern>/sendMessage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOutFailedServlet</servlet-name>
+        <url-pattern>/checkout-failed</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

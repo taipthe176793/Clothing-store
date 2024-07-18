@@ -132,7 +132,7 @@
                                     <div class="card-body">
                                         <div>
                                             <p>New Blogs</p>
-                                            <h3>${noOfBlogs} ${blog > 1 ? "blogs" : "blog"}</h3>
+                                            <h3>${noOfBlogs} ${noOfBlogs > 1 ? "blogs" : "blog"}</h3>
                                         </div>
                                         <div class="card-body-icon">
                                             <i class="fa-regular fa-newspaper"></i>

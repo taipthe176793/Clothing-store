@@ -167,14 +167,15 @@ public class CouponDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM [dbo].[coupon]";
+                String sql = "SELECT * FROM [dbo].[coupon] WHERE [code] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
+                stm.setString(1, couponCode);
 
                 //4. Excute Query
                 rs = stm.executeQuery();
                 //5. Process Result
-                while (rs.next()) {
+                if (rs.next()) {
 
                     coupon = new Coupon();
 
@@ -281,6 +282,35 @@ public class CouponDAO extends DBContext {
 
         }
         return valid;
+    }
+
+    public void addCouponToUsedCouponHistory(int cusId, int couponId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "INSERT INTO [dbo].[coupon_history]\n"
+                        + "           ([coupon_id]\n"
+                        + "           ,[customer_id]\n"
+                        + "           ,[used_at])\n"
+                        + "     VALUES\n"
+                        + "           (?, ?, GETDATE())";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, couponId);
+                stm.setInt(2, cusId);
+
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
     }
 
 }

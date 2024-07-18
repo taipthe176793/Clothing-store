@@ -4,10 +4,13 @@
  */
 package DAL;
 
+import Models.OrderDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -64,9 +67,8 @@ public class OrderDetailsDAO extends DBContext {
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, customerId);
                 stm.setInt(2, productId);
-                 System.out.println("customerId: " + customerId);
-            System.out.println("productId: " + productId);
-
+                System.out.println("customerId: " + customerId);
+                System.out.println("productId: " + productId);
 
                 rs = stm.executeQuery();
 
@@ -85,6 +87,48 @@ public class OrderDetailsDAO extends DBContext {
         }
 
         return hasPurchased;
+    }
+
+    List<OrderDetails> getListOrderDetailByOrderId(int orderId) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<OrderDetails> orderDetailList = new ArrayList<>();
+
+        try {
+            con = connect;
+            if (con != null) {
+                String sql = "SELECT [order_detail_id]\n"
+                        + "      ,[order_id]\n"
+                        + "      ,[quantity]\n"
+                        + "      ,[product_variant_id]\n"
+                        + "  FROM [dbo].[order_detail]\n"
+                        + "  WHERE [order_id] = ?";
+
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, orderId);
+
+                rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    OrderDetails od = new OrderDetails();
+                    od.setOrderDetailId(rs.getInt("order_detail_id"));
+                    od.setOrderId(rs.getInt("order_id"));
+                    od.setProductVariantId(rs.getInt("product_variant_id"));
+                    od.setQuantity(rs.getInt("quantity"));
+                    orderDetailList.add(od);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        }
+
+        return orderDetailList;
     }
 
 }

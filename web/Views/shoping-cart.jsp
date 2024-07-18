@@ -277,7 +277,9 @@
                                             <span class="mtext-110 cl2" id="discountTxt"></span>
                                         </div>
                                     </div>
-                                    <input name="discount" id="discount" hidden="" type="number" value="${discount ne null ? discount : 0}"/>
+                                    <input hidden name="code" value="${code ne null ? code : ""}" />
+                                    <input hidden id="discountPercent" value="${discount eq null ? 0 : discount}" />
+                                    <input name="discount" id="discount"  type="hidden" value="0"/>
 
                                     <div class="flex-w flex-t p-t-27 p-b-33">
                                         <div class="size-208">
@@ -290,7 +292,7 @@
                                             <span class="mtext-110 cl2" id="totalTxt"></span>
                                         </div>
                                     </div>
-                                    <input name="totalAmount" id="totalAmount" hidden="" type="number" value="0"/>
+                                    <input name="totalAmount" id="totalAmount"  type="hidden" value="0"/>
 
                                     <input type="submit" value="Proceed to Checkout" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
 
@@ -361,6 +363,8 @@
 
         <script>
                                         document.addEventListener('DOMContentLoaded', function () {
+                                            
+                                            let discount = document.querySelector('#discount');
 
                                             let subTotalTxt = document.querySelector('#subTotalTxt');
                                             subTotalTxt.innerText = "$ 0.0";
@@ -371,7 +375,7 @@
 
                                             let subTotal = parseFloat(subTotalTxt.textContent.trim().replace('$', '').trim());
                                             let total = parseFloat(totalTxt.textContent.trim().replace('$', '').trim());
-                                            const discount = parseFloat(document.querySelector('#discount').value);
+                                            const discountPercent = parseFloat(document.querySelector('#discountPercent').value);
 
                                             const inputs = document.querySelectorAll('input[id="num-product"]');
 
@@ -479,10 +483,11 @@
                                                     if (subTotal === 0) {
                                                         totalTxt.innerText = "$ 0.0";
                                                     } else {
-                                                        discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
-                                                        total = subTotal - (subTotal * discount / 100);
+                                                        discountTxt.innerText = "$" + (subTotal * discountPercent / 100).toFixed(1);
+                                                        total = subTotal - (subTotal * discountPercent / 100);
                                                         totalTxt.innerText = "$ " + total.toFixed(1);
                                                         document.querySelector('#totalAmount').value = total;
+                                                        discount.value = (subTotal * discountPercent / 100);
                                                     }
                                                 });
                                             });
@@ -500,22 +505,24 @@
                                                         }
                                                         subTotal += itemTotal;
                                                     });
-                                                    discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
-                                                    total = subTotal - (subTotal * discount / 100);
+                                                    discountTxt.innerText = "$" + (subTotal * discountPercent / 100).toFixed(1);
+                                                    total = subTotal - (subTotal * discountPercent / 100);
                                                     subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
                                                     totalTxt.innerText = "$ " + total.toFixed(1);
                                                     document.querySelector('#totalAmount').value = total;
+                                                    discount.value = (subTotal * discountPercent / 100);
                                                 } else {
                                                     checkboxs.forEach(function (checkbox) {
                                                         if (checkbox.checked) {
                                                             checkbox.checked = false;
                                                         }
                                                     });
-                                                    discountTxt.innerText = "$" + (subTotal * discount / 100).toFixed(1);
+                                                    discountTxt.innerText = "$" + (subTotal * discountPercent / 100).toFixed(1);
                                                     total = subTotal;
                                                     subTotalTxt.innerText = "$ " + subTotal.toFixed(1);
                                                     totalTxt.innerText = "$ " + total.toFixed(1);
                                                     document.querySelector('#totalAmount').value = total;
+                                                    discount.value = (subTotal * discountPercent / 100);
                                                 }
                                             });
 

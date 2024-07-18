@@ -95,7 +95,8 @@
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Discount</span>
                                 <p>$ ${discount}</p>
-                                <input hidden value="${discount}" name="discount"/>
+                            <input hidden value="${discount}" name="discount"/>
+                            <input hidden value="${code ne null ? code : ''}" name="code"/>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Total amount</span>
@@ -329,8 +330,27 @@
 
         <script>
 
-
+        
                                             function validateCheckout() {
+                                                
+                                                let addressOrder = document.querySelector('#stAddress');
+                                                if(addressOrder && addressOrder.required) {
+                                                    if(addressOrder.value.trim() === '') {
+                                                        addressOrder.value = '';
+                                                        addressOrder.reportValidity();
+                                                        return false;
+                                                    }
+                                                }
+                                                
+                                                let phoneOrder = document.querySelector('#phone');
+                                                if(phoneOrder && phoneOrder.required) {
+                                                    if(phoneOrder.value.trim() === '') {
+                                                        phoneOrder.value = '';
+                                                        phoneOrder.reportValidity();
+                                                        return false;
+                                                    }
+                                                }
+                                                
                                                 const radio = document.querySelector('input[id="pmethod"]:checked');
                                                 let alertBox = document.getElementById('alert');
                                                 if (!radio) {
@@ -346,6 +366,8 @@
                                                 } else {
                                                     alertBox.classList.remove('show');
                                                 }
+                                                
+                                                
 
                                                 return true;
                                             }
@@ -361,8 +383,12 @@
                                                 let addNewAddressInputs = document.querySelectorAll('div[name="cusNewAddress"]');
                                                 addNewAddressInputs.forEach((input) => {
                                                     input.classList.remove("d-none");
-                                                    input.setAttribute('required', '');
-                                                })
+                                                });
+                                                document.querySelector('#city').setAttribute('required', '');
+                                                document.querySelector('#district').setAttribute('required', '');
+                                                document.querySelector('#ward').setAttribute('required', '');
+                                                document.querySelector('#stAddress').setAttribute('required', '');
+                                                document.querySelector('#phone').setAttribute('required', '');
                                                 let selectAddressBtn = document.querySelector('#selectAddressBtn');
                                                 selectAddressBtn.classList.remove("d-none");
                                                 let selectAddress = document.querySelector('#cusAddress');
@@ -375,8 +401,12 @@
                                                 let addNewAddressInputs = document.querySelectorAll('div[name="cusNewAddress"]');
                                                 addNewAddressInputs.forEach((input) => {
                                                     input.classList.add("d-none");
-                                                    input.removeAttribute('required');
-                                                })
+                                                });
+                                                document.querySelector('#city').removeAttribute('required');
+                                                document.querySelector('#district').removeAttribute('required');
+                                                document.querySelector('#ward').removeAttribute('required');
+                                                document.querySelector('#stAddress').removeAttribute('required');
+                                                document.querySelector('#phone').removeAttribute('required');
                                                 let selectAddressBtn = document.querySelector('#selectAddressBtn');
                                                 selectAddressBtn.classList.add("d-none");
                                                 let selectAddress = document.querySelector('#cusAddress');
@@ -418,7 +448,6 @@
 
                                                 //Convert use to vnd
                                                 const amount = document.querySelector("#usd-total").value;
-                                                console.log(amount);
 
                                                 const fromCurrency = 'USD';
                                                 const toCurrency = 'VND';
@@ -437,7 +466,6 @@
                                                                 const exchangeRate = data.conversion_rates[toCurrency];
                                                                 const convertedAmount = amount * exchangeRate;
                                                                 document.querySelector('#vnd-total').value = convertedAmount;
-                                                                console.log(convertedAmount);
                                                             } else {
                                                                 console.log('Error fetching exchange rate');
                                                             }
