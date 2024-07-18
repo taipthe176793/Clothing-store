@@ -45,7 +45,7 @@
                 <h2 style="font-weight: 700;">Thank you for your ordering!</h2>
                 <p class="mt-2">Your order has been placed successfully.</p>
                 <c:if test="${cookie.userId.value ne null}">
-                    <p class="pointer text-success" style="font-weight: 600;" onclick="location.href='#'">Order History</p>
+                    <p class="pointer text-success" style="font-weight: 600;" onclick="location.href='history-order'">Order History</p>
                 </c:if>
                 <buttton class="btn text-white mt-3 font-weight-bold pointer" style=" background-color: #50C878; font-size: 20px" onclick="location.href = 'shop'">Continue Shopping</buttton>
             </div>

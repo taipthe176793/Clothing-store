@@ -304,6 +304,14 @@ public class CouponDAO extends DBContext {
                 stm.setInt(2, cusId);
 
                 stm.executeUpdate();
+
+                //Update coupon quantity
+                String updateCouponSql = "UPDATE [dbo].[coupon] "
+                        + "SET quantity = quantity - 1 "
+                        + "WHERE coupon_id = ?";
+                stm = con.prepareStatement(updateCouponSql);
+                stm.setInt(1, couponId);
+                stm.executeUpdate();
             }
         } finally {
             if (stm != null) {
@@ -312,8 +320,8 @@ public class CouponDAO extends DBContext {
 
         }
     }
-    
-     public List<Coupon> getAllCouponsByCustomer(int customerId)
+
+    public List<Coupon> getAllCouponsByCustomer(int customerId)
             throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
