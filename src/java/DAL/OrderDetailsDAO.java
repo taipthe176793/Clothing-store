@@ -130,5 +130,30 @@ public class OrderDetailsDAO extends DBContext {
 
         return orderDetailList;
     }
+    
+     public List<OrderDetails> getOrderDetailsByOrderId(int orderId) {
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        String query = "SELECT order_detail_id, order_id, product_variant_id, quantity FROM Order_Detail WHERE order_id = ?";
+        
+        try (PreparedStatement preparedStatement = connect.prepareStatement(query)) {
+            preparedStatement.setInt(1, orderId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    OrderDetails orderDetails = new OrderDetails();
+                    orderDetails.setOrderDetailId(resultSet.getInt("order_detail_id"));
+                    orderDetails.setOrderId(resultSet.getInt("order_id"));
+                    orderDetails.setProductVariantId(resultSet.getInt("product_variant_id"));
+                    orderDetails.setQuantity(resultSet.getInt("quantity"));
+                    ProductVariantDAO varianDao = new ProductVariantDAO();
+                    orderDetails.setVariant(varianDao.findProductVariantById(resultSet.getInt("product_variant_id")));
+                    orderDetailsList.add(orderDetails);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return orderDetailsList;
+    }
 
 }

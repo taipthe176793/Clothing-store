@@ -61,13 +61,13 @@
                             <!-- item blog -->
                             <c:forEach items="${blogs}" var="i">
                                 <div class="p-b-63">
-                                <a href="blog-detail.jsp" class="hov-img0 how-pos5-parent">
+                                <a href="blog-detail?id=${i.blogId}" class="hov-img0 how-pos5-parent">
                                     <img src="${pageContext.request.contextPath}/images/blog/blog-04.jpg" alt="IMG-BLOG">
                                 </a>
 
                                 <div class="p-t-32">
                                     <h4 class="p-b-15">
-                                        <a href="blog-detail.jsp" class="ltext-108 cl2 hov-cl1 trans-04">
+                                        <a href="blog-detail?id=${i.blogId}" class="ltext-108 cl2 hov-cl1 trans-04">
                                             ${i.title}
                                         </a>
                                     </h4>
@@ -77,7 +77,7 @@
                                     <div class="flex-w flex-sb-m p-t-18">
 
 
-                                        <a href="blog-detail.jsp" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
+                                        <a href="blog-detail?id=${i.blogId}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
                                             Continue Reading
 
                                             <i class="fa fa-long-arrow-right m-l-9"></i>

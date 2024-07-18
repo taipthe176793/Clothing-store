@@ -295,7 +295,7 @@ public class ProductVariantDAO extends DBContext {
 
     }
 
-    public ProductVariant findProductVariantById(int productVariantId) throws SQLException {
+    public ProductVariant findProductVariantById(int productVariantId) throws SQLException, ClassNotFoundException {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -328,7 +328,8 @@ public class ProductVariantDAO extends DBContext {
                     v.setSize(rs.getString("size"));
                     v.setQuantity(rs.getInt("quantity"));
                     v.setIsDeleted(rs.getBoolean("is_deleted"));
-
+                    ProductDAO productDao = new ProductDAO();
+                    v.setProduct(productDao.findProductById(rs.getInt("product_id")));
                     return v;
 
                 }

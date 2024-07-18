@@ -18,6 +18,7 @@ public class Coupon {
     private Date expiresAt;
     private Date startAt;
     private int quantity;
+    private Date usedAt;
 
     public Coupon() {
     }
@@ -102,7 +103,12 @@ public class Coupon {
     public String toString() {
         return "Coupon{" + "couponId=" + couponId + ", code=" + code + ", description=" + description + ", discount=" + discount + ", expiresAt=" + expiresAt + ", startAt=" + startAt + ", quantity=" + quantity + '}';
     }
-    
-    
-    
+
+    public Date getUsedAt() {
+        return usedAt;
+    }
+
+    public void setUsedAt(Date usedAt) {
+        this.usedAt = usedAt;
+    }
 }

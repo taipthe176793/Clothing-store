@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Admin
  */
-public class OrderController extends HttpServlet {
+public class CouponController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class OrderController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OrderController</title>");            
+            out.println("<title>Servlet CouponController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OrderController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CouponController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,7 +62,18 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        if (action == null) {
+            showCoupons(request, response);
+        } else {
+            switch (action) {
+                case "view":
+                    showCoupons(request, response);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
     }
 
     /**
@@ -88,5 +99,42 @@ public class OrderController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void showCoupons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            Cookie[] arr = request.getCookies();
+            int accountId = 0;
+            Account account = null;
+
+            if (arr != null) {
+                for (Cookie o : arr) {
+
+                    if (o.getName().equals("userId")) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
+
+                        account = aDAO.getAccountById(accountId);
+
+                        break;
+                    }
+                }
+            }
+
+            if (account == null) {
+                response.sendRedirect(request.getContextPath() + "/Views/authen/login.jsp");
+                return;
+            }
+
+            AccountDAO accountDAO = new AccountDAO();
+            int customerId = accountDAO.getCustomerIdByAccountId(account.getAccountId());
+
+            List<CustomerAddress> addresses = accountDAO.fetchAddressesForAccount(customerId);
+
+            request.setAttribute("addresses", addresses);
+            request.getRequestDispatcher("/Views/user/address.jsp").forward(request, response);
+        } catch (SQLException e) {
+            throw new ServletException("Error fetching addresses", e);
+        }
+    }
 
 }

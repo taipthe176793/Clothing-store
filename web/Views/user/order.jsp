@@ -39,81 +39,20 @@
             <div class="container mt-4">
                 <div class="row mb-4">
                     <div class="col-10">
-                        <h2>My Addresses</h2>
-                    </div>
-                    <div class="col-2">
-                        <div class="card">
-                            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addAddressModal">
-                                Add New Address
-                            </button>
-                        </div>
+                        <h2>My Coupons</h2>
                     </div>
                 </div>
-
-                <!-- Modal "Add New Address" -->
-                <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form id="addAddressForm" action="${pageContext.request.contextPath}/customer/address" method="post" onsubmit="return validateForm()">
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="addPhone">Phone</label>
-                                    <input type="text" id="addPhone" name="phone" class="form-control" required>
-                                    <div class="invalid-feedback">Phone number must be 10 digits and start with 0 without spaces.</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" name="city" id="city" aria-label=".form-select-sm" required>
-                                            <option value="" selected>Choose city</option>           
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="district">District <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" name="district" id="district" aria-label=".form-select-sm" required>
-                                            <option value="" selected>Choose district</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="ward">Ward <span class="text-danger">*</span></label>
-                                        <select class="form-control mb-3" name="ward" id="ward" aria-label=".form-select-sm" required>
-                                            <option value="" selected>Choose ward</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="stAddress">Street Address <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="stAddress" id="stAddress"
-                                               value="" required>
-                                        <div class="invalid-feedback">Street Address must not be empty.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-dark">Add Address</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Phone</th>
-                                <th>Address</th>
-                                <th>Action</th>
+                                <th>CouponID</th>
+                                <th>CODE</th>
+                                <th>Description</th>
+                                <th>Discount</th>
+                                <th>Expires At</th>
                             </tr>
                         </thead>
                         <tbody>

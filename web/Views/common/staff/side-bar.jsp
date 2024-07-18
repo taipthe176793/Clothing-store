@@ -9,13 +9,13 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link" href="">
+                <a class="nav-link" href="./manage-order">
                     <i class="nc-icon nc-circle-09"></i>
                     <p>Manage Orders</p>
                 </a>
             </li>
             <li>
-                <a class="nav-link" href="">
+                <a class="nav-link" href="./manage-order?action=requested">
                     <i class="nc-icon nc-layers-3"></i>
                     <p>Orders Request</p>
                 </a>
