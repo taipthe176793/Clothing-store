@@ -6,6 +6,7 @@ package utilities;
 
 import DAL.OrderDAO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -39,21 +40,28 @@ public class GeneratorUtils {
     }
 
     public static void makeNotification(HttpServletRequest request, String message, String type) {
-        request.getSession().setAttribute(utilities.CommonConst.NOTIFICATION, message);
-        request.getSession().setAttribute(utilities.CommonConst.NOTI_TYPE, type);
+        HttpSession session = request.getSession();
+        session.setAttribute(utilities.CommonConst.NOTIFICATION, message);
+        session.setAttribute(utilities.CommonConst.NOTI_TYPE, type);
     }
 
     public static void getNotification(HttpServletRequest request) {
 
-        if (request.getSession().getAttribute(utilities.CommonConst.NOTIFICATION) != null) {
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute(utilities.CommonConst.NOTIFICATION) != null) {
 
             request.setAttribute(utilities.CommonConst.NOTIFICATION,
-                    request.getSession().getAttribute(utilities.CommonConst.NOTIFICATION));
+                    session.getAttribute(utilities.CommonConst.NOTIFICATION));
+            session.removeAttribute(utilities.CommonConst.NOTIFICATION);
+        }
+
+        if (session.getAttribute(utilities.CommonConst.NOTI_TYPE) != null) {
 
             request.setAttribute(utilities.CommonConst.NOTI_TYPE,
-                    request.getSession().getAttribute(utilities.CommonConst.NOTI_TYPE));
+                    session.getAttribute(utilities.CommonConst.NOTI_TYPE));
 
-            request.getSession().invalidate();
+            session.removeAttribute(utilities.CommonConst.NOTI_TYPE);
         }
     }
 

@@ -22,7 +22,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import utilities.CommonConst;
+import utilities.CookieUtils;
 import utilities.EmailUtils;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -65,33 +68,18 @@ public class AuthenticationControllers extends HttpServlet {
 
             switch (action) {
                 case "login":
-                    HttpSession session = request.getSession();
-                    if (session.getAttribute("notification") != null) {
-                        request.setAttribute("notification", session.getAttribute("notification"));
-                        request.setAttribute("type", session.getAttribute("type"));
-                        session.invalidate();
-                    }
+                    GeneratorUtils.getNotification(request);
                     request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                     break;
                 case "signup":
                     request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
                     break;
                 case "logout":
-                    Cookie[] arr = request.getCookies();
-                    if (arr != null) {
-                        for (Cookie o : arr) {
-                            if (o.getName().equals("cart")
-                                    || o.getName().equals("userId")
-                                    || o.getName().equals("username")
-                                    || o.getName().equals("role")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                        }
-                        Cookie cartCookie = new Cookie("cart", "");
-                        cartCookie.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(cartCookie);
-                    }
+                    CookieUtils.deleteCookieByName(CommonConst.USER_ID_COOKIE, request, response);
+                    CookieUtils.deleteCookieByName(CommonConst.USER_ROLE, request, response);
+                    CookieUtils.deleteCookieByName(CommonConst.USER_NAME, request, response);
+
+                    CookieUtils.updateCookieValueByName(CommonConst.CART_COOKIE, "", request, response);
                     response.sendRedirect("home");
                     break;
                 case "loginWithGoogle":
@@ -99,17 +87,11 @@ public class AuthenticationControllers extends HttpServlet {
                     if (gAccount != null) {
                         CartControllers.mergeAndSyncCart(request, response, gAccount);
 
-                        Cookie userId = new Cookie("userId", gAccount.getAccountId() + "");
-                        userId.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(userId);
+                        CookieUtils.updateCookieValueByName(CommonConst.USER_ID_COOKIE, gAccount.getAccountId() + "", request, response);
 
-                        Cookie username = new Cookie("username", gAccount.getUsername());
-                        username.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(username);
+                        CookieUtils.updateCookieValueByName(CommonConst.USER_NAME, gAccount.getUsername(), request, response);
 
-                        Cookie role = new Cookie("role", gAccount.getRoleId() + "");
-                        role.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(role);
+                        CookieUtils.updateCookieValueByName(CommonConst.USER_ROLE, gAccount.getRoleId() + "", request, response);
 
                         response.sendRedirect("home");
                     } else {
@@ -184,24 +166,22 @@ public class AuthenticationControllers extends HttpServlet {
 
                             }
 
-                            Cookie userId = new Cookie("userId", account.getAccountId() + "");
-                            userId.setMaxAge(60 * 60 * 24 * 7);
-                            response.addCookie(userId);
+                            CookieUtils.updateCookieValueByName(CommonConst.USER_ID_COOKIE, account.getAccountId() + "", request, response);
 
-                            Cookie username = new Cookie("username", account.getUsername());
-                            username.setMaxAge(60 * 60 * 24 * 7);
-                            response.addCookie(username);
+                            CookieUtils.updateCookieValueByName(CommonConst.USER_NAME, account.getUsername(), request, response);
 
-                            Cookie role = new Cookie("role", account.getRoleId() + "");
-                            role.setMaxAge(60 * 60 * 24 * 7);
-                            response.addCookie(role);
-
-                            if (Integer.parseInt(role.getValue()) == ADMIN_ROLE) {
-                                response.sendRedirect("admin/dashboard");
-                            } else if (Integer.parseInt(role.getValue()) == STAFF_ROLE) {
-                                response.sendRedirect("staff/dashboard");
-                            } else {
-                                response.sendRedirect("home");
+                            CookieUtils.updateCookieValueByName(CommonConst.USER_ROLE, account.getRoleId() + "", request, response);
+                            
+                            switch (account.getRoleId()) {
+                                case CommonConst.ROLE_ADMIN:
+                                    response.sendRedirect("admin/dashboard");
+                                    break;
+                                case CommonConst.ROLE_STAFF:
+                                    response.sendRedirect("staff/dashboard");
+                                    break;
+                                default:
+                                    response.sendRedirect("home");
+                                    break;
                             }
                         }
                     } else {
@@ -391,7 +371,6 @@ public class AuthenticationControllers extends HttpServlet {
             return;
         }
 
-        // Assuming OTP validation succeeds and email is set in session
         // Process password reset here
         try {
             // Convert email to accountId (if needed), assuming AccountDAO is used

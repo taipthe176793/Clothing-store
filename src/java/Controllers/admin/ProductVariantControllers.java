@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -73,11 +74,7 @@ public class ProductVariantControllers extends HttpServlet {
             Product product = pDao.findProductById(productId);
             product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
 
-            HttpSession session = request.getSession();
-            if (session.getAttribute("notification") != null) {
-                request.setAttribute("notification", session.getAttribute("notification"));
-                session.removeAttribute("notification");
-            }
+            GeneratorUtils.getNotification(request);
 
             request.setAttribute("product", product);
             request.setAttribute("variantsList", product.getVariantList());

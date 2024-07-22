@@ -17,6 +17,9 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.CommonConst;
+import utilities.CookieUtils;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -87,13 +90,13 @@ public class ChangePasswordControllers extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
-                    accountId = Integer.parseInt(o.getValue());
-                    AccountDAO aDAO = new AccountDAO();
+                    if (o.getName().equals(CommonConst.USER_ID_COOKIE)) {
+                        accountId = Integer.parseInt(o.getValue());
+                        AccountDAO aDAO = new AccountDAO();
 
-                    account = aDAO.getAccountById(accountId);
+                        account = aDAO.getAccountById(accountId);
 
-                    break;
+                        break;
                     }
 
                 }
@@ -132,24 +135,15 @@ public class ChangePasswordControllers extends HttpServlet {
             boolean isPasswordUpdated = accountDAO.updatePassword(new Account(account.getUsername(), newPassword));
 
             if (isPasswordUpdated) {
-                HttpSession session = request.getSession();
-                session.setAttribute("notification", "Password changed successfully. Please log in with your new password.");
-                session.setAttribute("type", "alert-box-success");
-               
-                    if (arr != null) {
-                        for (Cookie o : arr) {
-                            if (o.getName().equals("cart")
-                                    || o.getName().equals("userId")
-                                    || o.getName().equals("username")
-                                    || o.getName().equals("role")) {
-                                o.setMaxAge(0);
-                                response.addCookie(o);
-                            }
-                        }
-                        Cookie cartCookie = new Cookie("cart", "");
-                        cartCookie.setMaxAge(60 * 60 * 24 * 7);
-                        response.addCookie(cartCookie);
-                    }
+                String notiMessage = "Password changed successfully. Please log in with your new password.";
+                GeneratorUtils.makeNotification(request, notiMessage, CommonConst.NOTI_SUCCESS);
+
+                CookieUtils.deleteCookieByName(CommonConst.USER_ID_COOKIE, request, response);
+                CookieUtils.deleteCookieByName(CommonConst.USER_ROLE, request, response);
+                CookieUtils.deleteCookieByName(CommonConst.USER_NAME, request, response);
+
+                CookieUtils.updateCookieValueByName(CommonConst.CART_COOKIE, "", request, response);
+
                 response.sendRedirect(request.getContextPath() + "/auth?action=login");
             } else {
                 request.setAttribute("message", "Failed to change password. Please try again.");

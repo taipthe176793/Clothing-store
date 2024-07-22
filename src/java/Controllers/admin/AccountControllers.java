@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -88,11 +89,7 @@ public class AccountControllers extends HttpServlet {
                 request.setAttribute("roleFilter", action);
             }
 
-            HttpSession session = request.getSession();
-            if (session.getAttribute("notification") != null) {
-                request.setAttribute("notification", session.getAttribute("notification"));
-                session.invalidate();
-            }
+            GeneratorUtils.getNotification(request);
             request.setAttribute("roleList", roleList);
             request.setAttribute("accountList", accountList);
             request.getRequestDispatcher("/Views/admin/accounts-table.jsp").forward(request, response);

@@ -26,6 +26,8 @@ public class CommonConst {
     public static final int ROLE_STAFF = 2;
     public static final int ROLE_CUSTOMER = 3;
     public static final int ROLE_GUEST = 4;
+    public static final String USER_ROLE = "role";
+    public static final String USER_NAME = "username";
 
     public static final String NOTIFICATION = "notification";
     public static final String NOTI_TYPE = "type";

@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static utilities.CommonConst.USER_ID_COOKIE;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -65,12 +67,7 @@ public class ProfileController extends HttpServlet {
 
         try {
             String action = request.getParameter("action");
-            if (request.getSession().getAttribute("notification") != null) {
-                request.setAttribute("notification", request.getSession().getAttribute("notification"));
-                request.setAttribute("type", request.getSession().getAttribute("type"));
-                request.getSession().invalidate();
-
-            }
+            GeneratorUtils.getNotification(request);
             if (action == null) {
                 action = "view";  // default action
             }
@@ -87,7 +84,7 @@ public class ProfileController extends HttpServlet {
                     if (arr != null) {
                         for (Cookie o : arr) {
 
-                            if (o.getName().equals("userId")) {
+                            if (o.getName().equals(USER_ID_COOKIE)) {
                                 accountId = Integer.parseInt(o.getValue());
                                 AccountDAO aDAO = new AccountDAO();
 
@@ -145,7 +142,7 @@ public class ProfileController extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
+                    if (o.getName().equals(USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(o.getValue());
                         AccountDAO aDAO = new AccountDAO();
                         account = aDAO.getAccountById(accountId);
@@ -200,7 +197,7 @@ public class ProfileController extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
+                    if (o.getName().equals(USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(o.getValue());
                         AccountDAO aDAO = new AccountDAO();
 

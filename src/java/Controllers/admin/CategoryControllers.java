@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -72,11 +73,7 @@ public class CategoryControllers extends HttpServlet {
 
             request.setAttribute("categoryList", categoryList);
 
-            HttpSession session = request.getSession();
-            if (session.getAttribute("notification") != null) {
-                request.setAttribute("notification", session.getAttribute("notification"));
-                session.removeAttribute("notification");
-            }
+            GeneratorUtils.getNotification(request);
 
             request.getRequestDispatcher("/Views/admin/categories-table.jsp").forward(request, response);
         } catch (SQLException ex) {

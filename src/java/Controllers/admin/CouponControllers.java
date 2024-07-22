@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import utilities.GeneratorUtils;
 
 /**
  *
@@ -70,11 +71,7 @@ public class CouponControllers extends HttpServlet {
 
             request.setAttribute("couponList", couponList);
 
-            HttpSession session = request.getSession();
-            if (session.getAttribute("notification") != null) {
-                request.setAttribute("notification", session.getAttribute("notification"));
-                session.removeAttribute("notification");
-            }
+            GeneratorUtils.getNotification(request);
 
             request.getRequestDispatcher("/Views/admin/coupons-table.jsp").forward(request, response);
         } catch (SQLException ex) {

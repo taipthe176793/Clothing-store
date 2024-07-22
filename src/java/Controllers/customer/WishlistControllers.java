@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.CommonConst;
 
 /**
  *
@@ -73,7 +74,7 @@ public class WishlistControllers extends HttpServlet {
 
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("userId")) {
+                    if (cookie.getName().equals(CommonConst.USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(cookie.getValue());
                         AccountDAO aDAO = new AccountDAO();
                         account = aDAO.getAccountById(accountId);
@@ -116,7 +117,7 @@ public class WishlistControllers extends HttpServlet {
 
         if (arr != null) {
             for (Cookie o : arr) {
-                if (o.getName().equals("userId")) {
+                if (o.getName().equals(CommonConst.USER_ID_COOKIE)) {
                     try {
                         account = accountDAO.getAccountById(Integer.parseInt(o.getValue()));
                     } catch (SQLException e) {

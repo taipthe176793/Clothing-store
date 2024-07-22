@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+import utilities.CommonConst;
 import utilities.GeneratorUtils;
 
 /**
@@ -122,7 +123,7 @@ public class AddressControllers extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
+                    if (o.getName().equals(CommonConst.USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(o.getValue());
                         AccountDAO aDAO = new AccountDAO();
 
@@ -163,7 +164,7 @@ public class AddressControllers extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
+                    if (o.getName().equals(CommonConst.USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(o.getValue());
                         AccountDAO aDAO = new AccountDAO();
 
@@ -254,7 +255,7 @@ public class AddressControllers extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
+                    if (o.getName().equals(CommonConst.USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(o.getValue());
                         AccountDAO aDAO = new AccountDAO();
 

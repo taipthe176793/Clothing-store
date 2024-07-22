@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
+import utilities.CommonConst;
 
 /**
  *
@@ -81,7 +82,7 @@ public class MyCouponController extends HttpServlet {
             if (arr != null) {
                 for (Cookie o : arr) {
 
-                    if (o.getName().equals("userId")) {
+                    if (o.getName().equals(CommonConst.USER_ID_COOKIE)) {
                         accountId = Integer.parseInt(o.getValue());
                         AccountDAO aDAO = new AccountDAO();
                         account = aDAO.getAccountById(accountId);
@@ -90,7 +91,7 @@ public class MyCouponController extends HttpServlet {
                 }
             }
             if (account == null) {
-                response.sendRedirect(request.getContextPath() + "/Views/authen/login.jsp");
+                response.sendRedirect(request.getContextPath() + "/auth?action=login");
                 return;
             }
             AccountDAO accountDAO = new AccountDAO();
