@@ -18,6 +18,7 @@ public class Blog {
     private int blogTypeId;
     private Date createdAt;
     private boolean status;
+    private String typeName;
     
     public Blog() {
     }
@@ -111,8 +112,11 @@ public class Blog {
         return "Blog{" + "blogId=" + blogId + ", title=" + title + ", image=" + image + ", body=" + body + ", blogTypeId=" + blogTypeId + ", createdAt=" + createdAt + ", status=" + status + '}';
     }
 
-    
-    
-    
-    
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 }

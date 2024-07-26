@@ -41,9 +41,10 @@
         <jsp:include page="common/homepage/page-header.jsp"></jsp:include>
 
         <div class="text-center m-t-100 m-b-100">
-                <img style="width: 300px" src="${pageContext.request.contextPath}/images/cart/payfailed.png" alt="failed"/>
-                <h2 style="font-weight: 700;">Order Failed!</h2>
-                <p class="mt-2">An Error has occurred when you placed order. </p>
+                <img style="width: 250px" src="${pageContext.request.contextPath}/images/cart/payfailed.png" alt="failed"/>
+                <h2 style="font-weight: 700;">Order Cancelled!</h2>
+                <p class="mt-2">Sorry, your order has been cancelled. </p>
+                <p class="mt-2">If you feel this is an error, please contact us at <strong>ntfstu555@gmail.com</strong> </p>
                 <buttton class="btn text-white mt-3 font-weight-bold pointer" style=" background-color: rgb(52, 58, 64); font-size: 20px" onclick="location.href = 'cart'">Back to cart</buttton>
             </div>
 

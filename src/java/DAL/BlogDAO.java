@@ -54,42 +54,6 @@ public class BlogDAO extends DBContext {
 
         return blogList;
     }
-    
-    public List<Blog> gePublictBlogs() throws SQLException, ClassNotFoundException {
-        List<Blog> blogList = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-
-        try {
-            con = connect;
-            if (con != null) {
-                String sql = "SELECT * FROM [dbo].[blog] WHERE [status] = 0";
-                stm = con.prepareStatement(sql);
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    Blog blog = new Blog();
-                    blog.setBlogId(rs.getInt("blog_id"));
-                    blog.setTitle(rs.getString("title"));
-                    blog.setBody(rs.getString("body"));
-                    blog.setImage(rs.getString("image"));
-                    blog.setBlogTypeId(rs.getInt("blog_type_id"));
-                    blog.setStatus(rs.getBoolean("status"));
-                    blog.setCreatedAt(rs.getDate("created_at"));
-                    blogList.add(blog);
-                }
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-        }
-
-        return blogList;
-    }
 
     public List<BlogType> getAllBlogTypes() throws SQLException {
         List<BlogType> blogTypes = new ArrayList<>();
@@ -269,11 +233,10 @@ public class BlogDAO extends DBContext {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-
         try {
             con = connect;
             if (con != null) {
-                String sql = "SELECT * FROM [dbo].[blog] WHERE status = ?";
+                String sql = "SELECT B.*, bt.name as typeName FROM [dbo].[blog] as B join [blog_type] as bt on B.blog_type_id = bt.blog_type_id WHERE status = ?";
                 stm = con.prepareStatement(sql);
                 stm.setBoolean(1, status);
                 rs = stm.executeQuery();
@@ -286,6 +249,7 @@ public class BlogDAO extends DBContext {
                     blog.setBlogTypeId(rs.getInt("blog_type_id"));
                     blog.setStatus(rs.getBoolean("status"));
                     blog.setCreatedAt(rs.getDate("created_at"));
+                    blog.setTypeName(rs.getString("typeName"));
                     blogList.add(blog);
                 }
             }
@@ -441,6 +405,17 @@ public class BlogDAO extends DBContext {
             }
         }
         return blogs;
+    }
+
+    public void updateStatusBlog(int blogId, String status) {
+        String sql = "UPDATE [blog] SET status = ? WHERE blog_id = ?";
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(status));
+            ps.setInt(2, blogId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

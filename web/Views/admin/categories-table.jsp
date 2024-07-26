@@ -23,7 +23,6 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
 
-        <link href="${pageContext.request.contextPath}/css/demo.css" rel="stylesheet" />
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/colReorder-bootstrap4.css">
 
@@ -34,7 +33,6 @@
         <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet" type="text/css">
 
         <link href="${pageContext.request.contextPath}/css/sb-admin.min.css" rel="stylesheet" type="text/css">
-
 
     </head>
 
@@ -237,37 +235,26 @@
     </body>
 
     <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
-    <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
-    <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
-    <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
+        <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
 
-
-    <script src="${pageContext.request.contextPath}/js/plugins/chartist.min.js"></script>
-
-    <script src="${pageContext.request.contextPath}/js/plugins/jquery.sharrre.js"></script>
-
-    <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-notify.js"></script>
-
-    <script src="${pageContext.request.contextPath}/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
-
-    <script src="${pageContext.request.contextPath}/js/demo.js"></script>
-
-
-
-    <script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/chart.js/Chart.min.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/datatables/jquery.dataTables.js"></script>
-    <script src="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="${pageContext.request.contextPath}/js/sb-admin.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
-    <script src="${pageContext.request.contextPath}/js/demo/chart-area-demo.js"></script>
-    <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/datatables/jquery.dataTables.js"></script>
+        <script src="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.js"></script>
+        <script src="${pageContext.request.contextPath}/js/sb-admin.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+        <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+        <script>
+                                                                $(document).ready(function () {
+                                                                    $("#data-table").DataTable();
+                                                                });
+        </script>
 
     
     <script>

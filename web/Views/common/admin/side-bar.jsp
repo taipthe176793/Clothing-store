@@ -32,6 +32,12 @@
                     <p>Manage Coupons</p>
                 </a>
             </li>
+            <li>
+                <a class="nav-link" href="${pageContext.request.contextPath}/admin/manage-blog">
+                    <i class="nc-icon nc-tag-content"></i>
+                    <p>Blogs</p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

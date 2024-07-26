@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.admin;
 
 import DAL.BlogDAO;
 import Models.Blog;
@@ -13,14 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
  * @author HP
  */
-@WebServlet(name = "BlogDetailController", urlPatterns = {"/blog-detail"})
-public class BlogDetailController extends HttpServlet {
+@WebServlet(name = "ManageBlogController", urlPatterns = {"/admin/manage-blog"})
+public class ManageBlogController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,38 +39,49 @@ public class BlogDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogDetailController</title>");
+            out.println("<title>Servlet ManageBlogController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ManageBlogController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
+    }    
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+        action = action != null ? action : "";
+        switch (action) {
+            case "approve":
+                this.approveBlog(request, response);
+                break;
+            default:
+                this.showAllBlogRequest(request, response);
+        }
+    }
+
+    private void approveBlog(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            int blogId = Integer.parseInt(request.getParameter("id"));
             BlogDAO blogDao = new BlogDAO();
-            Blog blog = blogDao.findBlogById(blogId);
-            if (blog == null) {
-                throw new NullPointerException();
-            }
-            request.setAttribute("blog", blog);
-            request.getRequestDispatcher("./Views/detail-blog.jsp").forward(request, response);
-        } catch (ServletException | IOException | ClassNotFoundException | NumberFormatException | SQLException | NullPointerException e) {
-            response.sendRedirect("404");
+            int id = Integer.parseInt(request.getParameter("blogId"));
+            blogDao.updateStatusBlog(id, request.getParameter("status"));
+            response.sendRedirect(request.getContextPath() + "/admin/manage-blog?success=Update successfully");
+        } catch (Exception e) {
+            throw new ServletException("Error fetching addresses", e);
+        }
+    }
+    
+    private void showAllBlogRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            BlogDAO blogDao = new BlogDAO();
+            List<Blog> blogs = blogDao.filterBlogsByStatus(false);
+            List<Blog> blogs2 = blogDao.filterBlogsByStatus(true);
+            blogs.addAll(blogs2);
+            request.setAttribute("blogs", blogs);
+            request.getRequestDispatcher("/Views/admin/manage-blog.jsp").forward(request, response);
+        } catch (Exception e) {
+            throw new ServletException("Error fetching addresses", e);
         }
     }
 

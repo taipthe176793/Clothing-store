@@ -132,6 +132,10 @@
         <servlet-name>VNPAYReturnServlet</servlet-name>
         <servlet-class>Controllers.VNPAYReturnServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PageNotFoundServlet</servlet-name>
+        <servlet-class>Controllers.PageNotFoundServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeControllers</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -247,6 +251,10 @@
     <servlet-mapping>
         <servlet-name>VNPAYReturnServlet</servlet-name>
         <url-pattern>/vnpayReturn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PageNotFoundServlet</servlet-name>
+        <url-pattern>/404</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

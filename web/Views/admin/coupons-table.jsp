@@ -40,11 +40,6 @@
     <body>
 
         <div class="wrapper">
-            <div class="sidebar" data-image="${pageContext.request.contextPath}/images/sidebar-5.jpg">
-
-
-
-            </div>
             <jsp:include page="../common/admin/side-bar.jsp"></jsp:include>
                 <div class="main-panel">
 
@@ -107,7 +102,6 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                         </div>
                     </div>
                 </div>

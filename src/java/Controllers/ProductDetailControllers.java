@@ -144,10 +144,8 @@ public class ProductDetailControllers extends HttpServlet {
                 request.setAttribute("sameCategory", sameCategory);
                 request.getRequestDispatcher("Views/productDetail.jsp").forward(request, response);
             }
-        } catch (SQLException | ClassNotFoundException ex) {
-            PrintWriter pw = response.getWriter();
-            String mess = "<html> " + ex.getMessage() + "  </html>";
-            pw.print(mess);
+        } catch (SQLException | ClassNotFoundException | NullPointerException ex) {
+            response.sendRedirect("404");
         }
     }
 
