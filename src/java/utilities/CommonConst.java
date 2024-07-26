@@ -21,6 +21,10 @@ public class CommonConst {
     public static final String VNPAY_KEY = "WJZ4PLJNY6VJNNL0XPEYI7IDCJAL9EMO";
     public static final String VNPAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static final String VNPAY_RETURN_URL = "http://localhost:8080/SWP391_SE1817/vnpayReturn";
+    
+    public static final String ALGORITHM = "AES";
+    public static final String TRANSFORMATION = "AES";
+    public static final String K = "JSOOPPQNN8210AIS";
 
     public static final int ROLE_ADMIN = 1;
     public static final int ROLE_STAFF = 2;

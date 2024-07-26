@@ -23,8 +23,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import utilities.CommonConst;
+import static utilities.CommonConst.ROLE_CUSTOMER;
 import utilities.CookieUtils;
 import utilities.EmailUtils;
+import utilities.EncryptionUtils;
 import utilities.GeneratorUtils;
 
 /**
@@ -171,7 +173,7 @@ public class AuthenticationControllers extends HttpServlet {
                             CookieUtils.updateCookieValueByName(CommonConst.USER_NAME, account.getUsername(), request, response);
 
                             CookieUtils.updateCookieValueByName(CommonConst.USER_ROLE, account.getRoleId() + "", request, response);
-                            
+
                             switch (account.getRoleId()) {
                                 case CommonConst.ROLE_ADMIN:
                                     response.sendRedirect("admin/dashboard");
@@ -241,7 +243,7 @@ public class AuthenticationControllers extends HttpServlet {
                 request.setAttribute("error", "Username is already existed");
                 return false;
             }
-            Account acc = new Account(username, password, 3, email, fullname, phone);
+            Account acc = new Account(username, EncryptionUtils.toSHA256(password), ROLE_CUSTOMER, email, fullname, phone);
             aDAO.addAccount(acc);
             return true;
 
@@ -259,10 +261,10 @@ public class AuthenticationControllers extends HttpServlet {
             AccountDAO aDAO = new AccountDAO();
             if (userInput.contains("@")) {
 
-                account = aDAO.loginByEmail(userInput, password);
+                account = aDAO.loginByEmail(userInput, EncryptionUtils.toSHA256(password));
 
             } else {
-                account = aDAO.loginByUsername(userInput, password);
+                account = aDAO.loginByUsername(userInput, EncryptionUtils.toSHA256(password));
             }
             return account;
         } catch (SQLException ex) {
@@ -284,23 +286,20 @@ public class AuthenticationControllers extends HttpServlet {
                 AccountDAO aDAO = new AccountDAO();
                 account = new Account();
                 if (!aDAO.checkEmailExist(acc.getEmail())) {
-                    account.setUsername(acc.getEmail());
-                    String username = account.getUsername();
-                    account.setPassword("12345678");
+                    String username = acc.getEmail().split("@")[0];
+                    String password = GeneratorUtils.generateRandomPassword();
+                    account.setUsername(username);
+                    account.setPassword(EncryptionUtils.toSHA256(password));
                     account.setEmail(acc.getEmail());
-                    account.setRoleId(3);
-                    account.setFullname(acc.getGiven_name());
+                    account.setRoleId(ROLE_CUSTOMER);
+                    account.setFullname(acc.getName());
                     account.setPhone("");
                     aDAO.addAccount(account);
                 }
                 account = aDAO.getAccountByEmail(acc.getEmail());
                 return account;
             }
-        } catch (IOException ex) {
-            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AuthenticationControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

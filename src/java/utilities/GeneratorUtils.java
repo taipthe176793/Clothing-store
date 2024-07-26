@@ -64,5 +64,28 @@ public class GeneratorUtils {
             session.removeAttribute(utilities.CommonConst.NOTI_TYPE);
         }
     }
+    
+    public static String generateRandomPassword() throws SQLException {
+
+        StringBuilder randomPassBuilder;
+        String password = "";
+        OrderDAO orderDAO = new OrderDAO();
+
+        do {
+
+            randomPassBuilder = new StringBuilder();
+            String characters = "0123456789";
+            Random random = new Random();
+
+            for (int i = 0; i < 10; i++) {
+                randomPassBuilder.append(characters.charAt(random.nextInt(characters.length())));
+            }
+
+            password = randomPassBuilder.toString();
+
+        } while (orderDAO.isOrderCodeExist(password));
+
+        return password;
+    }
 
 }
