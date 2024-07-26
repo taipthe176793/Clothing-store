@@ -23,7 +23,7 @@
 
                     <c:set var="cookie" value="${pageContext.request.cookies}"></c:set>
 
-                    <c:if test="${cookie.userId.value eq null}">
+                    <c:if test="${cookie.__d.value eq null}">
                         <a href="${pageContext.request.contextPath}/auth?action=login" class="flex-c-m trans-04 p-lr-25">
                             Login
                         </a>
@@ -32,7 +32,7 @@
                         </a>
                     </c:if>
 
-                    <c:if test="${cookie.userId.value ne null}">
+                    <c:if test="${cookie.__d.value ne null}">
                         <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="flex-c-m trans-04 p-lr-25">
                             My Profile
                         </a>
@@ -81,8 +81,8 @@
                 <!-- Icon header -->
                 <div class="wrap-icon-header flex-w flex-r-m">
 
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-cart <c:if test="${not empty cookie.cart.value.trim()}"> icon-header-noti</c:if>" 
-                         data-notify="${cookie.cin.value.trim() eq "" ? "" : cookie.cin.value}">
+                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-cart <c:if test="${cookie.__c.value ne 'ccovzFT40cE5PzFXDMD/eQ=='}"> icon-header-noti</c:if>" 
+                         data-notify="${cookie.__i.value.trim() eq "" ? "" : cookie.__i.value}">
                         <i onclick="location.href = '${pageContext.request.contextPath}/cart'" class="zmdi zmdi-shopping-cart"></i>
                     </div>
 

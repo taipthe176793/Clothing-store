@@ -35,9 +35,6 @@ import utilities.GeneratorUtils;
  */
 public class AuthenticationControllers extends HttpServlet {
 
-    private static final int ADMIN_ROLE = 1;
-    private static final int STAFF_ROLE = 2;
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -79,9 +76,8 @@ public class AuthenticationControllers extends HttpServlet {
                 case "logout":
                     CookieUtils.deleteCookieByName(CommonConst.USER_ID_COOKIE, request, response);
                     CookieUtils.deleteCookieByName(CommonConst.USER_ROLE, request, response);
-                    CookieUtils.deleteCookieByName(CommonConst.USER_NAME, request, response);
 
-                    CookieUtils.updateCookieValueByName(CommonConst.CART_COOKIE, "", request, response);
+                    CookieUtils.updateCookieValueByName(CommonConst.CART_COOKIE, EncryptionUtils.encrypt(""), request, response);
                     response.sendRedirect("home");
                     break;
                 case "loginWithGoogle":
@@ -91,7 +87,6 @@ public class AuthenticationControllers extends HttpServlet {
 
                         CookieUtils.updateCookieValueByName(CommonConst.USER_ID_COOKIE, gAccount.getAccountId() + "", request, response);
 
-                        CookieUtils.updateCookieValueByName(CommonConst.USER_NAME, gAccount.getUsername(), request, response);
 
                         CookieUtils.updateCookieValueByName(CommonConst.USER_ROLE, gAccount.getRoleId() + "", request, response);
 
@@ -169,8 +164,6 @@ public class AuthenticationControllers extends HttpServlet {
                             }
 
                             CookieUtils.updateCookieValueByName(CommonConst.USER_ID_COOKIE, account.getAccountId() + "", request, response);
-
-                            CookieUtils.updateCookieValueByName(CommonConst.USER_NAME, account.getUsername(), request, response);
 
                             CookieUtils.updateCookieValueByName(CommonConst.USER_ROLE, account.getRoleId() + "", request, response);
 

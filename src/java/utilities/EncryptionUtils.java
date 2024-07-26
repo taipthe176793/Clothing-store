@@ -36,10 +36,10 @@ public class EncryptionUtils {
         return result;
     }
 
-    public static String encrypt(String data, String key) {
+    public static String encrypt(String data) {
         try {
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.ENCRYPT_MODE, generateKey(key));
+            cipher.init(Cipher.ENCRYPT_MODE, generateKey(K));
             byte[] encryptedBytes = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
             return Base64.encodeBase64String(encryptedBytes);
         } catch (Exception e) {
@@ -48,10 +48,10 @@ public class EncryptionUtils {
         return null;
     }
 
-    public static String decrypt(String encryptedData, String key) {
+    public static String decrypt(String encryptedData) {
         try {
             Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.DECRYPT_MODE, generateKey(key));
+            cipher.init(Cipher.DECRYPT_MODE, generateKey(K));
             byte[] decodedBytes = Base64.decodeBase64(encryptedData);
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
             return new String(decryptedBytes, StandardCharsets.UTF_8);
@@ -66,7 +66,10 @@ public class EncryptionUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(toSHA256("22222222"));
+        String cartCookieValue = "3";
+        String encryptCart = encrypt(cartCookieValue);
+        System.out.println(encryptCart);
+        System.out.println(decrypt("ccovzFT40cE5PzFXDMD/eQ=="));
     }
     
 }

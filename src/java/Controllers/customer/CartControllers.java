@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utilities.CookieUtils;
+import utilities.EncryptionUtils;
 import utilities.GeneratorUtils;
 
 /**
@@ -109,14 +110,15 @@ public class CartControllers extends HttpServlet {
 
             if (account == null) {
                 account = new Account();
-                account.setCartFromCookie(CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request));
+                String cartCookieString = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+                account.setCartFromCookie(EncryptionUtils.decrypt(cartCookieString));
             }
             cartItems = account.getCartItems();
             cartCookieValue = account.cartToCookieValue();
 
             request.setAttribute(utilities.CommonConst.CART_COOKIE, cartItems);
 
-            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, cartCookieValue, request, response);
+            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, EncryptionUtils.encrypt(cartCookieValue), request, response);
 
             request.getRequestDispatcher("Views/shoping-cart.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException ex) {
@@ -205,6 +207,7 @@ public class CartControllers extends HttpServlet {
 
             String userId = CookieUtils.getCookieValueByName(utilities.CommonConst.USER_ID_COOKIE, request);
             String txt = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+            txt = EncryptionUtils.decrypt(txt);
 
             if (txt.isBlank()) {
                 txt = variant.getProductVariantId() + ":" + quantity;
@@ -219,7 +222,7 @@ public class CartControllers extends HttpServlet {
                 }
             }
 
-            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, txt, request, response);
+            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, EncryptionUtils.encrypt(txt), request, response);
             CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE, txt.split("/").length + "", request, response);
 
             //check if user is logged in
@@ -276,6 +279,7 @@ public class CartControllers extends HttpServlet {
     public static void mergeAndSyncCart(HttpServletRequest request, HttpServletResponse response, Account account) throws SQLException, ClassNotFoundException {
 
         String cartTxt = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+        cartTxt = EncryptionUtils.decrypt(cartTxt);
         CartItemDAO ciDAO = new CartItemDAO();
         //check if customer cart is not empty
         if (!account.getCartItems().isEmpty()) {
@@ -292,7 +296,7 @@ public class CartControllers extends HttpServlet {
             }
         }
 
-        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, account.cartToCookieValue(), request, response);
+        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, EncryptionUtils.encrypt(account.cartToCookieValue()), request, response);
         CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE,
                 account.cartToCookieValue().split("/").length + "", request, response);
     }
@@ -325,6 +329,7 @@ public class CartControllers extends HttpServlet {
             int variantId = Integer.parseInt(request.getParameter("itemIdDelete"));
 
             String cartTxt = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+            cartTxt = EncryptionUtils.decrypt(cartTxt);
             String userId = CookieUtils.getCookieValueByName(utilities.CommonConst.USER_ID_COOKIE, request);
             //check if user is logged in
             if (!userId.isBlank()) {
@@ -340,7 +345,7 @@ public class CartControllers extends HttpServlet {
             } else {
                 cartTxt = deleteItemInCartCookie(cartTxt, variantId);
             }
-            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, cartTxt, request, response);
+            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, EncryptionUtils.encrypt(cartTxt), request, response);
             CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE,
                     cartTxt.split("/").length + "", request, response);
 
@@ -378,6 +383,7 @@ public class CartControllers extends HttpServlet {
             ProductVariantDAO pvDAO = new ProductVariantDAO();
 
             String cartTxt = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+            cartTxt = EncryptionUtils.decrypt(cartTxt);
             String userId = CookieUtils.getCookieValueByName(utilities.CommonConst.USER_ID_COOKIE, request);
             //check if user is logged in
             if (!userId.isBlank()) {
@@ -394,7 +400,7 @@ public class CartControllers extends HttpServlet {
                 cartTxt = updateToCartCookie(cartTxt, pvDAO.findProductVariantById(variantId),
                         updateQuantity, "Change", request);
             }
-            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, cartTxt, request, response);
+            CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, EncryptionUtils.encrypt(cartTxt), request, response);
 
         } catch (SQLException ex) {
             Logger.getLogger(CartControllers.class

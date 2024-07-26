@@ -141,9 +141,8 @@ public class ChangePasswordControllers extends HttpServlet {
 
                 CookieUtils.deleteCookieByName(CommonConst.USER_ID_COOKIE, request, response);
                 CookieUtils.deleteCookieByName(CommonConst.USER_ROLE, request, response);
-                CookieUtils.deleteCookieByName(CommonConst.USER_NAME, request, response);
 
-                CookieUtils.updateCookieValueByName(CommonConst.CART_COOKIE, "", request, response);
+                CookieUtils.updateCookieValueByName(CommonConst.CART_COOKIE, EncryptionUtils.encrypt(""), request, response);
 
                 response.sendRedirect(request.getContextPath() + "/auth?action=login");
             } else {

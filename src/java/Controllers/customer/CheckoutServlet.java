@@ -31,6 +31,7 @@ import utilities.CommonConst;
 import static utilities.CommonConst.VNPAY_RETURN_URL;
 import utilities.CookieUtils;
 import utilities.EmailUtils;
+import utilities.EncryptionUtils;
 import utilities.GeneratorUtils;
 import utilities.VNPayUtils;
 
@@ -212,6 +213,7 @@ public class CheckoutServlet extends HttpServlet {
 
     private void updateCartAfterPlacedOrder(String items, HttpServletRequest request, HttpServletResponse response) {
         String cartCookie = CookieUtils.getCookieValueByName(utilities.CommonConst.CART_COOKIE, request);
+        cartCookie = EncryptionUtils.decrypt(cartCookie);
         if (cartCookie == null || cartCookie.isEmpty()) {
             return;
         }
@@ -250,7 +252,7 @@ public class CheckoutServlet extends HttpServlet {
 
         String updatedCartCookie = String.join("/", updatedCartItems);
 
-        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, updatedCartCookie, request, response);
+        CookieUtils.updateCookieValueByName(utilities.CommonConst.CART_COOKIE, EncryptionUtils.encrypt(updatedCartCookie), request, response);
         CookieUtils.updateCookieValueByName(utilities.CommonConst.ITEMS_NUMBER_CART_COOKIE, String.valueOf(updatedCartItems.size()), request, response);
     }
 

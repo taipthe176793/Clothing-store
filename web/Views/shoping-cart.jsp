@@ -63,7 +63,7 @@
         </c:if>
 
         <!-- Shoping Cart -->
-        <c:if test="${cart.isEmpty()}">
+        <c:if test="${__c.isEmpty()}">
             <div class="text-center m-t-100">
                 <img src="${pageContext.request.contextPath}/images/cart/emptycart.png" alt="empty cart image"/>
                 <h1>No item in your cart.</h1>
@@ -77,7 +77,7 @@
             </div>
 
 
-            <c:if test="${!cart.isEmpty()}">
+            <c:if test="${!__c.isEmpty()}">
                 <div class="container">
                     <form id="mainCartForm" action="cart?action=checkout" method="post" onsubmit="return validateCheckout()">
                         <div class="row">
@@ -98,7 +98,7 @@
                                                 <th class="column-5">Total</th>
                                                 <th class="p-r-15">Action</th>
                                             </tr>
-                                            <c:forEach items="${cart}" var="item">
+                                            <c:forEach items="${__c}" var="item">
 
                                                 <c:forEach items="${allVariant}" var="variant">
                                                     <c:if test="${variant.getProductVariantId() == item.getProductVariantId()}">
@@ -164,7 +164,7 @@
                                         </table>
                                     </div>
 
-                                    <c:if test="${not empty cookie.userId}">
+                                    <c:if test="${not empty cookie.__d}">
                                         <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                                             <div class="flex-w flex-m m-r-20 m-tb-5">
                                                 <input id="coupon" class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code" >
@@ -190,7 +190,7 @@
                                                 <th class="column-5" style="text-align: start;">Total</th>
                                                 <th class="" style="padding-right: 25px;">Action</th>
                                             </tr>
-                                            <c:forEach items="${cart}" var="item">
+                                            <c:forEach items="${__c}" var="item">
 
                                                 <c:forEach items="${allVariant}" var="variant">
                                                     <c:if test="${variant.getProductVariantId() == item.getProductVariantId()}">

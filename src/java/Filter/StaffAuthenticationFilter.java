@@ -19,6 +19,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import static utilities.CommonConst.ROLE_ADMIN;
+import static utilities.CommonConst.ROLE_CUSTOMER;
+import static utilities.CommonConst.ROLE_STAFF;
+import static utilities.CommonConst.USER_ROLE;
 
 /**
  *
@@ -26,8 +30,6 @@ import jakarta.servlet.http.HttpSession;
  */
 public class StaffAuthenticationFilter implements Filter {
 
-    private final int ADMIN_ROLE = 1;
-    private final int STAFF_ROLE = 2;
 
     private static final boolean debug = true;
 
@@ -114,7 +116,7 @@ public class StaffAuthenticationFilter implements Filter {
         int role = 4;
         if (arr != null) {
             for (Cookie o : arr) {
-                if (o.getName().equals("role")) {
+                if (o.getName().equals(USER_ROLE)) {
                     role = Integer.parseInt(o.getValue());
                 }
             }
@@ -122,11 +124,11 @@ public class StaffAuthenticationFilter implements Filter {
 
 
 
-        if (role == 4) {
+        if (role == ROLE_CUSTOMER) {
             res.sendRedirect(req.getServletContext().getContextPath() + "/auth?action=login");
         } else {
-            if (role != STAFF_ROLE) {
-                if (role == ADMIN_ROLE) {
+            if (role != ROLE_STAFF) {
+                if (role == ROLE_ADMIN) {
                     res.sendRedirect(req.getServletContext().getContextPath() + "/admin/dashboard");
                 } else {
                     res.sendRedirect(req.getServletContext().getContextPath() + "/home");

@@ -30,8 +30,8 @@ public class CommonConst {
     public static final int ROLE_STAFF = 2;
     public static final int ROLE_CUSTOMER = 3;
     public static final int ROLE_GUEST = 4;
-    public static final String USER_ROLE = "role";
-    public static final String USER_NAME = "username";
+    public static final String USER_ROLE = "__r";
+    public static final String USER_NAME = "__u";
 
     public static final String NOTIFICATION = "notification";
     public static final String NOTI_TYPE = "type";
@@ -54,10 +54,10 @@ public class CommonConst {
     public static final char OPERATION_DESCREASE = '-';
     public static final char OPERATION_INCREASE = '+';
 
-    public static final String CART_COOKIE = "cart";
-    public static final String ITEMS_NUMBER_CART_COOKIE = "cin";
+    public static final String CART_COOKIE = "__c";
+    public static final String ITEMS_NUMBER_CART_COOKIE = "__i";
 
-    public static final String USER_ID_COOKIE = "userId";
+    public static final String USER_ID_COOKIE = "__d";
 
     public static String ORDER_CONFIRMATION_TITLE = "Order Confirmation - Urban Vibes";
     public static String ORDER_CONFIRMATION_SUBTITLE = "Thank you for ordering!";
