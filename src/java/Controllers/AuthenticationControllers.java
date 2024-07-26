@@ -377,7 +377,7 @@ public class AuthenticationControllers extends HttpServlet {
             Account account = accountDAO.getAccountByEmail(email);
             if (account != null) {
                 // Update password in database for the account
-                account.setPassword(password); // Set new password (you might need to hash it)
+                account.setPassword(EncryptionUtils.toSHA256(password)); // Set new password (you might need to hash it)
                 boolean updateResult = accountDAO.updatePassword(account);
 
                 if (updateResult) {

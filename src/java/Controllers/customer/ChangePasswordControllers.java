@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import utilities.CommonConst;
 import utilities.CookieUtils;
+import utilities.EncryptionUtils;
 import utilities.GeneratorUtils;
 
 /**
@@ -112,7 +113,7 @@ public class ChangePasswordControllers extends HttpServlet {
             String repeatNewPassword = request.getParameter("repeat_new_password");
 
             AccountDAO accountDAO = new AccountDAO();
-            boolean isCurrentPasswordValid = accountDAO.validateCurrentPassword(account.getUsername(), currentPassword);
+            boolean isCurrentPasswordValid = accountDAO.validateCurrentPassword(account.getUsername(), EncryptionUtils.toSHA256(currentPassword));
 
             if (!isCurrentPasswordValid) {
                 request.setAttribute("message", "Current password is incorrect.");
@@ -132,7 +133,7 @@ public class ChangePasswordControllers extends HttpServlet {
                 return;
             }
 
-            boolean isPasswordUpdated = accountDAO.updatePassword(new Account(account.getUsername(), newPassword));
+            boolean isPasswordUpdated = accountDAO.updatePassword(new Account(account.getUsername(), EncryptionUtils.toSHA256(newPassword)));
 
             if (isPasswordUpdated) {
                 String notiMessage = "Password changed successfully. Please log in with your new password.";
