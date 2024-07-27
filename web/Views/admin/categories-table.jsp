@@ -143,7 +143,7 @@
                                          style="display: none; max-width: 300px; max-height: 300px;">
 
                                 </div>
-                                
+
                                 <!--Description-->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
@@ -178,8 +178,7 @@
                                     <label for="name">Name:</label>
                                     <input type="text" class="form-control" id="nameEditInput" name="name">
                                     <div id="nameEditError" class="error"></div>
-                                </div>                              
-                                <!-- img -->
+                                </div>
                                 <div class="form-group">
                                     <label for="image1">Image: </label>
                                     <div class="input-group mb-3">
@@ -187,16 +186,13 @@
                                             <span class="input-group-text">Upload</span>
                                         </div>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="imageEdit" name="image"
-                                                   onchange="displayImage2(this, 'previewImage2')">
+                                            <input type="file" class="custom-file-input" id="imageEdit" name="image" onchange="displayImage2(this, 'previewImage2')">
                                             <label class="custom-file-label">Choose file</label>
                                         </div>
                                     </div>
-                                    <img id="previewImage2" src="#" alt="Preview"
-                                         style="display: none; max-width: 300px; max-height: 300px;">
-                                    <input type="hidden" id="currentImage" name="currentImage2" value="">
+                                    <img id="previewImage2" src="#" alt="Preview" style="display: none; max-width: 300px; max-height: 300px;">
+                                    <input type="hidden" id="currentImage2" name="currentImage2" value="">
                                 </div>
-                                <!-- Description -->
                                 <div class="form-group">
                                     <label for="descriptionEditInput">Description:</label>
                                     <textarea class="form-control" id="descriptionEdit" name="description"></textarea>
@@ -205,12 +201,12 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" form="editModalForm"
-                                    onclick="validateForm2()">Update</button>
+                            <button type="submit" class="btn btn-primary" form="editModalForm" onclick="validateForm2()">Update</button>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Notification Modal -->
             <div class="modal fade" id="notiModal" role="dialog" aria-labelledby="errorModal">
@@ -235,117 +231,118 @@
     </body>
 
     <script src="${pageContext.request.contextPath}/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
-        <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/core/popper.min.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/core/bootstrap.min.js" type="text/javascript"></script>
 
-        <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
+    <script src="${pageContext.request.contextPath}/js/plugins/bootstrap-switch.js"></script>
 
-        <script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
-        <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/vendor/jquery-easing/jquery.easing.min.js"></script>
-        <script src="${pageContext.request.contextPath}/vendor/datatables/jquery.dataTables.js"></script>
-        <script src="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.js"></script>
-        <script src="${pageContext.request.contextPath}/js/sb-admin.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
-        <script src="${pageContext.request.contextPath}/js/demo.js"></script>
-        <script>
-                                                                $(document).ready(function () {
-                                                                    $("#data-table").DataTable();
-                                                                });
-        </script>
+    <script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="${pageContext.request.contextPath}/js/sb-admin.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/js/demo.js"></script>
+    <script>
+                                $(document).ready(function () {
+                                    $("#data-table").DataTable();
+                                });
+    </script>
 
-    
+
     <script>
 
-    function validateForm() {
-        let name = $('#nameInput').val();
+        function validateForm() {
+            let name = $('#nameInput').val();
 
-        $('.error').html('');
+            $('.error').html('');
 
-        if (name.trim() === '') {
-            $('#nameError').html('Name cannot be empty or contain spaces only!');
+            if (name.trim() === '') {
+                $('#nameError').html('Name cannot be empty or contain spaces only!');
+            }
+
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#addCategoryForm').submit();
+            } else {
+                event.preventDefault();
+            }
         }
 
-        let error = '';
-        $('.error').each(function () {
-            error += $(this).html();
-        });
-        if (error === '') {
-            $('#addCategoryForm').submit();
-        } else {
-            event.preventDefault();
-        }
-    }
+        function displayImage(input, previewId) {
+            var previewImage = document.getElementById(previewId);
+            var file = input.files[0];
+            var reader = new FileReader();
 
-    function displayImage(input, previewId) {
-        var previewImage = document.getElementById(previewId);
-        var file = input.files[0];
-        var reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = "block";
+            };
 
-        reader.onload = function (e) {
-            previewImage.src = e.target.result;
-            previewImage.style.display = "block";
-        };
-
-        reader.readAsDataURL(file);
-    }
-
-    function validateForm2() {
-        let name = $('#nameEditInput').val();
-
-        $('.error').html('');
-
-        if (name.trim() === '') {
-            $('#nameEditError').html('Name cannot be empty');
+            reader.readAsDataURL(file);
         }
 
-        let error = '';
-        $('.error').each(function () {
-            error += $(this).html();
-        });
-        if (error === '') {
-            $('#editModalForm').submit();
-        } else {
-            event.preventDefault();
+        function validateForm2() {
+            let name = $('#nameEditInput').val();
+
+            $('.error').html('');
+
+            if (name.trim() === '') {
+                $('#nameEditError').html('Name cannot be empty');
+            }
+
+            let error = '';
+            $('.error').each(function () {
+                error += $(this).html();
+            });
+            if (error === '') {
+                $('#editModalForm').submit();
+            } else {
+                event.preventDefault();
+            }
         }
-    }
 
-    function displayImage2(input, previewId) {
-        var previewImage = document.getElementById(previewId);
+        function displayImage2(input, previewId) {
+            var previewImage = document.getElementById(previewId);
 
-        var file = input.files[0];
-        var reader = new FileReader();
+            var file = input.files[0];
+            var reader = new FileReader();
 
-        reader.onload = function (e) {
-            previewImage.src = e.target.result;
-            previewImage.style.display = "block";
-        };
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = "block";
+            };
 
-        reader.readAsDataURL(file);
-    }
+            reader.readAsDataURL(file);
+        }
 
-    function editCategoryModal(button) {
-        let id = $(button).closest('tr').find('td[name="id"]').text().trim();
-        let name = $(button).closest('tr').find('td[name="name"]').text().trim();
-        let image = $(button).closest('tr').find('td[name="image"]').find('img').attr('src');
-        let description = $(button).closest('tr').find('td[name="description"]').text().trim();
+        function editCategoryModal(button) {
+            let id = $(button).closest('tr').find('td[name="id"]').text().trim();
+            let name = $(button).closest('tr').find('td[name="name"]').text().trim();
+            let image = $(button).closest('tr').find('td[name="image"]').find('img').attr('src');
+            let description = $(button).closest('tr').find('td[name="description"]').text().trim();
 
-        $('#idEditInput').val(id);
-        $('#nameEditInput').val(name);
-        $('#descriptionEdit').val(description);
-        $('#previewImage2').attr('src', image);
-        $('#previewImage2').css('display', 'block');
-        $('#currentImage2').val(image);
-    }
+            $('#idEditInput').val(id);
+            $('#nameEditInput').val(name);
+            $('#descriptionEdit').val(description);
+            $('#previewImage2').attr('src', image);
+            $('#previewImage2').css('display', 'block');
+            $('#currentImage2').val(image);
+        }
 
-    //Display Error
-    $(document).ready(function () {
+
+        //Display Error
+        $(document).ready(function () {
         <c:if test="${notification != null}">
             $('#notiModal').modal('show');
         </c:if>
-    });
+        });
 
     </script>
 

@@ -175,7 +175,7 @@ public class CategoryControllers extends HttpServlet {
         try {
 
             String name = request.getParameter("name");
-            
+
             String description = request.getParameter("description");
 
             Part part = request.getPart("image");
