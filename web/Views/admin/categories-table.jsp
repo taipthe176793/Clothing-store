@@ -86,7 +86,7 @@
                                         <c:forEach items="${categoryList}" var="c">
                                             <tr>
                                                 <td name="id">${c.getCategoryId()}</td>
-                                                <td name="image" style="width: 200px"><img style="height: 200px; width: 200px; padding: 0" src="${c.getImg()}" alt="img" /></td>
+                                                <td name="image"><img style="height: 60px; padding: 0" src="${c.getImg()}" alt="img" /></td>
                                                 <td name="name">${c.getName()}</td>  
                                                 <td name="description">${c.getDescription()}</td>
                                                 <td>
