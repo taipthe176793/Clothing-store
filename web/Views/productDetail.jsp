@@ -329,14 +329,14 @@
                                         <div class="feedback-header">
                                             <span class="feedback-username">${feedback.username}</span>
                                             <div class="d-flex justify-content-end">
-                                                <c:if test="${!feedback.isIsDeleted() && feedback.customerId == Integer.parseInt(cookie.userId.value eq null ? 0 : cookie.userId.value)}">
+                                                <c:if test="${!feedback.isIsDeleted() && feedback.customerId == Integer.parseInt(cookie.__d.value eq null ? 0 : cookie.__d.value)}">
                                                     <a href="#" class="edit-feedback" data-toggle="modal" data-target="#updateFeedbackModal" 
                                                        data-feedback-id="${feedback.feedbackId}" data-rating="${feedback.rating}" data-comment="${feedback.comment}">
                                                         <i class="fas fa-pencil-alt" style="margin-right: 10px; color: black"></i>
                                                     </a>
                                                 </c:if>
 
-                                                <c:if test="${!feedback.isIsDeleted() && feedback.getCustomerId() != Integer.parseInt(cookie.userId.value eq null ? 0 : cookie.userId.value)}">
+                                                <c:if test="${!feedback.isIsDeleted() && feedback.getCustomerId() != Integer.parseInt(cookie.__d.value eq null ? 0 : cookie.__d.value)}">
                                                     <form action="${pageContext.request.contextPath}/customer/feedback" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.feedbackId}">
                                                         <input type="hidden" name="action" value="report">

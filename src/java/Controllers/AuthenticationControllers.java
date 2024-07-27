@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import utilities.CommonConst;
+import static utilities.CommonConst.NOTI_SUCCESS;
 import static utilities.CommonConst.ROLE_CUSTOMER;
 import utilities.CookieUtils;
 import utilities.EmailUtils;
@@ -135,8 +136,8 @@ public class AuthenticationControllers extends HttpServlet {
                     if (!success) {
                         request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
                     } else {
-                        request.setAttribute("Success", "Sign Up Successfully!");
-                        request.getRequestDispatcher("Views/authen/signup.jsp").forward(request, response);
+                        GeneratorUtils.makeNotification(request, "SignUp Successfully", NOTI_SUCCESS);
+                        response.sendRedirect("auth?action=login");
                     }
                     break;
                 case "login":

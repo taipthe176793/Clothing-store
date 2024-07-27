@@ -80,42 +80,50 @@
                         let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
                         let form = document.forms["signupForm"];
+                        let fullname = form["fullname"];
                         let username = form["user"];
+                        let email = form["email"];
                         let phone = form["phone"];
                         let password = form["pass"];
-                        let fullname = form["fullname"];
-                        let email = form["email"];
+                        let confirmPassword = form["confirm-pass"];
 
                         let isValid = true;
+
+                        fullname.setCustomValidity("");
+                        username.setCustomValidity("");
+                        email.setCustomValidity("");
+                        phone.setCustomValidity("");
+                        password.setCustomValidity("");
+                        confirmPassword.setCustomValidity("");
+
                         if (fullname.value.trim() === "") {
                             fullname.setCustomValidity("Fullname cannot be empty!!!");
                             isValid = false;
                         }
+
                         if (!usernamePattern.test(username.value) || username.value.trim() === "") {
                             username.setCustomValidity("Username must be at least 6 characters without spaces.");
                             isValid = false;
-                        } else {
-                            username.setCustomValidity("");
+                        }
+
+                        if (!emailPattern.test(email.value) || email.value.trim() === "") {
+                            email.setCustomValidity("Please enter a valid email address.");
+                            isValid = false;
                         }
 
                         if (!phonePattern.test(phone.value) || phone.value.trim() === "") {
                             phone.setCustomValidity("Phone number must be 10 digits and start with 0 without spaces.");
                             isValid = false;
-                        } else {
-                            phone.setCustomValidity("");
                         }
 
                         if (!passwordPattern.test(password.value) || password.value.trim() === "") {
                             password.setCustomValidity("Password must be at least 8 characters without spaces.");
                             isValid = false;
-                        } else {
-                            password.setCustomValidity("");
                         }
-                        if (!emailPattern.test(email.value) || emailPattern.value.trim() === "") {
-                            email.setCustomValidity("Please enter a valid email address.");
+
+                        if (password.value !== confirmPassword.value) {
+                            confirmPassword.setCustomValidity("Passwords do not match.");
                             isValid = false;
-                        } else {
-                            email.setCustomValidity("Invalid Emails");
                         }
 
                         if (!isValid) {
@@ -124,7 +132,8 @@
 
                         return isValid;
                     }
+
         </script>
-        
+
     </body>
 </html>

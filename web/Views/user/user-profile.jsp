@@ -54,8 +54,7 @@
                                href="${pageContext.request.contextPath}/my-coupon">My Coupon</a>
                             <a class="list-group-item list-group-item-action" 
                                href="${pageContext.request.contextPath}/history-order">My Orders History</a>
-                            <a class="list-group-item list-group-item-action"
-                               href="#account-notifications">Notifications</a>
+                          
                         </div>
                     </div>
                     <div class="col-md-9">
