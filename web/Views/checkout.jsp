@@ -50,13 +50,12 @@
 
         <jsp:include page="common/homepage/page-header.jsp"></jsp:include>
 
-            <div class="container mt-4 mb-5">
+            <div class="container mt-2 mb-5">
                 <form class="needs-validation" id="checkoutForm" name="frmthanhtoan" method="post"
                       action="checkout" onsubmit="return validateCheckout()" >
-                    <div class="py-5 text-center">
-                        <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
-                        <h2>Checkout</h2>
-                        <p class="lead">Please fill in your information and verify the Cart details before placing the order.</p>
+                    <div class=" text-center">
+                        <i class="fa fa-credit-card fa-3x" aria-hidden="true"></i>
+                        <h3>Checkout</h3>
                     </div>
 
                     <div class="row">
@@ -159,7 +158,7 @@
                                 </div>
                             </c:if>
                             <c:if test="${account ne null}">
-                                <input value="${cookie.userId.value}" hidden name="accId" />
+                                <input value="${cookie.__d.value}" hidden name="accId" />
                                 <c:if test="${account.getAddresses().size() == 0}">
                                     <div class="col-md-6">
                                         <label for="city">City <span class="text-danger">*</span></label>
