@@ -127,7 +127,7 @@
                                             </c:choose>
                                         </td>
                                         <td class="d-flex">
-                                            <button class="btn btn-secondary btn-sm text-white " style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
+                                            <button class="btn btn-secondary btn-sm text-white " <c:if test="${!blog.status}">disabled</c:if> style="margin-right: 10px" onclick="location.href = '${pageContext.request.contextPath}/staff/blog?action=edit&blogId=${blog.blogId}'">Edit</button>
 
                                             <c:if test="${blog.status}">
                                                 <form action="blog?action=delete" method="post" >

@@ -46,7 +46,7 @@
                                         <th>Address</th>
                                         <th>Total</th>
                                         <th>Status</th>
-                                        <th>Is paid</th>
+                                        <th>Paid</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -59,18 +59,10 @@
                                         <td>${order.phone}</td>
                                         <td>${order.email}</td>
                                         <td>${order.deliveryAddress}</td>
-                                        <td>${order.totalAmount}</td>
+                                        <td>$${order.totalAmount}</td>
                                         <td>${order.status}</td>
-                                        <td><c:if test="${order.isPaid}">Yes</c:if><c:if test="${!order.isPaid}">No</c:if></td>
+                                        <td><c:if test="${order.isPaid}"><span class="text-success font-weight-bold">Yes</span></c:if><c:if test="${!order.isPaid}"><span class="text-danger font-weight-bold">No</span></c:if></td>
                                             <td>
-                                            <c:if test="${requested != null}">
-                                                <form action="${pageContext.request.contextPath}/staff/manage-order" method="post">
-                                                    <input type="hidden" name="action" value="UpdateStatus">
-                                                    <input type="hidden" name="orderId" value="${order.orderId}">
-                                                    <input type="hidden" name="status" value="Shipping">
-                                                    <button onclick="return confirm('Are you sure to update status?')" type="submit" class="btn btn-primary" style="padding: 4px 25px; font-size: 14px;">Accept </button>
-                                                </form>
-                                            </c:if>
                                             <a href="${pageContext.request.contextPath}/staff/manage-order?action=view&orderId=${order.orderId}" class="btn btn-info btn-sm">View Details</a>
                                         </td>
                                     </tr>

@@ -2,12 +2,6 @@
 
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="nc-icon nc-tablet-2"></i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
             <li>
                 <a class="nav-link" href="./manage-order">
                     <i class="nc-icon nc-circle-09"></i>

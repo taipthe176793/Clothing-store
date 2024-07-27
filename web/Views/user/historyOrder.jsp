@@ -1,14 +1,8 @@
-<%-- 
-    Document   : address
-    Created on : 15 thg 6, 2024, 20:58:51
-    Author     : caoqu
---%>
-
-<%@ page import="Models.CustomerAddress" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>    <head>
+<html>
+    <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Profile Template</title>
@@ -27,10 +21,9 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/slick/slick.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/MagnificPopup/magnific-popup.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
-
     </head>
 
     <body>
@@ -43,24 +36,37 @@
                     </div>
                 </div>
 
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Order code</th>
-                                <th>Full name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Is paid</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <!-- Dropdown for filtering orders -->
+                <div class="row mb-4">
+                    <div class="col-2">
+                        <select id="statusFilter" class="form-control" onchange="filterOrders()">
+                            <option value="all">All</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Shipping">Shipping</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Order code</th>
+                                    <th>Full name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Is paid</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable">
                             <c:forEach var="order" items="${orders}" varStatus="loop">
                                 <tr>
                                     <td>${loop.index + 1}</td>
@@ -70,20 +76,18 @@
                                     <td>${order.email}</td>
                                     <td>${order.deliveryAddress}</td>
                                     <td>${order.totalAmount}</td>
-                                    <td>${order.status}</td>
+                                    <td class="order-status">${order.status}</td>
                                     <td><c:if test="${order.isPaid}">Yes</c:if><c:if test="${!order.isPaid}">No</c:if></td>
-                                    <td>
-                                        <a href="${pageContext.request.contextPath}/history-order?action=view&orderId=${order.orderId}" class="btn btn-info btn-sm">View Details</a>
+                                        <td>
+                                                <a href="${pageContext.request.contextPath}/history-order?action=view&orderId=${order.orderId}" class="btn btn-info btn-sm">View Details</a>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
-
                 </div>
-                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-dark " style="width: 10%; margin: 0 auto">Back to Profile</a>
+                <a href="${pageContext.request.contextPath}/customer/profile?action=view" class="btn btn-dark" style="width: 10%; margin: 0 auto">Back to Profile</a>
             </div>
-
         </div>
 
         <jsp:include page="../common/homepage/page-footer.jsp"></jsp:include>
@@ -93,5 +97,19 @@
         <script src="${pageContext.request.contextPath}/js/slick-custom.js"></script>
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
 
+        <script>
+                        function filterOrders() {
+                            var filter = document.getElementById("statusFilter").value;
+                            var rows = document.querySelectorAll("#ordersTable tr");
+                            rows.forEach(row => {
+                                var status = row.querySelector(".order-status").textContent.trim();
+                                if (filter === "all" || status === filter) {
+                                    row.style.display = "";
+                                } else {
+                                    row.style.display = "none";
+                                }
+                            });
+                        }
+        </script>
     </body>
 </html>

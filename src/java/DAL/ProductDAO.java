@@ -35,7 +35,7 @@ public class ProductDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM [dbo].[product] WHERE [is_deleted] = 0";
+                String sql = "SELECT * FROM [dbo].[product]";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
 
@@ -83,6 +83,54 @@ public class ProductDAO extends DBContext {
             if (con != null) {
                 //2. Create SQL String
                 String sql = "SELECT * FROM [dbo].[product] WHERE [product_id] = ? AND [is_deleted] = 0";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, productId);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                if (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    return p;
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return null;
+    }
+    
+    public Product findProductByIdAllCase(int productId)
+            throws SQLException, ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product] WHERE [product_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, productId);
@@ -193,7 +241,7 @@ public class ProductDAO extends DBContext {
 
     }
 
-    public void deleteProduct(int productId) throws SQLException {
+    public void deleteProduct(int productId, boolean  status) throws SQLException {
 
         Connection con = null;
         PreparedStatement stm = null;
@@ -207,7 +255,7 @@ public class ProductDAO extends DBContext {
                         + " WHERE [product_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
-                stm.setBoolean(1, true);
+                stm.setBoolean(1, status);
                 stm.setInt(2, productId);
 
                 stm.executeUpdate();
@@ -753,6 +801,154 @@ public class ProductDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
+        }
+        return productList;
+    }
+
+    public List<Product> getAllProductsFilter(int category, int status) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> productList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product] WHERE [category_id] = ? AND [is_deleted] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, category);
+                stm.setInt(2, status);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    productList.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return productList;
+    }
+    
+    public List<Product> getAllProductsFilterCate(int category) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> productList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product] WHERE [category_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, category);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    productList.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return productList;
+    }
+    
+    public List<Product> getAllProductsFilterStatus(int status) throws SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<Product> productList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product] WHERE [is_deleted] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, status);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setProductId(rs.getInt("product_id"));
+                    p.setName(rs.getString("name"));
+                    p.setDescription(rs.getString("description"));
+                    p.setPrice(rs.getInt("price"));
+                    p.setImg1(rs.getString("image1"));
+                    p.setImg2(rs.getString("image2"));
+                    p.setImg3(rs.getString("image3"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setIsDelete(rs.getBoolean("is_deleted"));
+                    p.setRating(rs.getDouble("rating"));
+
+                    productList.add(p);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
         }
         return productList;
     }

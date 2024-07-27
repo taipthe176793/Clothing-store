@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <!-- Header -->
@@ -16,7 +17,7 @@
         <div class="top-bar">
             <div class="content-topbar flex-sb-m h-full container">
                 <div class="left-top-bar">
-                    
+
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
@@ -27,7 +28,7 @@
                         <a href="${pageContext.request.contextPath}/auth?action=login" class="flex-c-m trans-04 p-lr-25">
                             Login
                         </a>
-                            <a href="${pageContext.request.contextPath}/auth?action=signup" class="flex-c-m trans-04 p-lr-25">
+                        <a href="${pageContext.request.contextPath}/auth?action=signup" class="flex-c-m trans-04 p-lr-25">
                             Register
                         </a>
                     </c:if>
@@ -54,27 +55,27 @@
 
                 <!-- Menu desktop -->
                 <div class="menu-desktop">
+                    
+                     <c:set var="lastPart" value="${pageContext.request.servletPath}" />
+
                     <ul class="main-menu">
-                        <li class="active-menu">
+                        <li <c:if test="${lastPart eq '/Views/home.jsp'}">class="active-menu"</c:if> >
                             <a href="${pageContext.request.contextPath}/home">Home</a>
                         </li>
 
-                        <li>
+                        <li <c:if test="${lastPart eq '/Views/publicProducts.jsp' || lastPart eq '/Views/productDetail.jsp'}">class="active-menu"</c:if> >
                             <a href="${pageContext.request.contextPath}/shop">Shop</a>
                         </li>
 
 
-                        <li>
+                        <li <c:if test="${lastPart eq '/Views/blog.jsp'}">class="active-menu"</c:if> >
                             <a href="${pageContext.request.contextPath}/blogs">Blog</a>
                         </li>
 
-                        <li>
+                        <li <c:if test="${lastPart eq '/Views/about.jsp'}">class="active-menu"</c:if> >
                             <a href="${pageContext.request.contextPath}/about">About</a>
                         </li>
 
-                        <li>
-                            <a href="${pageContext.request.contextPath}/contact">Contact</a>
-                        </li>
                     </ul>
                 </div>
 

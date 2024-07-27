@@ -71,23 +71,46 @@
                                         Add New Product
                                     </button>
                                 </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th style="width: 10%">Name</th>
-                                                    <th>Image</th>
-                                                    <th style="width: 30%">Description</th>
-                                                    <th>Price</th>
-                                                    <th hidden>Image 2</th>
-                                                    <th hidden>Image 3</th>
-                                                    <th>Category</th>
-                                                    <th>Variants</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
+                                <form action="product" method="get">
+
+                                    <div class="row mt-2 d-flex justify-content-end">
+                                        <div class="col-3 d-flex">
+
+                                            <label for="cate">Category:</label>
+                                            <select id="cate" name="category" class="form-control mr-2" onchange="this.closest('form').submit()">
+                                                <option value="" ${param.category eq "" ? "selected" : ""}>All</option>
+                                            <c:forEach items="${categoryList}" var="c">
+                                                <option value="${c.categoryId}" ${param.category eq c.categoryId ? "selected" : ""}>${c.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                        <label for="statusP">Status:</label>
+                                        <select id="statusP" name="status" class="form-control" onchange="this.closest('form').submit()">
+                                            <option value="11" ${param.status eq 11 ? "selected" : ""}>All</option>
+                                            <option value="0" ${param.status eq 0 ? "selected" : ""}>Active</option>
+                                            <option value="1" ${param.status eq 1 ? "selected" : ""}>Inactive</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th style="width: 10%">Name</th>
+                                                <th>Image</th>
+                                                <th style="width: 30%">Description</th>
+                                                <th>Price</th>
+                                                <th hidden>Image 2</th>
+                                                <th hidden>Image 3</th>
+                                                <th>Category</th>
+                                                <th>Variants</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
                                         <c:forEach items="${productList}" var="product">
                                             <tr>
                                                 <td name="id">${product.getProductId()}</td>
@@ -107,12 +130,12 @@
                                                        href="product/variants?pId=${product.getProductId()}"><i class="fa fa-eye"></i></a>
                                                 </td>
                                                 <td class="d-block align-content-center">
-                                                    <button type="button" class="btn btn-primary"
+                                                    <button type="button" class="btn btn-info"
                                                             data-toggle="modal" data-target="#editProductModal"
                                                             onclick="editProductModal(this)">Edit</button>
-                                                    <button type="button" class="btn btn-danger" 
+                                                    <button type="button" class="btn btn-${product.isDelete ? "primary" : "danger"}" 
                                                             data-toggle="modal" data-target="#delete-product-modal"
-                                                            onclick="deleteProductModal(${product.getProductId()})">Delete</button>
+                                                            onclick="deleteProductModal(${product.getProductId()})">${product.isDelete ? "Activate" : "Deactivate"}</button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -346,13 +369,13 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="delete-modal-label">Delete confirmation</h5>
+                        <h5 class="modal-title" id="delete-modal-label">Update status confirmation</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete this product?</p>
+                        <p>Are you sure you want to update status of this product?</p>
                     </div>
                     <div class="modal-footer">
                         <form action="product?action=delete" method="POST">

@@ -79,6 +79,28 @@ public class ProductControllers extends HttpServlet {
 
             List<Product> productList = pDAO.getAllProducts();
             List<Category> categoryList = cDAO.getAllCategories();
+            String category = request.getParameter("category") == null ? "" : request.getParameter("category");
+            String status = request.getParameter("status") == null ? "" : request.getParameter("status");
+            if (!category.isBlank() || !status.isBlank()) {
+                int statusNumber = 0;
+                int cateId = 0;
+                if (!status.isBlank()) {
+                    statusNumber = Integer.parseInt(status);
+                }
+                if (!category.isBlank()) {
+                    cateId = Integer.parseInt(category);
+                }
+                if (statusNumber != 11 && cateId != 0) {
+                    productList = pDAO.getAllProductsFilter(cateId, statusNumber);
+                } else if (statusNumber == 11 && cateId != 0) {
+                    productList = pDAO.getAllProductsFilterCate(cateId);
+                } else if(cateId == 0 && statusNumber != 11){
+                    productList = pDAO.getAllProductsFilterStatus(statusNumber);
+                } else {
+                    productList = pDAO.getAllProducts();
+                }
+
+            }
 
             request.setAttribute("productList", productList);
             request.setAttribute("categoryList", categoryList);
@@ -172,7 +194,7 @@ public class ProductControllers extends HttpServlet {
 
             Product product = new Product(name, description, price,
                     imagePaths.get(0), imagePaths.get(1),
-                    imagePaths.get(2), categoryID, false, 0.0);
+                    imagePaths.get(2), categoryID, true, 0.0);
 
             ProductDAO pDAO = new ProductDAO();
             HttpSession session = request.getSession();
@@ -271,16 +293,20 @@ public class ProductControllers extends HttpServlet {
             ProductVariantDAO pvDao = new ProductVariantDAO();
 
             //Delete all variant of this product
-            for (ProductVariant pv : pvDao.getAllVariantsOfAProduct(productId)) {
-                pvDao.deleteVariant(pv.getProductVariantId());
+            for (ProductVariant pv : pvDao.getAllVariantsOfAProductAllCase(productId)) {
+                pvDao.deleteVariant(pv.getProductVariantId(), !pv.isIsDeleted());
             }
 
-            pDao.deleteProduct(productId);
+            Product p = pDao.findProductByIdAllCase(productId);
+
+            pDao.deleteProduct(productId, !p.isIsDelete());
 
             HttpSession session = request.getSession();
-            session.setAttribute("notification", "Deleted successfully.");
+            session.setAttribute("notification", "Update status successfully.");
 
         } catch (SQLException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

@@ -6,8 +6,11 @@ package Controllers.staff;
 
 import DAL.AccountDAO;
 import DAL.OrderDAO;
+import DAL.ProductVariantDAO;
 import Models.Account;
 import Models.Order;
+import Models.OrderDetails;
+import Models.ProductVariant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,6 +21,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
+import static utilities.CommonConst.OPERATION_INCREASE;
+import static utilities.CommonConst.ORDER_CANCELLED_STATUS;
+import static utilities.CommonConst.ORDER_DELIVERED_STATUS;
 
 /**
  *
@@ -67,7 +73,7 @@ public class ManagerOrderController extends HttpServlet {
                 this.showAllOrder(request, response);
         }
     }
-    
+
     private void showAllOrderRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             AccountDAO accountDAO = new AccountDAO();
@@ -125,6 +131,17 @@ public class ManagerOrderController extends HttpServlet {
             String status = request.getParameter("status");
             OrderDAO orderDao = new OrderDAO();
             int result = orderDao.updateOrderStatus(orderId, status);
+            if (status.equals(ORDER_DELIVERED_STATUS)) {
+                orderDao.updateOrderPaymentStatus(orderId, 1);
+            } else if (status.equals(ORDER_CANCELLED_STATUS)) {
+                for (OrderDetails od : orderDao.getOrderByOrderId(orderId).getListOrderDetails()) {
+                    int quantity = od.getQuantity();
+                    ProductVariantDAO pvDAO = new ProductVariantDAO();
+                    ProductVariant v = pvDAO.findProductVariantById(od.getProductVariantId());
+                    pvDAO.updateVariantQuantity(v, quantity, OPERATION_INCREASE);
+                }
+            }
+
             if (result > 0) {
                 response.sendRedirect(request.getContextPath() + "/staff/manage-order?action=view&orderId=" + orderId + "&success=Change status order successfully");
             } else {

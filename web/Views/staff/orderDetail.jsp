@@ -18,6 +18,8 @@
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
@@ -34,14 +36,59 @@
                 <jsp:include page="../common/staff/header.jsp"></jsp:include>
                     <div class="content">
                         <div class="container-fluid">
-                            <hr>
-                            <h3>Order informaton</h3>
-                            <hr>
-                            <table class="table table-bordered">
-                                <tbody>
+                        <c:if test="${param.success != null}">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                ${param.success}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </c:if>
+                        <c:if test="${param.error}">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                ${param.error}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </c:if>
+                        <hr>
+                        <h3>Order Details</h3>
+                        <hr>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product name</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Image</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="detail" items="${order.listOrderDetails}" varStatus="loop">
                                     <tr>
-                                        <td><strong>Order code</strong></td>
-                                        <td>${order.orderCode}</td>
+                                        <td>${loop.index + 1}</td>
+                                        <td>${detail.variant.product.name}</td>
+                                        <td>${detail.variant.color}</td>
+                                        <td>${detail.variant.size}</td>
+                                        <td>
+                                            <img src="${detail.variant.product.img1}" width="100px" height="height" alt="alt"/>
+                                        </td>
+                                        <td>${detail.quantity}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <h3>Order information</h3>
+                        <hr>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Order code</strong></td>
+                                    <td>${order.orderCode}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Fullname</strong></td>
@@ -61,11 +108,11 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Total</strong></td>
-                                    <td>${order.totalAmount}</td>
+                                    <td>$${order.totalAmount}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Discount</strong></td>
-                                    <td>${order.discount}</td>
+                                    <td>$${order.discount}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Status</strong></td>
@@ -74,75 +121,37 @@
                                 <tr>
                                     <td><strong>Is paid</strong></td>
                                     <td>
-                                        <c:if test="${order.isPaid}">Yes</c:if>
-                                        <c:if test="${!order.isPaid}">No</c:if>
+                                        <c:if test="${order.isPaid}"><span class="text-success font-weight-bold">Yes</span></c:if>
+                                        <c:if test="${!order.isPaid}"><span class="text-danger font-weight-bold">No</span></c:if>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+
                             <hr>
-                            <c:if test="${param.success != null}">
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    ${param.success}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            </c:if>
-                            <c:if test="${param.error}">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    ${param.error}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            </c:if>
-                        <hr>
-                        <form action="${pageContext.request.contextPath}/staff/manage-order" method="post">
+                            <form action="${pageContext.request.contextPath}/staff/manage-order" method="post">
                             <input type="hidden" name="action" value="UpdateStatus">
                             <input type="hidden" name="orderId" value="${order.orderId}">
-                            <div class="form-group">
-                                <label for="status">Change Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="Pending" <c:if test="${order.status == 'Pending'}">selected</c:if>>Pending</option>
-                                    <option value="Shipping" <c:if test="${order.status == 'Shipping'}">selected</c:if>>Shipping</option>
-                                    <option value="Delivered" <c:if test="${order.status == 'Delivered'}">selected</c:if>>Delivered</option>
-                                    <option value="Cancelled" <c:if test="${order.status == 'Cancelled'}">selected</c:if>>Cancelled</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Update Status</button>
-                            </form>
-                            <hr>
-                            <h3>Order Details</h3>
-                            <hr>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Product name</th>
-                                        <th>Quantity</th>
-                                        <th>Color</th>
-                                        <th>Size</th>
-                                        <th>Image</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="detail" items="${order.listOrderDetails}" varStatus="loop">
-                                    <tr>
-                                        <td>${loop.index + 1}</td>
-                                        <td>${detail.variant.product.name}</td>
-                                        <td>${detail.variant.quantity}</td>
-                                        <td>${detail.variant.color}</td>
-                                        <td>${detail.variant.size}</td>
-                                        <td>
-                                            <img src="${detail.variant.product.img1}" width="100px" height="height" alt="alt"/>
-                                        </td>
-                                        <td>${detail.quantity}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                            <c:choose>
+                                <c:when test="${order.status == 'Pending'}">
+                                    <h3>Update status: <label class="btn btn-primary" for="accept">Accept</label>
+                                        <input type="radio" id="accept" name="status" value="Shipping" class="btn-check" autocomplete="off" onchange="this.form.submit()"> 
+                                        <label class="btn btn-danger" for="cancel">Cancel</label>
+                                        <input type="radio" id="cancel" name="status" value="Cancelled" class="btn-check" autocomplete="off" onchange="this.form.submit()"> 
+                                    </h3>
+                                    <hr>
+                                </c:when>
+                                <c:when test="${order.status == 'Shipping'}">
+                                    <h3>Update status: <input type="submit" name="status" value="Delivered" class="btn btn-primary" /></h3>
+
+                                    <hr>
+                                </c:when>
+                            </c:choose>
+                        </form>
+
+                        <div class="text-center">
+                            <button class="btn btn-secondary" onclick="location.href = 'manage-order'">Back to order list</button>
+                        </div>
                     </div>
                 </div>
                 <jsp:include page="../common/staff/footer.jsp"></jsp:include>
@@ -176,10 +185,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
         <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
         <script>
-            $(document).ready(function () {
-                $("#data-table").DataTable();
-            });
+                                $(document).ready(function () {
+                                    $("#data-table").DataTable();
+                                });
         </script>
     </body>
 </html>

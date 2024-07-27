@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import utilities.CommonConst;
+import static utilities.CommonConst.CART_COOKIE;
 import static utilities.CommonConst.NOTI_SUCCESS;
 import static utilities.CommonConst.ROLE_CUSTOMER;
 import utilities.CookieUtils;
@@ -88,7 +89,6 @@ public class AuthenticationControllers extends HttpServlet {
 
                         CookieUtils.updateCookieValueByName(CommonConst.USER_ID_COOKIE, gAccount.getAccountId() + "", request, response);
 
-
                         CookieUtils.updateCookieValueByName(CommonConst.USER_ROLE, gAccount.getRoleId() + "", request, response);
 
                         response.sendRedirect("home");
@@ -152,17 +152,7 @@ public class AuthenticationControllers extends HttpServlet {
                             request.getRequestDispatcher("Views/authen/login.jsp").forward(request, response);
                         } else {
 
-                            Cookie[] arr = request.getCookies();
-                            String cartCookie = "";
-                            if (arr != null) {
-                                for (Cookie o : arr) {
-                                    if (o.getName().equals("cart")) {
-                                        CartControllers.mergeAndSyncCart(request, response, account);
-                                        break;
-                                    }
-                                }
-
-                            }
+                            CartControllers.mergeAndSyncCart(request, response, account);
 
                             CookieUtils.updateCookieValueByName(CommonConst.USER_ID_COOKIE, account.getAccountId() + "", request, response);
 
@@ -173,7 +163,7 @@ public class AuthenticationControllers extends HttpServlet {
                                     response.sendRedirect("admin/dashboard");
                                     break;
                                 case CommonConst.ROLE_STAFF:
-                                    response.sendRedirect("staff/dashboard");
+                                    response.sendRedirect("staff/manage-order");
                                     break;
                                 default:
                                     response.sendRedirect("home");

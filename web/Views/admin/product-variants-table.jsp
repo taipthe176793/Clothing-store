@@ -96,12 +96,12 @@
                                                 <td name="size">${variant.getSize()}</td>
                                                 <td name="quantity">${variant.getQuantity()}</td>
                                                 <td class="d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-primary"
+                                                    <button type="button" class="btn btn-info mr-2"
                                                             data-toggle="modal" data-target="#editProductModal"
                                                             onclick="editProductModal(this)">Edit</button>
-                                                    <button type="button" class="btn btn-danger" 
+                                                    <button type="button" class="btn btn-${variant.isDeleted ? "primary" : "danger"}" 
                                                             data-toggle="modal" data-target="#delete-product-modal"
-                                                            onclick="deleteProductModal(${variant.getProductVariantId()})">Delete</button>
+                                                            onclick="deleteProductModal(${variant.getProductVariantId()})">${variant.isDeleted ? "Activate" : "Deactivate"}</button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -267,13 +267,13 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="delete-modal-label">Delete confirmation</h5>
+                        <h5 class="modal-title" id="delete-modal-label">Update status confirmation</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete this variant?</p>
+                        <p>Are you sure you want to change status of this variant?</p>
                     </div>
                     <div class="modal-footer">
                         <form action="variants?action=delete" method="POST">

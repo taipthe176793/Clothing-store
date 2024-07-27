@@ -71,8 +71,8 @@ public class ProductVariantControllers extends HttpServlet {
             ProductDAO pDao = new ProductDAO();
             ProductVariantDAO pvDao = new ProductVariantDAO();
 
-            Product product = pDao.findProductById(productId);
-            product.setVariantList(pvDao.getAllVariantsOfAProduct(productId));
+            Product product = pDao.findProductByIdAllCase(productId);
+            product.setVariantList(pvDao.getAllVariantsOfAProductAllCase(productId));
 
             GeneratorUtils.getNotification(request);
 
@@ -210,14 +210,18 @@ public class ProductVariantControllers extends HttpServlet {
             int variantId = Integer.parseInt(request.getParameter("vId"));
 
             ProductVariantDAO pvDao = new ProductVariantDAO();
+            
+            ProductVariant v = pvDao.findProductVariantById(variantId);
 
-            pvDao.deleteVariant(variantId);
+            pvDao.deleteVariant(variantId, !v.isIsDeleted());
 
             HttpSession session = request.getSession();
 
-            session.setAttribute("notification", "Deleted successfully.");
+            session.setAttribute("notification", "Update status successfully.");
 
         } catch (SQLException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductVariantControllers.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

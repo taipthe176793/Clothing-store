@@ -36,6 +36,18 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <!--===============================================================================================-->
+        <style>
+            textarea {
+                width: 100%;
+                height: auto; /* Allows height to adjust based on content */
+                min-height: 100px; /* Optional: Sets a minimum height */
+                overflow: hidden; /* Hides the scrollbar, as height will adjust dynamically */
+                white-space: pre-wrap; /* Ensures that text wraps correctly */
+                box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+                padding: 10px; /* Adds padding inside the textarea */
+            }
+        </style>
+
     </head>
 
     <body>
@@ -52,18 +64,26 @@
 
 
         <!-- Content page -->
-        <section class="bg0 p-t-62 p-b-60">
+        <section class="bg0 p-t-62 p-b-30">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <h2 class="mt-4">${blog.title}</h2>
                         <img src="${blog.image}" class="img-fluid mt-3">
-                        <p class="mt-3">${blog.body}</p>
-                        <p><strong>Created At:</strong> ${blog.createdAt}</p>
-                        </div>
+
                     </div>
                 </div>
-            </section>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <textarea readonly>${blog.body}</textarea>
+                        <p><strong>Created At:</strong> ${blog.createdAt}</p>
+                    </div>
+                </div>
+                    <div class="text-center">
+                        <button class="btn btn-secondary mt-5" onclick="location.href='blogs'">Back to Blog list</button>
+                    </div>
+            </div>
+        </section>
 
         <jsp:include page="common/homepage/page-footer.jsp"></jsp:include>
 
@@ -113,6 +133,23 @@
         </script>
         <!--===============================================================================================-->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var textareas = document.querySelectorAll('textarea');
+
+                textareas.forEach(function (textarea) {
+                    function adjustHeight() {
+                        textarea.style.height = 'auto'; // Reset height to auto
+                        textarea.style.height = (textarea.scrollHeight) + 'px'; // Set height to scrollHeight
+                    }
+
+                    textarea.addEventListener('input', adjustHeight); // Adjust height on input
+                    adjustHeight(); // Adjust height on page load
+                });
+            });
+        </script>
+
 
     </body>
 

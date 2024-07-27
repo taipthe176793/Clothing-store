@@ -28,7 +28,7 @@
         <style>
             textarea {
                 resize: vertical;
-                min-height: 100px;
+                min-height: 500px;
             }
         </style>
     </head>
@@ -41,7 +41,7 @@
                 <div class="main-panel">
                 <jsp:include page="../common/staff/header.jsp"></jsp:include>
                     <div class="content">
-                        <div class="container mt">
+                        <div class="container-fluid">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
                                     <a href="./dashboard">Dashboard</a>

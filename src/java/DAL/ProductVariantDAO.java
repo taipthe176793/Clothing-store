@@ -77,7 +77,54 @@ public class ProductVariantDAO extends DBContext {
             con = connect;
             if (con != null) {
                 //2. Create SQL String
-                String sql = "SELECT * FROM [dbo].[product_variants] WHERE [product_id] = ? AND [is_deleted] = 0";
+                String sql = "SELECT * FROM [dbo].[product_variants] WHERE [product_id] = ?";
+                //3. Create Statement
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, productId);
+
+                //4. Excute Query
+                rs = stm.executeQuery();
+                //5. Process Result
+                while (rs.next()) {
+                    ProductVariant v = new ProductVariant();
+                    v.setProductVariantId(rs.getInt("product_variant_id"));
+                    v.setProductId(rs.getInt("product_id"));
+                    v.setColor(rs.getString("color"));
+                    v.setSize(rs.getString("size"));
+                    v.setQuantity(rs.getInt("quantity"));
+                    v.setIsDeleted(rs.getBoolean("is_deleted"));
+
+                    variantsList.add(v);
+
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+
+        }
+        return variantsList;
+
+    }
+    
+    public List<ProductVariant> getAllVariantsOfAProductAllCase(int productId) throws SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        List<ProductVariant> variantsList = new ArrayList<>();
+
+        try {
+            //1. Connect DB
+            con = connect;
+            if (con != null) {
+                //2. Create SQL String
+                String sql = "SELECT * FROM [dbo].[product_variants] WHERE [product_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, productId);
@@ -220,7 +267,7 @@ public class ProductVariantDAO extends DBContext {
 
     }
 
-    public void deleteVariant(int variantId) throws SQLException {
+    public void deleteVariant(int variantId, boolean status) throws SQLException {
 
         Connection con = null;
         PreparedStatement stm = null;
@@ -234,7 +281,7 @@ public class ProductVariantDAO extends DBContext {
                         + " WHERE [product_variant_id] = ?";
                 //3. Create Statement
                 stm = con.prepareStatement(sql);
-                stm.setBoolean(1, true);
+                stm.setBoolean(1, status);
                 stm.setInt(2, variantId);
 
                 stm.executeUpdate();

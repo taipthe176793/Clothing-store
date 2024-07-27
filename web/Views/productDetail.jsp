@@ -70,6 +70,86 @@
                 font-size: 24px; /* Increase the size of the stars */
             }
 
+            .carousel-item {
+                padding: 20px 0;
+            }
+
+            .card {
+                margin: 10px;
+                border: none;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            .card img {
+                height: 150px;
+                object-fit: cover;
+            }
+
+            .card-body {
+                padding: 15px;
+                text-align: center;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .card-text {
+                font-size: 1rem;
+                margin-bottom: 15px;
+                color: #666;
+            }
+
+            .btn-outline-success {
+                transition: background-color 0.3s, color 0.3s;
+                border-radius: 50px;
+                padding: 10px 20px;
+                font-weight: bold;
+            }
+
+            .btn-outline-success:hover {
+                background-color: #28a745;
+                color: #fff;
+            }
+
+            .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+                background-color: rgba(0, 0, 0, 0.5);
+                border-radius: 50%;
+            }
+
+            .carousel-control-prev, .carousel-control-next {
+                width: 5%;
+            }
+
+            .carousel-inner {
+                display: flex;
+                align-items: center;
+            }
+
+            .carousel-indicators li {
+                background-color: #28a745;
+                border-radius: 50%;
+            }
+
+            h2 {
+                color: #444;
+                margin-bottom: 30px;
+            }
+
+            .container {
+                max-width: 1200px;
+            }
         </style>
     </head>
 
